@@ -15,10 +15,4 @@
 | W6-W12   | **[Z]** Additional features         | Stephen, King, Freddie, Jane, Steve |          |
 | W8-W10   | UAT                                 | Stephen, King, Freddie, Jane, Steve |          |
 | W6       | Gantt Chart                         | Jane                                |          |
-|          |                                     |                                     |          |
-|          |                                     |                                     |          |
-|          |                                     |                                     |          |
-|          |                                     |                                     |          |
-|          |                                     |                                     |          |
-|          |                                     |                                     |          |
 
