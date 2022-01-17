@@ -1,0 +1,9 @@
+Products(PId, PName, Brand, Price, PDescri, Catalog)
+
+Customers(CId, Fullname, Emailaddr, Passw, Shoppingaddr)
+
+ShoppingChart(CId, PId, Quantity)
+
+Purchases(PONumber, CId, PId, PurDate, Amount, Status)
+
+Vendor(VId, Passw)
