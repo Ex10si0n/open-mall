@@ -15,11 +15,11 @@ docker run --name mariadb-isi -e MYSQL_ROOT_PASSWORD=<password> -p 3306:3306 -d 
 Tables initalization:
 
 ```bash
-schema.sql
+./init/schema.sql
 ```
 
 ### API Python environment
 
 ```bash
-conda env create -f environment.yml
+conda env create -f ./init/environment.yml
 ```
