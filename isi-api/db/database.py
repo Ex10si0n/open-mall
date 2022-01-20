@@ -79,6 +79,14 @@ def login_check(email: str, password: str):
     ret['status'] = 'error'
     return ret
     
+# @TODO: create product
+
+# @TODO: get products by name
+
+# @TODO: update product
+
+# @TODO: delete product
+
 if __name__ == '__main__':
     res = None
     # res = create_account("Steve", 'p1908326@ipm.edu.mo', password='somepassword', accType='admin')
