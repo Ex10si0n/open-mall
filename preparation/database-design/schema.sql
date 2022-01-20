@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: isi
--- Generation Time: 2022-01-19 21:37:35.5670
+-- Generation Time: 2022-01-20 15:12:44.2360
 -- -------------------------------------------------------------
 
 
@@ -19,32 +19,32 @@
 
 
 CREATE TABLE `account` (
-  `ACCID` varchar(255) NOT NULL DEFAULT '',
-  `ACCNAME` varchar(255) NOT NULL,
-  `HASHEDPASSWORD` varchar(255) NOT NULL,
-  `EMAIL` varchar(255) NOT NULL,
-  `ACCTYPE` varchar(255) NOT NULL DEFAULT 'customer',
+  `ACCID` varchar(255) NOT NULL DEFAULT '' COMMENT 'Account ID',
+  `ACCNAME` varchar(255) NOT NULL COMMENT 'Username',
+  `HASHEDPASSWORD` varchar(255) NOT NULL COMMENT 'Encrypted user password',
+  `EMAIL` varchar(255) NOT NULL COMMENT 'User E-mail',
+  `ACCTYPE` varchar(255) NOT NULL DEFAULT 'customer' COMMENT 'Account Type: (admin, user, vendor)',
   PRIMARY KEY (`ACCID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `address` (
-  `ADDID` varchar(255) NOT NULL DEFAULT '',
-  `TEL` varchar(255) NOT NULL,
-  `NAME` varchar(255) NOT NULL,
-  `CITY` varchar(255) NOT NULL,
-  `COUNTRY` varchar(255) NOT NULL,
-  `DETAILED` varchar(255) NOT NULL,
-  `ACCID` varchar(255) NOT NULL,
+  `ADDID` varchar(255) NOT NULL DEFAULT '' COMMENT 'Address ID',
+  `TEL` varchar(255) NOT NULL COMMENT 'Telephone number',
+  `NAME` varchar(255) NOT NULL COMMENT 'Customer full name',
+  `CITY` varchar(255) NOT NULL COMMENT 'City',
+  `COUNTRY` varchar(255) NOT NULL COMMENT 'Country or region',
+  `DETAILED` varchar(255) NOT NULL COMMENT 'Detailed address',
+  `ACCID` varchar(255) NOT NULL COMMENT 'Account ID',
   PRIMARY KEY (`ADDID`),
   KEY `ACCID` (`ACCID`),
   CONSTRAINT `address_ibfk_2` FOREIGN KEY (`ACCID`) REFERENCES `account` (`ACCID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `order` (
-  `PONO` varchar(255) NOT NULL DEFAULT '',
-  `PRICE` double NOT NULL DEFAULT 0,
-  `OID` varchar(255) NOT NULL,
-  `PID` varchar(255) NOT NULL,
+  `PONO` varchar(255) NOT NULL DEFAULT '' COMMENT 'Purchase ID',
+  `PRICE` double NOT NULL DEFAULT 0 COMMENT 'Product sales price',
+  `OID` varchar(255) NOT NULL COMMENT 'Order ID',
+  `PID` varchar(255) NOT NULL COMMENT 'Product ID',
   PRIMARY KEY (`OID`),
   KEY `PONO` (`PONO`),
   KEY `PID` (`PID`),
@@ -53,32 +53,32 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `product` (
-  `PID` varchar(255) NOT NULL,
-  `PNAME` varchar(255) NOT NULL,
-  `BRAND` varchar(255) NOT NULL,
-  `PRICE` double NOT NULL,
-  `PDESC` text NOT NULL,
-  `THU` varchar(255) NOT NULL,
-  `PIC` text NOT NULL,
-  `CATALOG` varchar(255) NOT NULL,
+  `PID` varchar(255) NOT NULL COMMENT 'Product ID',
+  `PNAME` varchar(255) NOT NULL COMMENT 'Product Name',
+  `BRAND` varchar(255) NOT NULL COMMENT 'Brand',
+  `PRICE` double NOT NULL COMMENT 'Sales price',
+  `PDESC` text NOT NULL COMMENT 'Description',
+  `THUMBNAIL` varchar(255) NOT NULL COMMENT 'Tumbnail Image',
+  `PIC` text NOT NULL COMMENT 'Images',
+  `CATALOG` varchar(255) NOT NULL COMMENT 'Product catalogue',
   PRIMARY KEY (`PID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `purchase` (
-  `PONO` varchar(255) NOT NULL DEFAULT '',
-  `ACCID` varchar(255) NOT NULL DEFAULT '',
-  `DATE` date NOT NULL DEFAULT current_timestamp(),
-  `STATUS` varchar(255) NOT NULL DEFAULT 'pending',
+  `PONO` varchar(255) NOT NULL DEFAULT '' COMMENT 'Purchase ID',
+  `ACCID` varchar(255) NOT NULL DEFAULT '' COMMENT 'Account ID',
+  `DATE` date NOT NULL DEFAULT current_timestamp() COMMENT 'Purchase generated date',
+  `STATUS` varchar(255) NOT NULL DEFAULT 'pending' COMMENT 'Purchase status',
   PRIMARY KEY (`PONO`),
   KEY `ACCID` (`ACCID`),
   CONSTRAINT `purchase_ibfk_1` FOREIGN KEY (`ACCID`) REFERENCES `account` (`ACCID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `shopping_cart` (
-  `ACCID` varchar(255) NOT NULL DEFAULT '',
-  `PID` varchar(255) NOT NULL DEFAULT '',
-  `QUANTITY` int(11) NOT NULL DEFAULT 1,
-  `CARTID` varchar(255) NOT NULL,
+  `ACCID` varchar(255) NOT NULL DEFAULT '' COMMENT 'Account ID',
+  `PID` varchar(255) NOT NULL DEFAULT '' COMMENT 'Product ID',
+  `QUANTITY` int(11) NOT NULL DEFAULT 1 COMMENT 'Quantity of product',
+  `CARTID` varchar(255) NOT NULL COMMENT 'Shopping Cart ID',
   PRIMARY KEY (`CARTID`),
   KEY `ACCID` (`ACCID`),
   KEY `PID` (`PID`),
