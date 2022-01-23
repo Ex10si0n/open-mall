@@ -3,7 +3,8 @@ import pymysql.cursors
 import uuid
 import password_validator
 
-connection = pymysql.connect(host=settings.db_host,
+def create_connection():
+    return pymysql.connect(host=settings.db_host,
                              user=settings.db_user,
                              password=settings.db_password,
                              database=settings.database,
@@ -22,6 +23,7 @@ def create_account(accName: str, email: str, password: str, accType: str):
         dict: status, uuid
     """    
     playload = {'status': '', 'uuid': ''}
+    connection = create_connection()
     with connection:
         with connection.cursor() as cursor:
             sql = "SELECT * FROM `account` WHERE `email`=%s"
@@ -51,6 +53,7 @@ def login_check(email: str, password: str):
         dict: status, uuid, type
     """    
     playload = {'status': '', 'uuid': '', 'type': ''}
+    connection = create_connection()
     with connection:
         with connection.cursor() as cursor:
             sql = "SELECT * FROM `account` WHERE `email`=%s"
@@ -71,7 +74,39 @@ def login_check(email: str, password: str):
     playload['status'] = 'error'
     return playload
 
-# @TODO: delete a user by email permanently
+def delete_account(email: str, password: str): 
+    """ delete a user by email permanently
+
+    Args:
+        email (str): user email
+        password (str): user password
+
+    Returns:
+        dict: status
+    """    
+    playload = {'status': ''}
+    connection = create_connection()
+    with connection:
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM `account` WHERE `email`=%s"
+            cursor.execute(sql, (email,))
+            result = cursor.fetchone()
+            if (result is None):
+                playload['status'] = 'account_not_registered'
+                return playload
+            given_hashed_password = password_validator.hash(password, result['ACCID'])
+            if given_hashed_password == result['HASHEDPASSWORD']:
+                sql = "DELETE FROM `account` WHERE `email`=%s"
+                cursor.execute(sql, (email,))
+                connection.commit()
+                playload['status'] = 'success'
+                return playload
+            else:
+                playload['status'] = 'authentication_error'
+                return playload
+    playload['status'] = 'error'
+    return playload
+
 
 # @TODO: update user password
 
@@ -99,6 +134,7 @@ def create_product(pName: str, brand: str, price: float, pDesc: str, thumbnail: 
         dict: status, pid
     """    
     playload = {'status': '', 'pid': ''}
+    connection = create_connection()
     with connection:
         with connection.cursor() as cursor:
             sql = "INSERT INTO `product` (`PID`, `PNAME`, `BRAND`, `PRICE`, `PDESC`, `THUMBNAIL`, `PIC`, `CATALOG`)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -131,7 +167,12 @@ def create_product(pName: str, brand: str, price: float, pDesc: str, thumbnail: 
 
 if __name__ == '__main__':
     res = None
-    # res = create_account("Steve", 'p1908326@ipm.edu.mo', password='somepassword', accType='admin')
-    # res = login_check("p1908326@ipm.edu.mo", password='somepassword')
-    res = create_product("iPhone 13 pro", "Apple", "10899", "Phone", "img/iphone.png", "img/iphone-2.png", "Smart Phone")
+    create = 1
+    if create == 1:
+        res = create_account("Steve", 'p1908326@ipm.edu.mo', password='somepassword', accType='admin')
+        create_account("Jane", 'p1908345@ipm.edu.mo', password='somepassword', accType='admin')
+    else:
+        res = login_check("p1908326@ipm.edu.mo", password='somepassword')
+    # res = create_product("iPhone 13 pro", "Apple", "10899", "Phone", "img/iphone.png", "img/iphone-2.png", "Smart Phone")
+    # res = delete_account("p1908326@ipm.edu.mo", "somepassword")
     print(res)
