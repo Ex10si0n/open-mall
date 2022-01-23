@@ -22,7 +22,7 @@ def create_account(accName: str, email: str, password: str, accType: str):
         accType (str): user account type (admin, customer, vendor)
 
     Returns:
-        dict: status, uuid
+        dict: status(email_exists, success, error), uuid
     """
     playload = {'status': '', 'uuid': ''}
     try:
@@ -56,7 +56,7 @@ def login_check(email: str, password: str):
         password (str): user password
 
     Returns:
-        dict: status, uuid, type
+        dict: status(account_not_registered, success, invalid_password), uuid, type
     """
     playload = {'status': '', 'uuid': '', 'type': ''}
     try:
@@ -92,7 +92,7 @@ def delete_account(email: str, password: str):
         password (str): user password
 
     Returns:
-        dict: status
+        dict: status(account_not_registered, success, authentication_error, error)
     """
     playload = {'status': ''}
     try:
@@ -121,8 +121,17 @@ def delete_account(email: str, password: str):
         return playload
 
 
-# @TODO: update user password
 def update_password(email: str, old_password: str, new_password: str):
+    """ update user password
+
+    Args:
+        email (str): user email
+        old_password (str): old password
+        new_password (str): new password
+
+    Returns:
+        dict: status(account_not_registered, success, authentication_error)
+    """
     playload = {'status': ''}
     try:
         connection = create_connection()
@@ -172,7 +181,7 @@ def create_product(pName: str, brand: str, price: float, pDesc: str, thumbnail: 
         category (str): product category
 
     Returns:
-        dict: status, pid
+        dict: status(success, error), pid
     """
     playload = {'status': '', 'pid': ''}
     try:
