@@ -27,7 +27,7 @@ const hello = computed(() => {
       <div class="grid grid-cols-2 gap-3">
         <div
           v-for="index in 3"
-          class="grid-cols-1 max-w-md border bg-white rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700"
+          class="grid-cols-1 max-w-md border bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700"
         >
           <a href="#">
             <img
