@@ -161,7 +161,7 @@ def update_password(email: str, old_password: str, new_password: str):
         playload['status'] = 'error'
 
 
-def create_address(accId: str, tel: str, name: str, city: str, country: str, detailed: str):
+def create_address(accId: str, tel: str, name: str, city: str, country: str, detailed: str, tag: str):
     """ create user's address
 
     Args:
@@ -180,10 +180,10 @@ def create_address(accId: str, tel: str, name: str, city: str, country: str, det
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
-                sql = "INSERT INTO `address` (`ADDRID`, `ACCID`, `TEL`, `NAME`, `CITY`, `COUNTRY`, `DETAILED`) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO `address` (`ADDRID`, `ACCID`, `TEL`, `NAME`, `CITY`, `COUNTRY`, `DETAILED`, `TAG`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
                 addrId = str(uuid.uuid4())
                 cursor.execute(
-                    sql, (addrId, accId, tel, name, city, country, detailed))
+                    sql, (addrId, accId, tel, name, city, country, detailed, tag))
                 connection.commit()
                 playload['status'] = 'success'
                 return playload
@@ -221,7 +221,8 @@ def get_user_address_list(addId: str):
                             'name': row['NAME'],
                             'city': row['CITY'],
                             'country': row['COUNTRY'],
-                            'detailed': row['DETAILED']
+                            'detailed': row['DETAILED'],
+                            'tag': row['TAG']
                         }
                         playload['address_list'].append(address)
                     return playload
@@ -230,7 +231,7 @@ def get_user_address_list(addId: str):
         return playload
 
 
-def update_user_address(addId: str, tel: str, name: str, city: str, country: str, detailed: str):
+def update_user_address(addId: str, tel: str, name: str, city: str, country: str, detailed: str, tag: str):
     """ update user's address
 
     Args:
@@ -249,9 +250,9 @@ def update_user_address(addId: str, tel: str, name: str, city: str, country: str
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
-                sql = "UPDATE `address` SET `TEL`=%s, `NAME`=%s, `CITY`=%s, `COUNTRY`=%s, `DETAILED`=%s WHERE `ADDRID`=%s"
+                sql = "UPDATE `address` SET `TEL`=%s, `NAME`=%s, `CITY`=%s, `COUNTRY`=%s, `DETAILED`=%s `TAG`=%s WHERE `ADDRID`=%s"
                 cursor.execute(
-                    sql, (tel, name, city, country, detailed, addId))
+                    sql, (tel, name, city, country, detailed, tag, addId))
                 connection.commit()
                 playload['status'] = 'success'
                 return playload
