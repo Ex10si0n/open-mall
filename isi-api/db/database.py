@@ -526,7 +526,7 @@ if __name__ == '__main__':
     #    "11a45010-d203-438c-98ef-2ed2012b2eaf", 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 1)
     # res = create_address('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '18740060111', 'Steve Yan', 'Macao SAR',
     #                     'China', 'Rua de Bruxelas, Nam On Gardon, Macao Polytechnic Institute Student Hostel')
-    # res = get_user_address_list('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    res = get_user_address_list('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = delete_address('c5a498da-a01b-47c2-8475-b6546a84ad2a',
     #                     'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = delete_product_from_cart(
