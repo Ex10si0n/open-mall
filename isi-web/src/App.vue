@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
@@ -9,6 +9,12 @@ const store = useStore();
 const userStatus = computed(() => {
   return store.state.userStatus;
 });
+
+const activeTab = ref('shop');
+
+const changeTab = (tab: string) => {
+  activeTab.value = tab;
+};
 </script>
 
 <template>
@@ -23,6 +29,8 @@ const userStatus = computed(() => {
         <router-link
           to="/"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          :class="{ 'active': activeTab === 'shop' }"
+          @click="changeTab('shop')"
         >
           <svg
             width="28"
@@ -38,9 +46,11 @@ const userStatus = computed(() => {
           </svg>
         </router-link>
         <router-link
-          v-if="userStatus != 'visitor'"
+          v-if="userStatus !== 'visitor'"
           to="/profile"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          :class="{ 'active': activeTab === 'profile' }"
+          @click="changeTab('profile')"
           ><svg
             width="28"
             height="28"
@@ -55,9 +65,11 @@ const userStatus = computed(() => {
           </svg>
         </router-link>
         <router-link
-          v-if="userStatus == 'visitor'"
+          v-if="userStatus === 'visitor'"
           to="/login"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          :class="{ 'active': activeTab === 'login' }"
+          @click="changeTab('login')"
           ><svg
             width="28"
             height="28"
@@ -72,9 +84,11 @@ const userStatus = computed(() => {
           </svg>
         </router-link>
         <router-link
-          v-if="userStatus != 'vendor'"
+          v-if="userStatus !== 'vendor'"
           to="/cart"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          :class="{ 'active': activeTab === 'cart' }"
+          @click="changeTab('cart')"
           ><svg
             width="28"
             height="28"
@@ -89,9 +103,11 @@ const userStatus = computed(() => {
           </svg>
         </router-link>
         <router-link
-          v-if="userStatus == 'vendor'"
+          v-if="userStatus === 'vendor'"
           to="/vendor"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          :class="{ 'active': activeTab === 'vendor'}"
+          @click="changeTab('vendor')"
           ><svg
             width="28"
             height="28"
@@ -106,9 +122,11 @@ const userStatus = computed(() => {
           </svg>
         </router-link>
         <router-link
-          v-if="userStatus != 'visitor'"
+          v-if="userStatus !== 'visitor'"
           to="/order"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          :class="{ 'active': activeTab === 'order'}"
+          @click="changeTab('order')"
         >
           <svg
             width="28"
@@ -127,3 +145,9 @@ const userStatus = computed(() => {
     </div>
   </div>
 </template>
+
+<style>
+.active {
+  background-color: #f3f5f9;
+}
+</style>

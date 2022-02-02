@@ -27,7 +27,7 @@ const hello = computed(() => {
       <div class="grid grid-cols-2 gap-3">
         <div
           v-for="index in 3"
-          class="grid-cols-1 max-w-md border bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700"
+          class="grid-cols-1 max-w-md border bg-white rounded-lg shadow-lg"
         >
           <a href="#">
             <img
@@ -39,7 +39,7 @@ const hello = computed(() => {
           <div class="px-5 pb-5">
             <a href="#">
               <h3
-                class="text-sm font-semibold tracking-tight text-gray-900 dark:text-white"
+                class="text-sm font-semibold tracking-tight text-gray-900"
               >
                 Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport
               </h3>
@@ -96,12 +96,12 @@ const hello = computed(() => {
                 ></path>
               </svg> -->
               <span
-                class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
+                class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
                 >Smart Watch</span
               >
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-md font-bold text-gray-700 dark:text-white">$599</span>
+              <span class="text-md font-bold text-gray-700">$599</span>
             </div>
           </div>
         </div>
