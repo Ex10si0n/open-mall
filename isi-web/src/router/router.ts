@@ -13,5 +13,6 @@ export default createRouter({
     { path: "/cart", component: () => import(/* webpackChunkName: "home" */ "../views/Cart.vue") },
     { path: "/profile", component: () => import(/* webpackChunkName: "home" */ "../views/Profile.vue") },
     { path: "/order", component: () => import(/* webpackChunkName: "home" */ "../views/Order.vue") },
+    { path: "/address_list", component: () => import(/* webpackChunkName: "home" */ "../views/AddressList.vue") },
   ]
 })
