@@ -319,6 +319,46 @@ def create_product(pName: str, brand: str, price: float, pDesc: str, thumbnail: 
         return playload
 
 
+def get_products_by_brand(brand: str):
+    """ Get products by brand
+
+    Args:
+        brand (str): product brand
+
+    Returns:
+        dict: status(success, error), product list
+    """
+    playload = {'status': '', 'product_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `product` WHERE `BRAND`=%s"
+                cursor.execute(sql, (brand,))
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'success'
+                    return playload
+                else:
+                    playload['status'] = 'success'
+                    for row in result:
+                        product = {
+                            'pid': row['PID'],
+                            'pName': row['PNAME'],
+                            'brand': row['BRAND'],
+                            'price': row['PRICE'],
+                            'pDesc': row['PDESC'],
+                            'thumbnail': row['THUMBNAIL'],
+                            'pic': row['PIC'],
+                            'category': row['CATALOG']
+                        }
+                        playload['product_list'].append(product)
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
+
 def get_products_by_name(name: str):
     """ Get products by name
 
