@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed } from "vue";
+import { useStore } from "vuex";
 
-// const count = ref(0)
+const store = useStore();
+
+const userEmail = computed(() => {
+  return store.state.userEmail;
+});
 </script>
 
 <template>
@@ -11,8 +16,11 @@ import { ref } from "vue";
       <div class="lg:col-span-2">
         <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
           <div class="flex items-start justify-between">
-            <h2 class="text-2xl font-medium text-gray-900" id="slide-over-title">
-              Shopping cart
+            <h2 class="text-left text-2xl font-medium text-gray-900">
+              Shopping Cart
+              <div class="text-sm text-gray-500">
+                {{ userEmail }}
+              </div>
             </h2>
             <div class="ml-3 h-7 flex items-center"></div>
           </div>
