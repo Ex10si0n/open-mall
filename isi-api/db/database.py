@@ -3,6 +3,8 @@ import pymysql.cursors
 import uuid
 import password_validator
 
+imgdir = 'img/'
+
 
 def create_connection():
     return pymysql.connect(host=settings.db_host,
@@ -286,7 +288,7 @@ def delete_address(addId: str, accId: str):
         return playload
 
 
-def create_product(pName: str, brand: str, price: float, pDesc: str, thumbnail: str, pic: str, category: str):
+def create_product(pName: str, brand: str, price: float, pDesc: str, thumbnail: str, pic: str):
     """ Create a new product
 
     Args:
@@ -296,7 +298,6 @@ def create_product(pName: str, brand: str, price: float, pDesc: str, thumbnail: 
         pDesc (str): product description
         thumbnail (str): thumbnail image
         pic (str): product detail image
-        category (str): product category
 
     Returns:
         dict: status(success, error), pid
@@ -306,14 +307,53 @@ def create_product(pName: str, brand: str, price: float, pDesc: str, thumbnail: 
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
-                sql = "INSERT INTO `product` (`PID`, `PNAME`, `BRAND`, `PRICE`, `PDESC`, `THUMBNAIL`, `PIC`, `CATALOG`)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO `product` (`PID`, `PNAME`, `BRAND`, `PRICE`, `PDESC`, `THUMBNAIL`, `PIC`)  VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
                 pid = str(uuid.uuid4())
                 cursor.execute(sql, (pid, pName, brand, price,
-                               pDesc, thumbnail, pic, category))
+                               pDesc, thumbnail, pic))
                 connection.commit()
                 playload['status'] = 'success'
                 playload['pid'] = pid
                 return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
+
+def get_all_products():
+    """ Get all products
+
+    Args:
+        None
+
+    Returns:
+        dict: status(success, none, error), product list
+    """
+    playload = {'status': '', 'product_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `product`"
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    playload['status'] = 'success'
+                    for row in result:
+                        product = {
+                            'pid': row['PID'],
+                            'pname': row['PNAME'],
+                            'brand': row['BRAND'],
+                            'price': row['PRICE'],
+                            'pdesc': row['PDESC'],
+                            'thumbnail': row['THUMBNAIL'],
+                            'pic': row['PIC'],
+                        }
+                        playload['product_list'].append(product)
+                    return playload
     except:
         playload['status'] = 'error'
         return playload
@@ -350,7 +390,6 @@ def get_products_by_brand(brand: str):
                             'pDesc': row['PDESC'],
                             'thumbnail': row['THUMBNAIL'],
                             'pic': row['PIC'],
-                            'category': row['CATALOG']
                         }
                         playload['product_list'].append(product)
                     return playload
@@ -567,10 +606,11 @@ if __name__ == '__main__':
     #    "11a45010-d203-438c-98ef-2ed2012b2eaf", 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 1)
     # res = create_address('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '18740060111', 'Steve Yan', 'Macao SAR',
     #                     'China', 'Rua de Bruxelas, Nam On Gardon, Macao Polytechnic Institute Student Hostel')
-    res = get_user_address_list('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    # res = get_user_address_list('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = delete_address('c5a498da-a01b-47c2-8475-b6546a84ad2a',
     #                     'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = delete_product_from_cart(
     #    'bea69416-d9a2-42b5-8323-bf2778093562', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    res = get_all_products()
 
     print(res)
