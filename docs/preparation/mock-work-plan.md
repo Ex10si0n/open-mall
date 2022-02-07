@@ -12,7 +12,7 @@ Our project will include all basic functions and the additional function Z0. In 
 
 Work Breakdown Structure (WBS) is used to break the whole project into smaller components to make the work more manageable and elastic. Specifically, for this project, we have divided the whole project into for parts -- analysis, design, implementation, and deployment. And several work packages have been grouped into these four parts separately.
 
-  ![ISI-WBS](./diagrams/ISI-WBS.png)
+  ![ISI-WBS](../diagrams/ISI-WBS.png)
 
 ### Milestones
 
@@ -30,7 +30,7 @@ In this part, Gantt chart is shown.
 
 The following is the draft Gantt chart. The Gantt chart describes the duration of each task, start and finish of each task and milestones (indicated by green square).
 
-![Gantt](./diagrams/Gantt.png)
+![Gantt](../diagrams/Gantt.png)
 
 ## Work plan table
 
