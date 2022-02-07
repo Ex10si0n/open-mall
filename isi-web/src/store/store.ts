@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import axios from 'axios'
 
 export default createStore({
   state: {
@@ -15,8 +16,10 @@ export default createStore({
       detailed: 'Rua de Bruxelas, Nam On Gardon, Macao Polytechnic Institute Student Hostel',
       tag: 'home',
     },
-    shoppingCart: {}
+    shoppingCart: {},
+    allProducts: {}
   },
   mutations: {},
-  actions: {}
+  actions: {
+  }
 })
