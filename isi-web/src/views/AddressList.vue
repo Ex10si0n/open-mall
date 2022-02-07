@@ -26,7 +26,7 @@ const address = computed(() => {
           {{ userEmail }}
         </div>
       </h2>
-      <div class="max-w-sm rounded-lg overflow-hidden border shadow-lg">
+      <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-lg">
         <div class="px-6 py-4">
           <div class="font-medium text-xl mb-2">Primary Address</div>
           <div class="grid grid-cols-3">

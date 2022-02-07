@@ -10,7 +10,7 @@ const userStatus = computed(() => {
   return store.state.userStatus;
 });
 
-const activeTab = ref('shop');
+const activeTab = ref("shop");
 
 const changeTab = (tab: string) => {
   activeTab.value = tab;
@@ -29,7 +29,7 @@ const changeTab = (tab: string) => {
         <router-link
           to="/"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
-          :class="{ 'active': activeTab === 'shop' }"
+          :class="{ active: activeTab === 'shop' }"
           @click="changeTab('shop')"
         >
           <svg
@@ -49,7 +49,7 @@ const changeTab = (tab: string) => {
           v-if="userStatus !== 'visitor'"
           to="/profile"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
-          :class="{ 'active': activeTab === 'profile' }"
+          :class="{ active: activeTab === 'profile' }"
           @click="changeTab('profile')"
           ><svg
             width="28"
@@ -68,7 +68,7 @@ const changeTab = (tab: string) => {
           v-if="userStatus === 'visitor'"
           to="/login"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
-          :class="{ 'active': activeTab === 'login' }"
+          :class="{ active: activeTab === 'login' }"
           @click="changeTab('login')"
           ><svg
             width="28"
@@ -87,7 +87,7 @@ const changeTab = (tab: string) => {
           v-if="userStatus !== 'vendor'"
           to="/cart"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
-          :class="{ 'active': activeTab === 'cart' }"
+          :class="{ active: activeTab === 'cart' }"
           @click="changeTab('cart')"
           ><svg
             width="28"
@@ -106,7 +106,7 @@ const changeTab = (tab: string) => {
           v-if="userStatus === 'vendor'"
           to="/vendor"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
-          :class="{ 'active': activeTab === 'vendor'}"
+          :class="{ active: activeTab === 'vendor' }"
           @click="changeTab('vendor')"
           ><svg
             width="28"
@@ -125,7 +125,7 @@ const changeTab = (tab: string) => {
           v-if="userStatus !== 'visitor'"
           to="/order"
           class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
-          :class="{ 'active': activeTab === 'order'}"
+          :class="{ active: activeTab === 'order' }"
           @click="changeTab('order')"
         >
           <svg
@@ -148,6 +148,10 @@ const changeTab = (tab: string) => {
 
 <style>
 .active {
+  background-color: #f3f5f9;
+}
+
+body {
   background-color: #f3f5f9;
 }
 </style>
