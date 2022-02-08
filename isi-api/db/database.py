@@ -358,6 +358,43 @@ def get_all_products():
         playload['status'] = 'error'
         return playload
 
+def get_product_by_id(id: str):
+    """ Get product by id
+
+    Args:
+        id (str): product id
+
+    Returns:
+        dict: status(success, none, error), product
+    """
+    playload = {'status': '', 'product': {}}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `product` WHERE `PID`=%s"
+                cursor.execute(sql, (id,))
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    playload['status'] = 'success'
+                    for row in result:
+                        product = {
+                            'pid': row['PID'],
+                            'pname': row['PNAME'],
+                            'brand': row['BRAND'],
+                            'price': row['PRICE'],
+                            'pdesc': row['PDESC'],
+                            'thumbnail': row['THUMBNAIL'],
+                            'pic': row['PIC'],
+                        }
+                        playload['product'] = product
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
 
 def get_products_by_brand(brand: str):
     """ Get products by brand
