@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from "vue-router";
+import Carousel from "../components/Carousel.vue";
 import config from "../config";
 import axios from "axios";
 
@@ -20,7 +21,8 @@ type ProductState = {
   price: number;
   pdesc: string;
   thumbnail: string;
-  pic: string;
+  pic: Array<string>;
+  // pic: string;
 };
 
 const product = reactive({} as ProductState);
@@ -39,14 +41,21 @@ axios
         route.params.pid
     );
     const json = res.data.product;
-    console.log(json);
     product.pid = json.pid;
     product.pname = json.pname;
     product.brand = json.brand;
     product.price = json.price;
     product.pdesc = json.pdesc;
-    product.pic =
-      "http://" + config.apiServer + ":" + config.port + "/api/img/" + json.pic;
+    // product.pic =
+    //   "http://" + config.apiServer + ":" + config.port + "/api/img/" + json.pic;
+    product.pic = [];
+    json.pic.split(";").forEach((pic: string) => {
+      console.log(pic);
+      product.pic.push(
+        "http://" + config.apiServer + ":" + config.port + "/api/img/" + pic
+      );
+    });
+
     console.log(product);
   })
   .catch((error) => console.log(error));
@@ -56,10 +65,12 @@ axios
   <div class="min-h-full flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+        <div>
+          <!-- <img v-for="pic in product.pic" :src="pic" alt="Product" /> -->
+          <!-- <img :src="product.pic" alt="" /> -->
+          <Carousel :pic="product.pic" />
+        </div>
         <div class="px-6 py-4">
-          <div>
-            <img :src="product.pic" alt="Product" />
-          </div>
           <h2 class="text-left text-2xl font-medium text-gray-900">
             {{ product.pname }}, <span class="font-bold">{{ product.brand }}</span>
             <div class="my-2 text-xl font-medium text-orange-500">

@@ -63,13 +63,13 @@ axios
           class="grid-cols-1 max-w-md border bg-white rounded-lg shadow-sm"
           @click="$router.push('/product/' + product.pid)"
         >
-          <img class="p-8 rounded-t-lg" :src="product.thumbnail" />
-          <div class="px-5 pb-5">
+          <img class="py-0 rounded-t-lg" :src="product.thumbnail" />
+          <div class="px-5 py-2 pb-5">
             <h3 class="text-md font-semibold tracking-tight text-gray-900">
               {{ product.pname }}
             </h3>
             <h3 class="text-sm font-semibold tracking-tight text-gray-500">
-              {{ product.pdesc.split(" ").slice(0, 10).join(" ") }}
+              {{ product.pdesc.split(" ").slice(0, 8).join(" ") }}
             </h3>
             <div class="flex items-center mt-2.5 mb-5">
               <span
