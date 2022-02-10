@@ -1,7 +1,9 @@
+from unittest import result
 import settings
 import pymysql.cursors
 import uuid
 import password_validator
+from datetime import date
 
 imgdir = 'img/'
 
@@ -621,6 +623,300 @@ def delete_all_product_from_cart(accId: str):
         return playload
 
 
+def get_all_products_in_cart(accId: str):
+    """ List all product in cart
+
+    Args: 
+        accId(str): user id
+
+    Returns:
+        dict: status(success, error), product
+    """
+    playload = {'status': '', 'shopping_cart_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `shopping_cart` WHERE `ACCID` = %s"
+                cursor.execute(sql,(accId))
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    for row in result:
+                        sql = "SELECT PNAME, PRICE FROM `product` WHERE `PID` = %s"
+                        pid = row['PID']
+                        quantity = row['QUANTITY']
+                        cursor.execute(sql, (pid))
+                        product = cursor.fetchone()
+                        shopping_cart= {
+                            'pname': product['PNAME'],
+                            'price': product['PRICE'],
+                            'quantity': quantity
+                        }
+                        playload['status'] = 'success'
+                        playload['shopping_cart_list'].append(shopping_cart)
+                        return playload
+    except:
+        playload['status'] = 'error'
+        return playload 
+
+
+def check_out(accId: str):
+    """Check out all items in the shopping cart and create a purchase order
+
+    Args: 
+        accId(str): user id
+
+    Returns:
+        dict: status(success, error), purchase order number
+    """
+    playload = {'status': '', 'PONO': ''}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `shopping_cart` WHERE `ACCID` = %s"
+                cursor.execute(sql,(accId,))
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    amount = 0
+                    pono = str(uuid.uuid4())
+                    for row in result:
+                        cartId = row['CARTID']
+                        pid = row['PID']
+                        quantity = row['QUANTITY']
+                        sql = "SELECT PRICE FROM `product` WHERE `PID` = %s"
+                        cursor.execute(sql,(pid))
+                        product = cursor.fetchone()
+                        price = product['PRICE']                 
+                        subtotal = quantity * price
+                        amount = amount + subtotal
+                        sql = "INSERT INTO `order` (`PONO`, `PRICE`, `OID`, `PID`, `QUANTITY`, `SUBTOTAL`) VALUES (%s, %s, %s, %s, %s, %s)"
+                        oid = str(uuid.uuid4())
+                        print('pono:' + pono)
+                        print(price)
+                        print('oid:' + oid)
+                        print('pid:' + pid)
+                        print(quantity)
+                        print(subtotal)
+                        cursor.execute(sql,(pono, price, oid, pid, quantity, subtotal))
+                        connection.commit()
+                        delete_product_from_cart(cartId, accId)
+                    sql = "INSERT INTO `purchase` (`PONO`, `ACCID`, `DATE`, `STATUS`, `AMOUNT`) VALUES (%s, %s, %s, %s, %s)"
+                    today = date.today().strftime("%Y-%m-%d")
+                    cursor.execute(sql,(pono, accId, today, 'pending', amount))
+                    connection.commit()
+                    playload['status'] = 'success'
+                    playload['PONO'] = pono
+                    return playload
+    except:
+        playload ['status'] = 'error'
+        return playload    
+
+
+def get_all_purchase(accId: str):
+    """List all purchase orders that the customer has placed
+
+    Args: 
+        accId(str): user id
+
+    Returns:
+        dict: status(success, error), purchase_list
+    """
+    playload = {'status': '', 'purchase_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `purchase` WHERE `ACCID` = %s ORDER BY `DATE` DESC"
+                cursor.execute(sql,(accId))
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    for row in result:
+                        purchase = {
+                            'pono': row['PONO'],
+                            'date': row['DATE'],
+                            'amount': row['AMOUNT'],
+                            'status': row['STATUS']
+                        }
+                        playload['status'] = 'success'
+                        playload['purchase_list'].append(purchase)
+                        return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+    
+
+def get_purchase_with_particular_status(accId: str, status: str):
+    """Show 'current purchase' with status 'pending' and 'hold', and show 'past purchases' with status 'shipped' and 'cancelled'
+    
+    Args: 
+        accId(str): user id, status(str): current/past
+
+    Returns:
+        dict: status(success, error), purchase_list
+    """
+
+    playload = {'status': '', 'purchase_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `purchase` WHERE `ACCID` = %s AND (`STATUS` = %s OR `STATUS` = %s)"
+                if(status == 'current'):
+                    cursor.execute(sql,(accId, 'pending', 'hold'))
+                elif (status == 'past'):
+                    cursor.execute(sql,(accId, 'shipped', 'cancelled'))  
+                else:
+                    playload['status'] = 'wrong status'
+                    return playload
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    for row in result:
+                        purchase = {
+                            'pono': row['PONO'],
+                            'date': row['DATE'],
+                            'amount': row['AMOUNT'],
+                            'status': row['STATUS']
+                        }
+                        playload['status'] = 'success'
+                        playload['purchase_list'].append(purchase)
+                        return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
+
+def get_purchase_by_id(pono: str, accId: str, addrId: str):
+    """Get purchase by id
+    
+    Args: 
+        pono(str): purchase id, accId(str): user id, addrId(str): address Id
+
+    Returns:
+        dict: status(success, error), purchase
+    """
+    playload = {'status': '', 'purchase': {}}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `purchase` WHERE `PONO` = %s"
+                cursor.execute(sql,(pono))
+                result = cursor.fetchone()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    date = result['DATE']
+                    amount = result['AMOUNT']
+                    status = result['STATUS']
+                    shipDate = result['SHIPDATE']
+                    cancelBy = result['CANCELBY']
+                    cancelDate = result['CANCELDATE']
+                    sql = "SELECT PNAME FROM `account` WHERE `ACCID` = %s"
+                    cursor.execute(sql, (accId))
+                    account = cursor.fetchone()
+                    accname = account['ACCNAME']
+                    sql = "SELECT * FROM `address` WHERE `ADDRID` = %s"
+                    cursor.execute(sql, (addrId))
+                    address = cursor.fetchone()
+                    order = get_order_by_pono(pono)['order_list']
+                    if (status == 'shipped'):
+                        playload['purchase'] = {
+                            'pono': pono,
+                            'date': date,
+                            'accname': accname,
+                            'address': address,
+                            'amount': amount,
+                            'status': status,
+                            'shipDate': shipDate,
+                            'order': order
+                        }
+                    elif(status == 'cancelled'):
+                         playload['purchase'] = {
+                            'pono': pono,
+                            'date': date,
+                            'accname': accname,
+                            'address': address,
+                            'amount': amount,
+                            'status': status,
+                            'cancelDate': cancelDate,
+                            'cancelBy': cancelBy,
+                            'order': order
+                        }
+                    else:
+                        playload['purchase'] = {
+                            'pono': pono,
+                            'date': date,
+                            'accname': accname,
+                            'address': address,
+                            'amount': amount,
+                            'status': status,
+                            'order': order
+                        }
+                        playload['status'] = 'success'
+                        return playload
+    except:
+        playload['status'] = 'error'
+        return playload                   
+
+
+def get_order_by_pono(pono: str):
+    """Get order by pono
+
+    Args: 
+        pono(str): purchase id
+
+    Returns:
+        dict: status(success, error), order_list
+    """     
+    playload = {'status': '', 'order_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT PID, PRICE, QUANTITY, SUBTOTAL FROM `order` WHERE `PONO` = %s"
+                cursor.execute(sql, (pono))
+                result = cursor.fetchall()
+                for row in result:
+                    pid = row['PID']
+                    price = row['PRICE']
+                    quantity = row['QUANTITY']
+                    subtotal = row['SUBTOTOAL']
+                    sql = "SELECT PNAME FROM `produce` WHERE `PID` = %s"
+                    cursor.execute(sql,(pid))
+                    pname = cursor.fetchone()
+                    order = {
+                        'pname': pname,
+                        'quantity': quantity,
+                        'price': price,
+                        'subtotal': subtotal
+                    }
+                    playload['status'] = 'success'
+                    playload['order_list'].append(order)
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+                    
+                    
+
+
+
+
+
 # @TODO: purchase all products in shopping cart list and clear shopping cart
 # should create a 'purchase receipt' by the following methods
 
@@ -648,6 +944,8 @@ if __name__ == '__main__':
     #                     'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = delete_product_from_cart(
     #    'bea69416-d9a2-42b5-8323-bf2778093562', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
-    res = get_all_products()
+    # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    #res = get_all_products()
 
     print(res)
