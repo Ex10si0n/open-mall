@@ -791,10 +791,10 @@ def get_all_purchase_of_customer(accId: str):
 
 
 def get_purchase_by_status(accId: str, status: str):
-    """Show 'current purchase' with status 'pending' and 'hold', and show 'past purchases' with status 'shipped' and 'cancelled'
+    """Filter purchase by status
 
     Args: 
-        accId(str): user id, status(str): current/past
+        accId(str): user id, status(str): pending/hold/shipped/cancelled
 
     Returns:
         dict: status(success, error), purchase_list
@@ -805,14 +805,8 @@ def get_purchase_by_status(accId: str, status: str):
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
-                sql = "SELECT * FROM `purchase` WHERE `ACCID` = %s AND (`STATUS` = %s OR `STATUS` = %s)"
-                if(status == 'current'):
-                    cursor.execute(sql, (accId, 'pending', 'hold'))
-                elif (status == 'past'):
-                    cursor.execute(sql, (accId, 'shipped', 'cancelled'))
-                else:
-                    playload['status'] = 'wrong status'
-                    return playload
+                sql = "SELECT * FROM `purchase` WHERE `ACCID` = %s AND `STATUS` = %s"
+                cursor.execute(sql, (accId, status))
                 result = cursor.fetchall()
                 if (len(result) == 0):
                     playload['status'] = 'none'
@@ -821,6 +815,7 @@ def get_purchase_by_status(accId: str, status: str):
                     for row in result:
                         purchase = {
                             'pono': row['PONO'],
+                            'accId': row['ACCID'],
                             'date': row['DATE'].strftime("%Y-%m-%d"),
                             'amount': row['AMOUNT'],
                             'status': row['STATUS']
@@ -1048,7 +1043,7 @@ if __name__ == '__main__':
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_all_purchase_of_customer('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
-    # res = get_purchase_by_status('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'past')
+    res = get_purchase_by_status('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'pending')
     # res = get_purchase_by_id('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '98409f31-ee40-404c-b6c5-896c85e3878a')
     # res = update_status('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'cancelled')
     # res = update_product('11a45010-d203-438c-98ef-2ed2012b2eaf', 'iPhone 13 pro', 'Apple', '9899', 'Phone',
