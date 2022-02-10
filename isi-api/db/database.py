@@ -359,6 +359,7 @@ def get_all_products():
         playload['status'] = 'error'
         return playload
 
+
 def get_product_by_id(id: str):
     """ Get product by id
 
@@ -396,6 +397,7 @@ def get_product_by_id(id: str):
     except:
         playload['status'] = 'error'
         return playload
+
 
 def get_products_by_brand(brand: str):
     """ Get products by brand
@@ -463,6 +465,7 @@ def get_products_by_name(name: str):
         playload['status'] = 'error'
         return playload
 
+
 def update_product(pid: str, pName: str, brand: str, price: float, pDesc: str, thumbnail: str, pic: str):
     """ Update product
 
@@ -484,7 +487,8 @@ def update_product(pid: str, pName: str, brand: str, price: float, pDesc: str, t
         with connection:
             with connection.cursor() as cursor:
                 sql = "UPDATE `product` SET `PNAME`=%s, `BRAND`=%s, `PRICE`=%s, `PDESC`=%s, `THUMBNAIL`=%s, `PIC`=%s WHERE `PID`=%s"
-                cursor.execute(sql, (pName, brand, price, pDesc, thumbnail, pic, pid))
+                cursor.execute(sql, (pName, brand, price,
+                               pDesc, thumbnail, pic, pid))
                 connection.commit()
                 playload['status'] = 'success'
                 playload['pid'] = pid
@@ -492,6 +496,7 @@ def update_product(pid: str, pName: str, brand: str, price: float, pDesc: str, t
     except:
         playload['status'] = 'error'
         return playload
+
 
 def update_product_price(pid: str, new_price: int):
     """ Update product's price
@@ -666,7 +671,7 @@ def get_all_products_in_cart(accId: str):
         with connection:
             with connection.cursor() as cursor:
                 sql = "SELECT * FROM `shopping_cart` WHERE `ACCID` = %s"
-                cursor.execute(sql,(accId))
+                cursor.execute(sql, (accId))
                 result = cursor.fetchall()
                 if (len(result) == 0):
                     playload['status'] = 'none'
@@ -678,7 +683,7 @@ def get_all_products_in_cart(accId: str):
                         quantity = row['QUANTITY']
                         cursor.execute(sql, (pid))
                         product = cursor.fetchone()
-                        shopping_cart= {
+                        shopping_cart = {
                             'pname': product['PNAME'],
                             'price': product['PRICE'],
                             'quantity': quantity
@@ -688,7 +693,7 @@ def get_all_products_in_cart(accId: str):
                         return playload
     except:
         playload['status'] = 'error'
-        return playload 
+        return playload
 
 
 def check_out(accId: str):
@@ -706,7 +711,7 @@ def check_out(accId: str):
         with connection:
             with connection.cursor() as cursor:
                 sql = "SELECT * FROM `shopping_cart` WHERE `ACCID` = %s"
-                cursor.execute(sql,(accId,))
+                cursor.execute(sql, (accId,))
                 result = cursor.fetchall()
                 if (len(result) == 0):
                     playload['status'] = 'none'
@@ -714,37 +719,39 @@ def check_out(accId: str):
                 else:
                     amount = 0
                     pono = str(uuid.uuid4())
+                    sql = "INSERT INTO `purchase` (`PONO`, `ACCID`, `DATE`, `STATUS`, `AMOUNT`) VALUES (%s, %s, %s, %s, %s)"
+                    today = date.today().strftime("%Y-%m-%d")
+                    cursor.execute(
+                        sql, (pono, accId, today, 'pending', 0))
+                    connection.commit()
                     for row in result:
                         cartId = row['CARTID']
                         pid = row['PID']
                         quantity = row['QUANTITY']
                         sql = "SELECT PRICE FROM `product` WHERE `PID` = %s"
-                        cursor.execute(sql,(pid))
+                        cursor.execute(sql, (pid))
                         product = cursor.fetchone()
-                        price = product['PRICE']                 
+                        price = product['PRICE']
                         subtotal = quantity * price
                         amount = amount + subtotal
                         sql = "INSERT INTO `order` (`PONO`, `PRICE`, `OID`, `PID`, `QUANTITY`, `SUBTOTAL`) VALUES (%s, %s, %s, %s, %s, %s)"
                         oid = str(uuid.uuid4())
-                        print('pono:' + pono)
-                        print(price)
-                        print('oid:' + oid)
-                        print('pid:' + pid)
-                        print(quantity)
-                        print(subtotal)
-                        cursor.execute(sql,(pono, price, oid, pid, quantity, subtotal))
+                        print(sql % (pono, price, oid, pid, quantity, subtotal))
+                        cursor.execute(
+                            sql, (pono, price, oid, pid, quantity, subtotal))
                         connection.commit()
                         delete_product_from_cart(cartId, accId)
-                    sql = "INSERT INTO `purchase` (`PONO`, `ACCID`, `DATE`, `STATUS`, `AMOUNT`) VALUES (%s, %s, %s, %s, %s)"
+                    sql = "UPDATE `purchase` SET `AMOUNT` = %s WHERE `PONO` = %s"
                     today = date.today().strftime("%Y-%m-%d")
-                    cursor.execute(sql,(pono, accId, today, 'pending', amount))
+                    cursor.execute(
+                        sql, (amount, pono))
                     connection.commit()
                     playload['status'] = 'success'
                     playload['PONO'] = pono
                     return playload
     except:
-        playload ['status'] = 'error'
-        return playload    
+        playload['status'] = 'error'
+        return playload
 
 
 def get_all_purchase(accId: str):
@@ -762,7 +769,7 @@ def get_all_purchase(accId: str):
         with connection:
             with connection.cursor() as cursor:
                 sql = "SELECT * FROM `purchase` WHERE `ACCID` = %s ORDER BY `DATE` DESC"
-                cursor.execute(sql,(accId))
+                cursor.execute(sql, (accId))
                 result = cursor.fetchall()
                 if (len(result) == 0):
                     playload['status'] = 'none'
@@ -781,11 +788,11 @@ def get_all_purchase(accId: str):
     except:
         playload['status'] = 'error'
         return playload
-    
 
-def get_purchase_with_particular_status(accId: str, status: str):
+
+def get_purchase_by_status(accId: str, status: str):
     """Show 'current purchase' with status 'pending' and 'hold', and show 'past purchases' with status 'shipped' and 'cancelled'
-    
+
     Args: 
         accId(str): user id, status(str): current/past
 
@@ -800,9 +807,9 @@ def get_purchase_with_particular_status(accId: str, status: str):
             with connection.cursor() as cursor:
                 sql = "SELECT * FROM `purchase` WHERE `ACCID` = %s AND (`STATUS` = %s OR `STATUS` = %s)"
                 if(status == 'current'):
-                    cursor.execute(sql,(accId, 'pending', 'hold'))
+                    cursor.execute(sql, (accId, 'pending', 'hold'))
                 elif (status == 'past'):
-                    cursor.execute(sql,(accId, 'shipped', 'cancelled'))  
+                    cursor.execute(sql, (accId, 'shipped', 'cancelled'))
                 else:
                     playload['status'] = 'wrong status'
                     return playload
@@ -828,7 +835,7 @@ def get_purchase_with_particular_status(accId: str, status: str):
 
 def get_purchase_by_id(pono: str, accId: str, addrId: str):
     """Get purchase by id
-    
+
     Args: 
         pono(str): purchase id, accId(str): user id, addrId(str): address Id
 
@@ -841,7 +848,7 @@ def get_purchase_by_id(pono: str, accId: str, addrId: str):
         with connection:
             with connection.cursor() as cursor:
                 sql = "SELECT * FROM `purchase` WHERE `PONO` = %s"
-                cursor.execute(sql,(pono))
+                cursor.execute(sql, (pono))
                 result = cursor.fetchone()
                 if (len(result) == 0):
                     playload['status'] = 'none'
@@ -873,7 +880,7 @@ def get_purchase_by_id(pono: str, accId: str, addrId: str):
                             'order': order
                         }
                     elif(status == 'cancelled'):
-                         playload['purchase'] = {
+                        playload['purchase'] = {
                             'pono': pono,
                             'date': date,
                             'accname': accname,
@@ -898,7 +905,7 @@ def get_purchase_by_id(pono: str, accId: str, addrId: str):
                         return playload
     except:
         playload['status'] = 'error'
-        return playload                   
+        return playload
 
 
 def get_order_by_pono(pono: str):
@@ -909,7 +916,7 @@ def get_order_by_pono(pono: str):
 
     Returns:
         dict: status(success, error), order_list
-    """     
+    """
     playload = {'status': '', 'order_list': []}
     try:
         connection = create_connection()
@@ -924,7 +931,7 @@ def get_order_by_pono(pono: str):
                     quantity = row['QUANTITY']
                     subtotal = row['SUBTOTOAL']
                     sql = "SELECT PNAME FROM `produce` WHERE `PID` = %s"
-                    cursor.execute(sql,(pid))
+                    cursor.execute(sql, (pid))
                     pname = cursor.fetchone()
                     order = {
                         'pname': pname,
@@ -938,19 +945,11 @@ def get_order_by_pono(pono: str):
     except:
         playload['status'] = 'error'
         return playload
-                    
-                    
-
-
-
 
 
 # @TODO: purchase all products in shopping cart list and clear shopping cart
 # should create a 'purchase receipt' by the following methods
-
 # @TODO: generate a 'purchase recepit' by method purchase all products in shopping cart list
-
-
 if __name__ == '__main__':
     res = None
     # res = create_account("Steve", 'p1908326@ipm.edu.mo',
@@ -973,11 +972,11 @@ if __name__ == '__main__':
     # res = delete_product_from_cart(
     #    'bea69416-d9a2-42b5-8323-bf2778093562', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
-    # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = update_product('11a45010-d203-438c-98ef-2ed2012b2eaf', 'iPhone 13 pro', 'Apple', '9899', 'Phone',
     #                      'img/iphone.png', 'img/iphone-2.png')
     # res = create_product('Nike Air Force 1 Mid 07 LV8', 'Nike', '819', 'Shoes',
     #                     '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp', '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp;8d56312f-79ac-4fb8-836e-0326817ddc1e.webp;7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp')
-    res = get_all_products()
+    # res = get_all_products()
 
     print(res)
