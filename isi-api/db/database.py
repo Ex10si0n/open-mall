@@ -783,7 +783,7 @@ def get_all_purchase(accId: str):
         return playload
     
 
-def get_purchase_with_particular_status(accId: str, status: str):
+def get_purchase_by_status(accId: str, status: str):
     """Show 'current purchase' with status 'pending' and 'hold', and show 'past purchases' with status 'shipped' and 'cancelled'
     
     Args: 
@@ -940,6 +940,28 @@ def get_order_by_pono(pono: str):
         return playload
                     
                     
+def update_status(pono: str, status: str):
+    """Update status
+
+    Args: 
+        pono(str): purchase id, status(str): status of purchase
+
+    Returns:
+        dict: status(success, error)
+    """
+    playload = {'status': ''}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "UPDATE `purchase` SET `STATUS` = %s WHERE `PONO` = %s"
+                cursor.execute(sql, (status, pono))
+                connection.commit()
+                playload['status'] = 'success'
+                return playload
+    except:
+        playload['status'] = 'error'
+        return playload
 
 
 
