@@ -789,10 +789,7 @@ def get_all_purchase(accId: str):
         playload['status'] = 'error'
         return playload
 
-<<<<<<< HEAD
 
-=======
->>>>>>> a88ffabb58830a90c63ea8c08dd958b4d6d4102d
 def get_purchase_by_status(accId: str, status: str):
     """Show 'current purchase' with status 'pending' and 'hold', and show 'past purchases' with status 'shipped' and 'cancelled'
 
@@ -948,10 +945,8 @@ def get_order_by_pono(pono: str):
     except:
         playload['status'] = 'error'
         return playload
-<<<<<<< HEAD
-=======
-                    
-                    
+
+
 def update_status(pono: str, status: str):
     """Update status
 
@@ -974,10 +969,6 @@ def update_status(pono: str, status: str):
     except:
         playload['status'] = 'error'
         return playload
-
-
-
->>>>>>> a88ffabb58830a90c63ea8c08dd958b4d6d4102d
 
 
 # @TODO: purchase all products in shopping cart list and clear shopping cart
@@ -1005,7 +996,7 @@ if __name__ == '__main__':
     # res = delete_product_from_cart(
     #    'bea69416-d9a2-42b5-8323-bf2778093562', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
-    res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = update_product('11a45010-d203-438c-98ef-2ed2012b2eaf', 'iPhone 13 pro', 'Apple', '9899', 'Phone',
     #                      'img/iphone.png', 'img/iphone-2.png')
     # res = create_product('Nike Air Force 1 Mid 07 LV8', 'Nike', '819', 'Shoes',
