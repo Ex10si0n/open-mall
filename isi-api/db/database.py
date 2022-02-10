@@ -754,7 +754,7 @@ def check_out(accId: str):
         return playload
 
 
-def get_all_purchase(accId: str):
+def get_all_purchase_of_customer(accId: str):
     """List all purchase orders that the customer has placed
 
     Args: 
@@ -778,7 +778,7 @@ def get_all_purchase(accId: str):
                     for row in result:
                         purchase = {
                             'pono': row['PONO'],
-                            'date': row['DATE'],
+                            'date': row['DATE'].strftime("%Y-%m-%d"),
                             'amount': row['AMOUNT'],
                             'status': row['STATUS']
                         }
@@ -821,7 +821,7 @@ def get_purchase_by_status(accId: str, status: str):
                     for row in result:
                         purchase = {
                             'pono': row['PONO'],
-                            'date': row['DATE'],
+                            'date': row['DATE'].strftime("%Y-%m-%d"),
                             'amount': row['AMOUNT'],
                             'status': row['STATUS']
                         }
@@ -854,12 +854,12 @@ def get_purchase_by_id(pono: str, accId: str, addrId: str):
                     playload['status'] = 'none'
                     return playload
                 else:
-                    date = result['DATE']
+                    date = result['DATE'].strftime("%Y-%m-%d")
                     amount = result['AMOUNT']
                     status = result['STATUS']
-                    shipDate = result['SHIPDATE']
+                    shipDate = result['SHIPDATE'].strftime("%Y-%m-%d")
                     cancelBy = result['CANCELBY']
-                    cancelDate = result['CANCELDATE']
+                    cancelDate = result['CANCELDATE'].strftime("%Y-%m-%d")
                     sql = "SELECT ACCNAME FROM `account` WHERE `ACCID` = %s"
                     cursor.execute(sql, (accId))
                     account = cursor.fetchone()
@@ -976,6 +976,51 @@ def update_status(pono: str, status: str):
         return playload
 
 
+def get_all_purchase():
+    """Get all purchase
+
+    Args: 
+        None
+
+    Returns:
+        dict: status(success, error), purchase_list
+    """
+    playload = {'status': '', 'purchase_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `purchase` ORDER BY `DATE` DESC"
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    for row in result:
+                        pono = row['PONO']
+                        date = row['DATE'].strftime("%Y-%m-%d")
+                        accId = row['ACCID']
+                        amount = row['AMOUNT']
+                        status = row['STATUS']
+                        sql = "SELECT ACCNAME FROM `account` WHERE `ACCID` = %s"
+                        cursor.execute(sql, (accId))
+                        name = cursor.fetchone()
+                        accName = name['ACCNAME']
+                        purchase = {
+                            'pono': pono,
+                            'date': date,
+                            'accName': accName,
+                            'amount': amount,
+                            'status': status
+                        }
+                        playload['purchase_list'].append(purchase)
+                    playload['status'] = 'success'
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
 # @TODO: purchase all products in shopping cart list and clear shopping cart
 # should create a 'purchase receipt' by the following methods
 # @TODO: generate a 'purchase recepit' by method purchase all products in shopping cart list
@@ -1002,7 +1047,7 @@ if __name__ == '__main__':
     #    'bea69416-d9a2-42b5-8323-bf2778093562', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
-    # res = get_all_purchase('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    # res = get_all_purchase_of_customer('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_purchase_by_status('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'past')
     # res = get_purchase_by_id('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '98409f31-ee40-404c-b6c5-896c85e3878a')
     # res = update_status('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'cancelled')
@@ -1010,6 +1055,7 @@ if __name__ == '__main__':
     #                      'img/iphone.png', 'img/iphone-2.png')
     # res = create_product('Nike Air Force 1 Mid 07 LV8', 'Nike', '819', 'Shoes',
     #                     '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp', '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp;8d56312f-79ac-4fb8-836e-0326817ddc1e.webp;7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp')
+    # res = get_all_purchase()
     # res = get_all_products()
 
     print(res)
