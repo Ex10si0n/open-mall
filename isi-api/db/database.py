@@ -789,7 +789,10 @@ def get_all_purchase(accId: str):
         playload['status'] = 'error'
         return playload
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> a88ffabb58830a90c63ea8c08dd958b4d6d4102d
 def get_purchase_by_status(accId: str, status: str):
     """Show 'current purchase' with status 'pending' and 'hold', and show 'past purchases' with status 'shipped' and 'cancelled'
 
@@ -945,6 +948,36 @@ def get_order_by_pono(pono: str):
     except:
         playload['status'] = 'error'
         return playload
+<<<<<<< HEAD
+=======
+                    
+                    
+def update_status(pono: str, status: str):
+    """Update status
+
+    Args: 
+        pono(str): purchase id, status(str): status of purchase
+
+    Returns:
+        dict: status(success, error)
+    """
+    playload = {'status': ''}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "UPDATE `purchase` SET `STATUS` = %s WHERE `PONO` = %s"
+                cursor.execute(sql, (status, pono))
+                connection.commit()
+                playload['status'] = 'success'
+                return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
+
+
+>>>>>>> a88ffabb58830a90c63ea8c08dd958b4d6d4102d
 
 
 # @TODO: purchase all products in shopping cart list and clear shopping cart
