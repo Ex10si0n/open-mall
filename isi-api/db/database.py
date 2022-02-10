@@ -782,9 +782,9 @@ def get_all_purchase(accId: str):
                             'amount': row['AMOUNT'],
                             'status': row['STATUS']
                         }
-                        playload['status'] = 'success'
                         playload['purchase_list'].append(purchase)
-                        return playload
+                    playload['status'] = 'success'
+                    return playload    
     except:
         playload['status'] = 'error'
         return playload
@@ -825,9 +825,9 @@ def get_purchase_by_status(accId: str, status: str):
                             'amount': row['AMOUNT'],
                             'status': row['STATUS']
                         }
-                        playload['status'] = 'success'
                         playload['purchase_list'].append(purchase)
-                        return playload
+                    playload['status'] = 'success'
+                    return playload
     except:
         playload['status'] = 'error'
         return playload
@@ -860,10 +860,10 @@ def get_purchase_by_id(pono: str, accId: str, addrId: str):
                     shipDate = result['SHIPDATE']
                     cancelBy = result['CANCELBY']
                     cancelDate = result['CANCELDATE']
-                    sql = "SELECT PNAME FROM `account` WHERE `ACCID` = %s"
+                    sql = "SELECT ACCNAME FROM `account` WHERE `ACCID` = %s"
                     cursor.execute(sql, (accId))
                     account = cursor.fetchone()
-                    accname = account['ACCNAME']
+                    accName = account['ACCNAME']
                     sql = "SELECT * FROM `address` WHERE `ADDRID` = %s"
                     cursor.execute(sql, (addrId))
                     address = cursor.fetchone()
@@ -872,7 +872,7 @@ def get_purchase_by_id(pono: str, accId: str, addrId: str):
                         playload['purchase'] = {
                             'pono': pono,
                             'date': date,
-                            'accname': accname,
+                            'accName': accName,
                             'address': address,
                             'amount': amount,
                             'status': status,
@@ -883,7 +883,7 @@ def get_purchase_by_id(pono: str, accId: str, addrId: str):
                         playload['purchase'] = {
                             'pono': pono,
                             'date': date,
-                            'accname': accname,
+                            'accName': accName,
                             'address': address,
                             'amount': amount,
                             'status': status,
@@ -895,14 +895,14 @@ def get_purchase_by_id(pono: str, accId: str, addrId: str):
                         playload['purchase'] = {
                             'pono': pono,
                             'date': date,
-                            'accname': accname,
+                            'accName': accName,
                             'address': address,
                             'amount': amount,
                             'status': status,
                             'order': order
                         }
-                        playload['status'] = 'success'
-                        return playload
+                    playload['status'] = 'success'
+                    return playload
     except:
         playload['status'] = 'error'
         return playload
@@ -925,22 +925,27 @@ def get_order_by_pono(pono: str):
                 sql = "SELECT PID, PRICE, QUANTITY, SUBTOTAL FROM `order` WHERE `PONO` = %s"
                 cursor.execute(sql, (pono))
                 result = cursor.fetchall()
-                for row in result:
-                    pid = row['PID']
-                    price = row['PRICE']
-                    quantity = row['QUANTITY']
-                    subtotal = row['SUBTOTOAL']
-                    sql = "SELECT PNAME FROM `produce` WHERE `PID` = %s"
-                    cursor.execute(sql, (pid))
-                    pname = cursor.fetchone()
-                    order = {
-                        'pname': pname,
-                        'quantity': quantity,
-                        'price': price,
-                        'subtotal': subtotal
-                    }
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    for row in result:
+                        pid = row['PID']
+                        price = row['PRICE']
+                        quantity = row['QUANTITY']
+                        subtotal = row['SUBTOTAL']
+                        sql = "SELECT PNAME FROM `product` WHERE `PID` = %s"
+                        cursor.execute(sql, (pid))
+                        name = cursor.fetchone()
+                        pname = name['PNAME']
+                        order = {
+                            'pname': pname,
+                            'quantity': quantity,
+                            'price': price,
+                            'subtotal': subtotal
+                        }
+                        playload['order_list'].append(order)
                     playload['status'] = 'success'
-                    playload['order_list'].append(order)
                     return playload
     except:
         playload['status'] = 'error'
@@ -997,6 +1002,10 @@ if __name__ == '__main__':
     #    'bea69416-d9a2-42b5-8323-bf2778093562', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    # res = get_all_purchase('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    # res = get_purchase_by_status('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'past')
+    # res = get_purchase_by_id('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '98409f31-ee40-404c-b6c5-896c85e3878a')
+    # res = update_status('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'cancelled')
     # res = update_product('11a45010-d203-438c-98ef-2ed2012b2eaf', 'iPhone 13 pro', 'Apple', '9899', 'Phone',
     #                      'img/iphone.png', 'img/iphone-2.png')
     # res = create_product('Nike Air Force 1 Mid 07 LV8', 'Nike', '819', 'Shoes',
