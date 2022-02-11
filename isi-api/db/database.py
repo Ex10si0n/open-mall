@@ -607,11 +607,11 @@ def update_product_quantity_in_cart(cartId: str, accId: str, quantity: int):
         return playload
 
 
-def delete_product_from_cart(cartId: str, accId: str):
+def delete_product_from_cart(pid: str, accId: str):
     """ Delete product from shopping cart list
 
     Args:
-        cartId (str): shopping cart id
+        pid (str): product id
         accId (str): user id
 
     Returns:
@@ -622,8 +622,8 @@ def delete_product_from_cart(cartId: str, accId: str):
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
-                sql = "DELETE FROM `shopping_cart` WHERE `CARTID`=%s AND `ACCID`=%s"
-                cursor.execute(sql, (cartId, accId))
+                sql = "DELETE FROM `shopping_cart` WHERE `PID`=%s AND `ACCID`=%s"
+                cursor.execute(sql, (pid, accId))
                 connection.commit()
                 playload['status'] = 'success'
                 return playload
@@ -684,13 +684,14 @@ def get_all_products_in_cart(accId: str):
                         cursor.execute(sql, (pid))
                         product = cursor.fetchone()
                         shopping_cart = {
+                            'pid': pid,
                             'pname': product['PNAME'],
                             'price': product['PRICE'],
                             'quantity': quantity
                         }
                         playload['status'] = 'success'
                         playload['shopping_cart_list'].append(shopping_cart)
-                        return playload
+                    return playload
     except:
         playload['status'] = 'error'
         return playload
@@ -784,7 +785,7 @@ def get_all_purchase_of_customer(accId: str):
                         }
                         playload['purchase_list'].append(purchase)
                     playload['status'] = 'success'
-                    return playload    
+                    return playload
     except:
         playload['status'] = 'error'
         return playload
@@ -1016,6 +1017,7 @@ def get_all_purchase():
         playload['status'] = 'error'
         return playload
 
+
 # @TODO: purchase all products in shopping cart list and clear shopping cart
 # should create a 'purchase receipt' by the following methods
 # @TODO: generate a 'purchase recepit' by method purchase all products in shopping cart list
@@ -1043,7 +1045,8 @@ if __name__ == '__main__':
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_all_purchase_of_customer('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
-    res = get_purchase_by_status('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'pending')
+    # res = get_purchase_by_status(
+    #    'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'pending')
     # res = get_purchase_by_id('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '98409f31-ee40-404c-b6c5-896c85e3878a')
     # res = update_status('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'cancelled')
     # res = update_product('11a45010-d203-438c-98ef-2ed2012b2eaf', 'iPhone 13 pro', 'Apple', '9899', 'Phone',
@@ -1052,5 +1055,6 @@ if __name__ == '__main__':
     #                     '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp', '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp;8d56312f-79ac-4fb8-836e-0326817ddc1e.webp;7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp')
     # res = get_all_purchase()
     # res = get_all_products()
+    res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
 
     print(res)

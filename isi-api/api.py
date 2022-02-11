@@ -1,5 +1,7 @@
 import os
+import re
 import sys
+from turtle import up
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -46,3 +48,21 @@ def get_product_by_id(id: str):
 def add_product_to_cart(pid: str, accid: str, quantity: int):
     from db.database import add_product_to_cart
     return add_product_to_cart(pid, accid, quantity)
+
+
+@app.get("/api/cart/del/{pid}/{accId}")
+def delete_product_from_cart(pid: str, accId: str):
+    from db.database import delete_product_from_cart
+    return delete_product_from_cart(pid, accId)
+
+
+@app.get("/api/cart/products/{accId}")
+def get_cart_by_id(accId: str):
+    from db.database import get_all_products_in_cart
+    return get_all_products_in_cart(accId)
+
+
+@app.get("/api/cart/update/{pid}/{accId}/{quantity}")
+def update_product_from_cart(pid: str, accId: str, quantity: int):
+    from db.database import update_product_quantity_in_cart
+    return update_product_quantity_in_cart(pid, accId, quantity)

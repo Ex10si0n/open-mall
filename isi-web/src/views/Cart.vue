@@ -1,12 +1,81 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
+import axios from "axios";
+import config from "../config";
+import InputNumber from "../components/InputNumber.vue";
 
 const store = useStore();
 
 const userEmail = computed(() => {
   return store.state.userEmail;
 });
+
+type ProductState = {
+  pid: string;
+  pname: string;
+  brand: string;
+  price: number;
+  pdesc: string;
+  thumbnail: string;
+  pic: string;
+  quantity: number;
+};
+
+const accId = computed(() => {
+  return store.state.accId;
+});
+
+const subtotal = ref(0);
+
+const products = reactive([] as Array<ProductState>);
+
+const query =
+  "http://" + config.apiServer + ":" + config.port + "/api/cart/products/" + accId.value;
+axios.get(query).then((res) => {
+  const cartItems = res.data.shopping_cart_list;
+  cartItems.forEach((cartItem: ProductState) => {
+    const pid = cartItem.pid;
+    const quantity = cartItem.quantity;
+    const innerQuery =
+      "http://" + config.apiServer + ":" + config.port + "/api/product/" + pid;
+    axios.get(innerQuery).then((res) => {
+      const img =
+        "http://" +
+        config.apiServer +
+        ":" +
+        config.port +
+        "/api/img/" +
+        res.data.product.thumbnail;
+      const product = {
+        pid: cartItem.pid,
+        pname: cartItem.pname,
+        brand: res.data.product.brand,
+        price: cartItem.price,
+        pdesc: res.data.product.pdesc,
+        thumbnail: img,
+        pic: res.data.product.pic,
+        quantity: quantity,
+      };
+      subtotal.value += product.price * product.quantity;
+      products.push(product);
+    });
+  });
+});
+
+const removeProduct = (pid: string) => {
+  const query =
+    "http://" +
+    config.apiServer +
+    ":" +
+    config.port +
+    "/api/cart/del/" +
+    pid +
+    "/" +
+    accId.value;
+  axios.get(query);
+  location.reload(); // responsive alternative
+};
 </script>
 
 <template>
@@ -28,13 +97,18 @@ const userEmail = computed(() => {
           <div class="mt-8">
             <div class="flow-root">
               <ul role="list" class="-my-6 divide-y divide-gray-200">
-                <li class="py-6 flex">
+                <li
+                  v-if="products.length == 0"
+                  class="px-6 py-16 text-lg text-gray-500 text-center"
+                >
+                  Nothing in Cart
+                </li>
+                <li v-for="product in products" class="py-6 flex">
                   <div
                     class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden"
                   >
                     <img
-                      src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg"
-                      alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
+                      :src="product.thumbnail"
                       class="w-full h-full object-center object-cover"
                     />
                   </div>
@@ -45,19 +119,25 @@ const userEmail = computed(() => {
                         class="flex justify-between text-base font-medium text-gray-900"
                       >
                         <h3>
-                          <a href="#"> Throwback Hip Bag </a>
+                          <a href="#"> {{ product.pname }} </a>
                         </h3>
-                        <p class="ml-4">$90.00</p>
+                        <p class="ml-4">HK${{ product.price }}</p>
                       </div>
-                      <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                      <p class="mt-1 text-sm text-gray-500">{{ product.brand }}</p>
                     </div>
                     <div class="flex-1 flex items-end justify-between text-sm">
-                      <p class="text-gray-500">Qty 1</p>
+                      <!-- <p class="text-gray-500">Qty 1</p> -->
+                      <!-- <InputNumber :value="product.quantity"></InputNumber> -->
+                      <InputNumber
+                        :pid="product.pid"
+                        :value="product.quantity"
+                      ></InputNumber>
 
                       <div class="flex">
                         <button
                           type="button"
                           class="font-medium text-indigo-600 hover:text-indigo-500"
+                          @click="removeProduct(product.pid)"
                         >
                           Remove
                         </button>
@@ -65,63 +145,22 @@ const userEmail = computed(() => {
                     </div>
                   </div>
                 </li>
-
-                <li class="py-6 flex">
-                  <div
-                    class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden"
-                  >
-                    <img
-                      src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg"
-                      alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch."
-                      class="w-full h-full object-center object-cover"
-                    />
-                  </div>
-
-                  <div class="ml-4 flex-1 flex flex-col">
-                    <div>
-                      <div
-                        class="flex justify-between text-base font-medium text-gray-900"
-                      >
-                        <h3>
-                          <a href="#"> Medium Stuff Satchel </a>
-                        </h3>
-                        <p class="ml-4">$32.00</p>
-                      </div>
-                      <p class="mt-1 text-sm text-gray-500">Blue</p>
-                    </div>
-                    <div class="flex-1 flex items-end justify-between text-sm">
-                      <p class="text-gray-500">Qty 1</p>
-
-                      <div class="flex">
-                        <button
-                          type="button"
-                          class="font-medium text-indigo-600 hover:text-indigo-500"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-                <!-- More products... -->
               </ul>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-span-1 h-full flex flex-col">
+      <div class="col-span-1 h-full flex flex-col" v-if="products.length > 0">
         <div class="py-6 px-4 sm:px-6">
           <div class="flex justify-between text-base font-medium text-gray-900">
             <p>Subtotal</p>
-            <p>$262.00</p>
+            <p>${{ subtotal }}</p>
           </div>
           <p class="mt-0.5 text-sm text-gray-500">
             Shipping and taxes calculated at checkout.
           </p>
           <div class="mt-6">
             <button
-              href="#"
               class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
             >
               Checkout
