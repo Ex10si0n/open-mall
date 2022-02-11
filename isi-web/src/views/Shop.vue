@@ -42,13 +42,15 @@ axios
 </script>
 
 <template>
-  <div class="min-h-full flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <h2 class="text-left text-2xl font-medium text-gray-900">
+  <div class="flex items-center justify-center min-h-full px-4 py-6 bg-red sm:px-6 lg:px-8">
+    <div class="w-full max-w-md space-y-8">
+    <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
+      <h2 class="text-2xl font-medium text-left text-gray-900">
         <span class="font-bold">Open</span> Mall
         <div class="text-sm text-gray-500">Online Shopping Mall Project for ISI</div>
       </h2>
-      <div class="input-group relative flex flex-wrap items-stretch w-full mb-4">
+    <div class="w-full max-w-md space-y-8">
+      <div class="relative flex flex-wrap items-stretch w-full mb-4 input-group">
         <input
           type="search"
           class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-slate-200 bg-clip-padding border-2 border-solid border-gray-100 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none"
@@ -57,15 +59,17 @@ axios
           aria-describedby="button-addon2"
         />
       </div>
+      </div>
+      </div>
       <div class="grid grid-cols-2 gap-3">
         <div
           v-for="product in products"
-          class="grid-cols-1 max-w-md border bg-white rounded-lg shadow-sm"
+          class="max-w-md bg-white border rounded-lg grid-cols-1 shadow-sm"
           @click="$router.push('/product/' + product.pid)"
         >
           <img class="py-0 rounded-t-lg" :src="product.thumbnail" />
           <div class="px-5 py-2 pb-5">
-            <h3 class="text-md font-semibold tracking-tight text-gray-900">
+            <h3 class="font-semibold tracking-tight text-gray-900 text-md">
               {{ product.pname }}
             </h3>
             <h3 class="text-sm font-semibold tracking-tight text-gray-500">
@@ -77,8 +81,8 @@ axios
                 >{{ product.brand }}</span
               >
             </div>
-            <div class="flex justify-between items-center">
-              <span class="text-md font-bold text-gray-700">HK${{ product.price }}</span>
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-gray-700 text-md">HK${{ product.price }}</span>
             </div>
           </div>
         </div>

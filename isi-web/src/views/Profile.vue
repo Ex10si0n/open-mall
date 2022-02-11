@@ -18,22 +18,22 @@ const address = computed(() => {
 </script>
 
 <template>
-  <div class="min-h-full flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <h2 class="text-left text-2xl font-medium text-gray-900">
+  <div class="flex items-center justify-center min-h-full px-4 py-6 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md space-y-8">
+      <h2 class="text-2xl font-medium text-left text-gray-900">
         Hello, <span class="font-bold">{{ userName }}</span>
         <div class="text-sm text-gray-500">
           {{ userEmail }}
         </div>
       </h2>
-      <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+      <div class="max-w-sm overflow-hidden bg-white border rounded-lg shadow-sm">
         <div class="px-6 py-4">
-          <div class="items-center flex justify-around">
+          <div class="flex items-center justify-around">
             <div class="place-items-center text-md">
               <svg
                 style="display: none"
                 t="1644207695805"
-                class="icon"
+                class="icon alipay-off"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +49,7 @@ const address = computed(() => {
               </svg>
               <svg
                 t="1644207695805"
-                class="icon"
+                class="icon alipay-on"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +68,7 @@ const address = computed(() => {
               <svg
                 style="display: none"
                 t="1644207831698"
-                class="icon"
+                class="icon wechat-off"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +84,7 @@ const address = computed(() => {
               </svg>
               <svg
                 t="1644207831698"
-                class="icon"
+                class="icon wechat-on"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -101,9 +101,9 @@ const address = computed(() => {
             </div>
             <div class="text-md">
               <svg
-                style="display: none"
+                style=""
                 t="1644208162555"
-                class="icon"
+                class="icon paypal-off"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +119,8 @@ const address = computed(() => {
               </svg>
               <svg
                 t="1644208048553"
-                class="icon"
+                style="display: none"
+                class="icon paypal-on"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +148,7 @@ const address = computed(() => {
             <div class="text-md">
               <svg
                 t="1644208113997"
-                class="icon"
+                class="icon apple-pay"
                 viewBox="0 0 1152 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -164,26 +165,26 @@ const address = computed(() => {
           </div>
         </div>
       </div>
-      <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+      <div class="max-w-sm overflow-hidden bg-white border rounded-lg shadow-sm">
         <router-link to="/address_list">
           <div class="px-6 py-4">
-            <div class="font-medium text-xl mb-2">Primary address</div>
+            <div class="mb-2 text-xl font-medium">Primary address</div>
             <div class="grid grid-cols-3">
-              <div class="col-span-1 text-md font-bold mb-2">{{ address.name }}</div>
-              <div class="col-span-2 text-right text-md mb-2">{{ address.tel }}</div>
+              <div class="mb-2 font-bold col-span-1 text-md">{{ address.name }}</div>
+              <div class="mb-2 text-right col-span-2 text-md">{{ address.tel }}</div>
             </div>
-            <div class="col-span-1 text-md bold mb-2">
+            <div class="mb-2 col-span-1 text-md bold">
               {{ address.city }}, {{ address.country }}
             </div>
-            <div class="col-span-1 text-md bold mb-2">
+            <div class="mb-2 col-span-1 text-md bold">
               {{ address.detailed }}
             </div>
-            <p class="text-gray-700 text-base"></p>
+            <p class="text-base text-gray-700"></p>
           </div>
-          <div class="grid grid-cols-3 px-6 pt-4 pb-2">
+          <div class="px-6 pt-4 pb-2 grid grid-cols-3">
             <div class="col-span-1">
               <span
-                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                class="inline-block px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-full"
                 >#{{ address.tag.toUpperCase() }}</span
               >
             </div>
@@ -193,7 +194,7 @@ const address = computed(() => {
       <div>
         <button
           type="submit"
-          class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="relative flex justify-center w-full px-6 py-3 font-medium text-white bg-indigo-600 border border-transparent group rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           style="display: none"
         >
           Change Password

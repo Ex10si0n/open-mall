@@ -12,6 +12,10 @@ const address = computed(() => {
   return store.state.primaryAddress;
 });
 
+const accId = computed(() => {
+  return store.state.accId;
+});
+
 const route = useRoute();
 
 type ProductState = {
@@ -26,6 +30,26 @@ type ProductState = {
 };
 
 const product = reactive({} as ProductState);
+
+const buttonLabel = ref("Add to Shopping Cart");
+
+const addToCart = () => {
+  if (buttonLabel.value === "In Shopping Cart") {
+    alert("Already in cart");
+  }
+  const query =
+    "http://" +
+    config.apiServer +
+    ":" +
+    config.port +
+    "/api/cart/add/" +
+    product.pid +
+    "/" +
+    accId.value +
+    "/1";
+  axios.get(query);
+  buttonLabel.value = "In Shopping Cart";
+};
 
 axios
   .get(
@@ -87,8 +111,9 @@ axios
         <button
           type="submit"
           class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
+          @click="addToCart"
         >
-          Add to Shopping Cart
+          {{ buttonLabel }}
         </button>
         <div class="px-6 py-4">
           <div class="font-medium text-xl mb-2">Shipping to</div>

@@ -24,6 +24,7 @@ app.add_middleware(
 async def root():
     return {"message": "Hello World"}
 
+
 @app.get("/api/img/{filename}")
 async def root(filename: str):
     return FileResponse(os.path.join(fpath, 'img/' + filename))
@@ -39,3 +40,9 @@ def test():
 def get_product_by_id(id: str):
     from db.database import get_product_by_id
     return get_product_by_id(id)
+
+
+@app.get("/api/cart/add/{pid}/{accid}/{quantity}")
+def add_product_to_cart(pid: str, accid: str, quantity: int):
+    from db.database import add_product_to_cart
+    return add_product_to_cart(pid, accid, quantity)

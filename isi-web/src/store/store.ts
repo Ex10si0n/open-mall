@@ -7,6 +7,7 @@ export default createStore({
     userStatus: 'active', // active vendor visitor
     userEmail: 'yzb.ex10si0n@icloud.com',
     userName: 'Ex10si0n',
+    accId: 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa',
     primaryAddress: {
       addrId: 'e224b00e-eb86-4203-9090-31de3970a0af',
       name: 'Zhongbo Yan',
