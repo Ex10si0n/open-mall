@@ -63,6 +63,16 @@ axios.get(query).then((res) => {
   });
 });
 
+const sortedProducts = products.sort((a, b) => {
+  if (a.pname < b.pname) {
+    return -1;
+  }
+  if (a.pname > b.pname) {
+    return 1;
+  }
+  return 0;
+});
+
 const removeProduct = (pid: string) => {
   const query =
     "http://" +
@@ -103,7 +113,7 @@ const removeProduct = (pid: string) => {
                 >
                   Nothing in Cart
                 </li>
-                <li v-for="product in products" class="py-6 flex">
+                <li v-for="product in sortedProducts" class="py-6 flex">
                   <div
                     class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden"
                   >
@@ -119,7 +129,9 @@ const removeProduct = (pid: string) => {
                         class="flex justify-between text-base font-medium text-gray-900"
                       >
                         <h3>
-                          <a href="#"> {{ product.pname }} </a>
+                          <router-link :to="`/product/${product.pid}`">
+                            {{ product.pname }}
+                          </router-link>
                         </h3>
                         <p class="ml-4">HK${{ product.price }}</p>
                       </div>
@@ -130,7 +142,7 @@ const removeProduct = (pid: string) => {
                       <!-- <InputNumber :value="product.quantity"></InputNumber> -->
                       <InputNumber
                         :pid="product.pid"
-                        :value="product.quantity"
+                        :quant="product.quantity"
                       ></InputNumber>
 
                       <div class="flex">

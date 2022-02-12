@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
-import { useRouter, useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from "vue-router";
+import { useRoute } from "vue-router";
 import Carousel from "../components/Carousel.vue";
 import config from "../config";
 import axios from "axios";
