@@ -27,6 +27,18 @@ async def root():
     return {"message": "Hello World"}
 
 
+@app.get("/api/address/{accid}")
+def get_address(accid: str):
+    from db.database import get_user_address_list
+    return get_user_address_list(accid)
+
+
+@app.get("/api/address/{addrId}")
+def get_addrId(addrId: str):
+    from db.database import get_address_by_id
+    return get_address_by_id(addrId)
+
+
 @app.get("/api/img/{filename}")
 async def root(filename: str):
     return FileResponse(os.path.join(fpath, 'img/' + filename))

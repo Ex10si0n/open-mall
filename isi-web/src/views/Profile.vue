@@ -194,10 +194,9 @@ const address = computed(() => {
       <div>
         <button
           type="submit"
-          class="relative flex justify-center w-full px-6 py-3 font-medium text-white bg-indigo-600 border border-transparent group rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          style="display: none"
+          class="relative flex justify-center w-full px-6 py-3 font-medium text-white bg-red-500 border border-transparent group rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
         >
-          Change Password
+          Log Out
         </button>
       </div>
     </div>

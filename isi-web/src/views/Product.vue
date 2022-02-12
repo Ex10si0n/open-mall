@@ -138,15 +138,6 @@ axios
           </div>
         </div>
       </div>
-      <div>
-        <button
-          type="submit"
-          class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          style="display: none"
-        >
-          Change Password
-        </button>
-      </div>
     </div>
   </div>
 </template>

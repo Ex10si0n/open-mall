@@ -195,11 +195,39 @@ def create_address(accId: str, tel: str, name: str, city: str, country: str, det
         return playload
 
 
-def get_user_address_list(addId: str):
+def get_address_by_id(addrId: str):
+    """ get user's address by id
+
+    Args:
+        addrId (str): address id
+
+    Returns:
+        dict: status(success, error), address
+    """
+    playload = {'status': '', 'address': {}}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `address` WHERE `addrId`=%s"
+                cursor.execute(sql, (addrId,))
+                result = cursor.fetchone()
+                if (result is None):
+                    playload['status'] = 'error'
+                    return playload
+                playload['status'] = 'success'
+                playload['address'] = result
+                return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
+
+def get_user_address_list(accId: str):
     """ get user's address list
 
     Args:
-        addId (str): user id
+        accId (str): user id
 
     Returns:
         dict: status(success, error), address list
@@ -210,7 +238,7 @@ def get_user_address_list(addId: str):
         with connection:
             with connection.cursor() as cursor:
                 sql = "SELECT * FROM `address` WHERE `ACCID`=%s"
-                cursor.execute(sql, (addId,))
+                cursor.execute(sql, (accId,))
                 result = cursor.fetchall()
                 if (len(result) == 0):
                     playload['status'] = 'success'
@@ -581,11 +609,11 @@ def add_product_to_cart(pid: str, accid: str, quantity: int):
         return playload
 
 
-def update_product_quantity_in_cart(cartId: str, accId: str, quantity: int):
+def update_product_quantity_in_cart(pid: str, accId: str, quantity: int):
     """ Update product quantity in shopping cart
 
     Args:
-        cartId (str): cart id
+        pid (str): product id
         accId (str): user id
         quantity (int): product quantity
 
@@ -597,8 +625,8 @@ def update_product_quantity_in_cart(cartId: str, accId: str, quantity: int):
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
-                sql = "UPDATE `shopping_cart` SET `QUANTITY` = %s WHERE `CARTID` = %s AND `ACCID` = %s"
-                cursor.execute(sql, (quantity, cartId, accId))
+                sql = "UPDATE `shopping_cart` SET `QUANTITY` = %s WHERE `PID` = %s AND `ACCID` = %s"
+                cursor.execute(sql, (quantity, pid, accId))
                 connection.commit()
                 playload['status'] = 'success'
                 return playload

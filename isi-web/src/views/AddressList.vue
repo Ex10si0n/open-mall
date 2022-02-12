@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import axios from "axios";
+import { computed, h, reactive } from "vue";
 import { useStore } from "vuex";
+import config from "../config";
 
 const store = useStore();
 
@@ -15,6 +17,37 @@ const userEmail = computed(() => {
 const address = computed(() => {
   return store.state.primaryAddress;
 });
+
+const accId = computed(() => {
+  return store.state.accId;
+});
+
+type AddressState = {
+  addrId: string;
+  tel: string;
+  name: string;
+  city: string;
+  country: string;
+  detailed: string;
+  accId: string;
+  tag: string;
+};
+
+const addr = reactive([] as Array<AddressState>);
+
+const query =
+  "http://" + config.apiServer + ":" + config.port + "/api/address/" + accId.value;
+axios.get(query).then((res) => {
+  const addressList = res.data.address_list;
+  addressList.forEach((address: AddressState) => {
+    addr.push(address as AddressState);
+  });
+});
+
+const setPrimaryAddress = (addrId: string) => {
+  console.log("setPrimaryAddress to " + addrId);
+  store.commit("setPrimaryAddress", addrId);
+};
 </script>
 
 <template>
@@ -27,49 +60,52 @@ const address = computed(() => {
         </div>
       </h2>
       <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-lg">
-        <div class="px-6 py-4">
-          <div class="font-medium text-xl mb-2">Primary Address</div>
-          <div class="grid grid-cols-3">
-            <div class="col-span-1 text-md font-bold mb-2">{{ address.name }}</div>
-            <div class="col-span-2 text-right text-md mb-2">{{ address.tel }}</div>
-          </div>
-          <div class="col-span-1 text-md bold mb-2">
-            {{ address.city }}, {{ address.country }}
-          </div>
-          <div class="col-span-1 text-md bold mb-2">
-            {{ address.detailed }}
-          </div>
-          <p class="text-gray-700 text-base"></p>
-        </div>
-        <div class="grid grid-cols-3 px-6 pt-4 pb-2">
-          <div class="col-span-1">
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >#{{ address.tag.toUpperCase() }}</span
-            >
-          </div>
-        </div>
-        <hr />
-        <div v-for="i in 2">
+        <div v-for="a in addr">
           <hr />
-          <div class="px-6 py-4">
-            <div class="font-medium text-xl mb-2">Alternative Addresses</div>
+          <div
+            v-if="address.addrId === a.addrId"
+            class="px-6 py-4 bg-teal-50 border-2 border-teal-500 rounded-sm"
+            @click="setPrimaryAddress(a.addrId)"
+          >
+            <router-link to="/address/edit"></router-link>
+            <div class="font-medium text-xl mb-2">Primary Addresses</div>
+
             <div class="grid grid-cols-3">
-              <div class="col-span-1 text-md font-bold mb-2">Zhongbo Yan</div>
-              <div class="col-span-2 text-right text-md mb-2">(853) 6886-0187</div>
+              <div class="col-span-1 text-md font-bold mb-2">{{ a.name }}</div>
+              <div class="col-span-2 text-right text-md mb-2">{{ a.tel }}</div>
             </div>
-            <div class="col-span-1 text-md bold mb-2">Macao SAR, China</div>
+            <div class="col-span-1 text-md bold mb-2">{{ a.city }}, {{ a.country }}</div>
             <div class="col-span-1 text-md bold mb-2">
-              Rua de Bruxelas, Nam On Gardon, Macao Polytechnic Institute Student Hostel
+              {{ a.detailed }}
             </div>
             <p class="text-gray-700 text-base"></p>
+            <div class="grid grid-cols-3 pt-4">
+              <div class="col-span-1">
+                <span
+                  class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                  >#{{ a.tag }}</span
+                >
+              </div>
+            </div>
           </div>
-          <div class="grid grid-cols-3 px-6 pt-4 pb-2">
-            <div class="col-span-1">
-              <span
-                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-                >#School</span
-              >
+          <div v-else @click="setPrimaryAddress(a.addrId)" class="px-6 py-4">
+            <!-- <div class="font-medium text-xl mb-2">Alternative Addresses</div> -->
+            <div class="grid grid-cols-3">
+              <div class="col-span-1 text-md font-bold mb-2">{{ a.name }}</div>
+              <div class="col-span-2 text-right text-md mb-2">{{ a.tel }}</div>
+            </div>
+            <div class="col-span-1 text-md bold mb-2">{{ a.city }}, {{ a.country }}</div>
+            <div class="col-span-1 text-md bold mb-2">
+              {{ a.detailed }}
+            </div>
+            <p class="text-gray-700 text-base"></p>
+            <div class="grid grid-cols-3 pt-4">
+              <div class="col-span-1">
+                <span
+                  class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                  >#{{ a.tag }}</span
+                >
+              </div>
             </div>
           </div>
         </div>
