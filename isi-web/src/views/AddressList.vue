@@ -55,21 +55,9 @@ const setPrimaryAddress = (addrId: string) => {
     <div class="max-w-md w-full space-y-8">
       <h2 class="text-left font-medium text-gray-900">
         <router-link to="/profile">
-          <div class="pb-3">
-            <svg
-              class="inline"
-              width="28"
-              height="28"
-              viewBox="0 0 28 28"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8.34863 13.6543C8.34863 13.9619 8.46289 14.2256 8.70898 14.4541L15.5469 21.1514C15.7402 21.3447 15.9863 21.4502 16.2764 21.4502C16.8564 21.4502 17.3223 20.9932 17.3223 20.4043C17.3223 20.1143 17.1992 19.8594 17.0059 19.6572L10.8447 13.6543L17.0059 7.65137C17.1992 7.44922 17.3223 7.18555 17.3223 6.9043C17.3223 6.31543 16.8564 5.8584 16.2764 5.8584C15.9863 5.8584 15.7402 5.96387 15.5469 6.15723L8.70898 12.8457C8.46289 13.083 8.34863 13.3467 8.34863 13.6543Z"
-                fill="#1C1C1E"
-              />
-            </svg>
-            <div class="inline text-md text-teal-800">Go Back</div>
+          <div class="pb-3 text-teal-800">
+            <div class="inline text-xl">&lsaquo;&nbsp;</div>
+            <div class="inline text-md">Go Back</div>
           </div>
         </router-link>
         <div class="text-2xl">Manage Addresses</div>
@@ -126,12 +114,14 @@ const setPrimaryAddress = (addrId: string) => {
           </div>
         </div>
         <div>
-          <button
-            type="submit"
-            class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
+          <router-link to="/address_list/create">
+            <button
+              type="submit"
+              class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
+            >
+              Add Address
+            </button></router-link
           >
-            Add Address
-          </button>
         </div>
       </div>
     </div>
