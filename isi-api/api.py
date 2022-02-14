@@ -33,7 +33,7 @@ def get_address(accid: str):
     return get_user_address_list(accid)
 
 
-@app.get("/api/address/{addrId}")
+@app.get("/api/address_by_id/{addrId}")
 def get_addrId(addrId: str):
     from db.database import get_address_by_id
     return get_address_by_id(addrId)
