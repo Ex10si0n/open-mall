@@ -8,8 +8,12 @@ import axios from "axios";
 
 const store = useStore();
 
-const address = computed(() => {
-  return store.state.primaryAddress;
+// const address = computed(() => {
+//   return store.state.primaryAddress.addrId;
+// });
+
+const addrId = computed(() => {
+  return store.state.primaryAddress.addrId;
 });
 
 const accId = computed(() => {
@@ -28,6 +32,26 @@ type ProductState = {
   pic: Array<string>;
   // pic: string;
 };
+
+type AddressState = {
+  ADDRID: string;
+  TEL: string;
+  NAME: string;
+  CITY: string;
+  COUNTRY: string;
+  DETAILED: string;
+  ACCID: string;
+  TAG: string;
+};
+
+const address = ref({} as AddressState);
+
+const query =
+  "http://" + config.apiServer + ":" + config.port + "/api/address_by_id/" + addrId.value;
+axios.get(query).then((res) => {
+  const addressList = res.data.address;
+  address.value = addressList as AddressState;
+});
 
 const product = reactive({} as ProductState);
 
@@ -56,14 +80,14 @@ axios
     "http://" + config.apiServer + ":" + config.port + "/api/product/" + route.params.pid
   )
   .then((res) => {
-    console.log(
-      "http://" +
-        config.apiServer +
-        ":" +
-        config.port +
-        "/api/product/" +
-        route.params.pid
-    );
+    // console.log(
+    //   "http://" +
+    //     config.apiServer +
+    //     ":" +
+    //     config.port +
+    //     "/api/product/" +
+    //     route.params.pid
+    // );
     const json = res.data.product;
     product.pid = json.pid;
     product.pname = json.pname;
@@ -74,13 +98,13 @@ axios
     //   "http://" + config.apiServer + ":" + config.port + "/api/img/" + json.pic;
     product.pic = [];
     json.pic.split(";").forEach((pic: string) => {
-      console.log(pic);
+      // console.log(pic);
       product.pic.push(
         "http://" + config.apiServer + ":" + config.port + "/api/img/" + pic
       );
     });
 
-    console.log(product);
+    // console.log(product);
   })
   .catch((error) => console.log(error));
 </script>
@@ -118,14 +142,14 @@ axios
         <div class="px-6 py-4">
           <div class="font-medium text-xl mb-2">Shipping to</div>
           <div class="grid grid-cols-3">
-            <div class="col-span-1 text-md font-bold mb-2">{{ address.name }}</div>
-            <div class="col-span-2 text-right text-md mb-2">{{ address.tel }}</div>
+            <div class="col-span-1 text-md font-bold mb-2">{{ address.NAME }}</div>
+            <div class="col-span-2 text-right text-md mb-2">{{ address.TEL }}</div>
           </div>
           <div class="col-span-1 text-md bold mb-2">
-            {{ address.city }}, {{ address.country }}
+            {{ address.CITY }}, {{ address.COUNTRY }}
           </div>
           <div class="col-span-1 text-md bold mb-2">
-            {{ address.detailed }}
+            {{ address.DETAILED }}
           </div>
           <p class="text-gray-700 text-base"></p>
         </div>
@@ -133,7 +157,7 @@ axios
           <div class="col-span-1">
             <span
               class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >#{{ address.tag.toUpperCase() }}</span
+              >#{{ address.TAG }}</span
             >
           </div>
         </div>

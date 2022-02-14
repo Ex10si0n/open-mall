@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import config from "../config";
+import axios from "axios";
 
 const store = useStore();
 
@@ -12,8 +14,28 @@ const userEmail = computed(() => {
   return store.state.userEmail;
 });
 
-const address = computed(() => {
-  return store.state.primaryAddress;
+const addrId = computed(() => {
+  return store.state.primaryAddress.addrId;
+});
+
+type AddressState = {
+  ADDRID: string;
+  TEL: string;
+  NAME: string;
+  CITY: string;
+  COUNTRY: string;
+  DETAILED: string;
+  ACCID: string;
+  TAG: string;
+};
+
+const address = ref({} as AddressState);
+
+const query =
+  "http://" + config.apiServer + ":" + config.port + "/api/address_by_id/" + addrId.value;
+axios.get(query).then((res) => {
+  const addressList = res.data.address;
+  address.value = addressList as AddressState;
 });
 </script>
 
@@ -170,14 +192,14 @@ const address = computed(() => {
           <div class="px-6 py-4">
             <div class="mb-2 text-xl font-medium">Primary address</div>
             <div class="grid grid-cols-3">
-              <div class="mb-2 font-bold col-span-1 text-md">{{ address.name }}</div>
-              <div class="mb-2 text-right col-span-2 text-md">{{ address.tel }}</div>
+              <div class="mb-2 font-bold col-span-1 text-md">{{ address.NAME }}</div>
+              <div class="mb-2 text-right col-span-2 text-md">{{ address.TEL }}</div>
             </div>
             <div class="mb-2 col-span-1 text-md bold">
-              {{ address.city }}, {{ address.country }}
+              {{ address.CITY }}, {{ address.COUNTRY }}
             </div>
             <div class="mb-2 col-span-1 text-md bold">
-              {{ address.detailed }}
+              {{ address.DETAILED }}
             </div>
             <p class="text-base text-gray-700"></p>
           </div>
@@ -185,7 +207,7 @@ const address = computed(() => {
             <div class="col-span-1">
               <span
                 class="inline-block px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-full"
-                >#{{ address.tag.toUpperCase() }}</span
+                >#{{ address.TAG }}</span
               >
             </div>
           </div>
