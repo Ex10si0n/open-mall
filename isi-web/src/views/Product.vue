@@ -110,8 +110,14 @@ axios
 </script>
 
 <template>
-  <div class="min-h-full flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
+  <div class="min-h-full flex items-center justify-center py-6 px-4 lg:px-8">
+    <div class="max-w-md w-full space-y-4">
+      <router-link to="/">
+        <div class="text-orange-500">
+          <div class="inline text-xl">&lsaquo;&nbsp;</div>
+          <div class="inline text-md">Go Back</div>
+        </div></router-link
+      >
       <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
         <div>
           <!-- <img v-for="pic in product.pic" :src="pic" alt="Product" /> -->
@@ -139,28 +145,30 @@ axios
         >
           {{ buttonLabel }}
         </button>
-        <div class="px-6 py-4">
-          <div class="font-medium text-xl mb-2">Shipping to</div>
-          <div class="grid grid-cols-3">
-            <div class="col-span-1 text-md font-bold mb-2">{{ address.NAME }}</div>
-            <div class="col-span-2 text-right text-md mb-2">{{ address.TEL }}</div>
+        <router-link to="/address_list">
+          <div class="px-6 py-4">
+            <div class="font-medium text-xl mb-2">Shipping to</div>
+            <div class="grid grid-cols-3">
+              <div class="col-span-1 text-md font-bold mb-2">{{ address.NAME }}</div>
+              <div class="col-span-2 text-right text-md mb-2">{{ address.TEL }}</div>
+            </div>
+            <div class="col-span-1 text-md bold mb-2">
+              {{ address.CITY }}, {{ address.COUNTRY }}
+            </div>
+            <div class="col-span-1 text-md bold mb-2">
+              {{ address.DETAILED }}
+            </div>
+            <p class="text-gray-700 text-base"></p>
           </div>
-          <div class="col-span-1 text-md bold mb-2">
-            {{ address.CITY }}, {{ address.COUNTRY }}
-          </div>
-          <div class="col-span-1 text-md bold mb-2">
-            {{ address.DETAILED }}
-          </div>
-          <p class="text-gray-700 text-base"></p>
-        </div>
-        <div class="grid grid-cols-3 px-6 pt-4 pb-2">
-          <div class="col-span-1">
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >#{{ address.TAG }}</span
-            >
-          </div>
-        </div>
+          <div class="grid grid-cols-3 px-6 pt-4 pb-2">
+            <div class="col-span-1">
+              <span
+                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                >#{{ address.TAG }}</span
+              >
+            </div>
+          </div></router-link
+        >
       </div>
     </div>
   </div>

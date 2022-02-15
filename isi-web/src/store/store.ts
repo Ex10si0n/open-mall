@@ -7,6 +7,8 @@ export default createStore({
   state: {
     hello: 'Vue-SPA-Quickstart',
     userStatus: 'active', // active vendor visitor
+    activeTab: '',
+    viewingProduct: '',
     userEmail: 'yzb.ex10si0n@icloud.com',
     userName: 'Ex10si0n',
     accId: 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa',
@@ -23,6 +25,13 @@ export default createStore({
   mutations: {
     setPrimaryAddress(state, addrId) {
       state.primaryAddress.addrId = addrId;
+    },
+    chgActiveTab(state, tab) {
+      state.activeTab = tab;
+      console.log('[debug] active tab change to ' + tab)
+    },
+    chgViewingProduct(state, pid) {
+      state.viewingProduct = pid;
     }
   },
   actions: {

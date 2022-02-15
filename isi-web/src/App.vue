@@ -10,10 +10,14 @@ const userStatus = computed(() => {
   return store.state.userStatus;
 });
 
-const activeTab = ref("shop");
+const activeTab = computed(() => {
+  return store.state.activeTab;
+});
+
+// const activeTab = ref("shop");
 
 const changeTab = (tab: string) => {
-  activeTab.value = tab;
+  store.commit("chgActiveTab", tab);
 };
 </script>
 
@@ -23,16 +27,17 @@ const changeTab = (tab: string) => {
   </div>
   <div class="w-full h-screen my-5">
     <div
-      class="inline-block text-center mx-auto fixed inset-x-0 bottom-0 z-10 bg-white shadow p-3"
+      class="inline-block text-center mx-auto fixed inset-x-0 bottom-0 z-10 bg-white border-t-1 shadow-2xl p-3"
     >
-      <div class="justify-center flex space-x-10" id="nav">
+      <div class="justify-center flex space-x-7" id="nav">
         <router-link
           to="/"
-          class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
-          :class="{ active: activeTab === 'shop' }"
-          @click="changeTab('shop')"
+          class="rounded-lg px-5 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          :class="{ active: activeTab === '' }"
+          @click="changeTab('')"
         >
           <svg
+            v-if="activeTab !== ''"
             width="28"
             height="28"
             viewBox="0 0 28 28"
@@ -44,14 +49,32 @@ const changeTab = (tab: string) => {
               fill="#1C1C1E"
             />
           </svg>
+          <svg
+            v-else
+            width="28"
+            height="28"
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.9375 21.8809H19.2734C20.9697 21.8809 21.9541 20.8965 21.9541 19.0156V9.91895C21.9541 8.03809 20.9609 7.05371 19.0625 7.05371H17.8232C17.7793 5.08496 16.1006 3.4502 14 3.4502C11.9082 3.4502 10.2207 5.08496 10.1768 7.05371H8.9375C7.03906 7.05371 6.0459 8.03809 6.0459 9.91895V19.0156C6.0459 20.8965 7.03906 21.8809 8.9375 21.8809ZM14 5.00586C15.2041 5.00586 16.0918 5.91113 16.127 7.05371H11.873C11.9082 5.91113 12.7959 5.00586 14 5.00586Z"
+              fill="#1C1C1E"
+            />
+          </svg>
+          <div v-if="activeTab !== ''" class="text-xs text-gray-500 text-center">
+            Store
+          </div>
+          <div v-else class="text-xs text-gray-800 text-center">Store</div>
         </router-link>
         <router-link
           v-if="userStatus !== 'visitor'"
           to="/profile"
-          class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          class="rounded-lg px-5 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
           :class="{ active: activeTab === 'profile' }"
           @click="changeTab('profile')"
           ><svg
+            v-if="activeTab !== 'profile'"
             width="28"
             height="28"
             viewBox="0 0 28 28"
@@ -63,11 +86,28 @@ const changeTab = (tab: string) => {
               fill="#1C1C1E"
             />
           </svg>
+          <svg
+            v-else
+            width="28"
+            height="28"
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14.0088 13.5752C15.9248 13.5752 17.5508 11.8701 17.5508 9.66406C17.5508 7.51074 15.916 5.8584 14.0088 5.8584C12.0928 5.8584 10.4492 7.53711 10.458 9.68164C10.458 11.8701 12.084 13.5752 14.0088 13.5752ZM8.52441 21.749H19.4756C20.9258 21.749 21.4268 21.3096 21.4268 20.501C21.4268 18.2422 18.5615 15.1309 14 15.1309C9.44727 15.1309 6.57324 18.2422 6.57324 20.501C6.57324 21.3096 7.07422 21.749 8.52441 21.749Z"
+              fill="#1C1C1E"
+            />
+          </svg>
+          <div v-if="activeTab !== 'profile'" class="text-xs text-gray-500 text-center">
+            My
+          </div>
+          <div v-else class="text-xs text-gray-800 text-center">My</div>
         </router-link>
         <router-link
           v-if="userStatus === 'visitor'"
           to="/login"
-          class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          class="rounded-lg px-5 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
           :class="{ active: activeTab === 'login' }"
           @click="changeTab('login')"
           ><svg
@@ -82,14 +122,19 @@ const changeTab = (tab: string) => {
               fill="#1C1C1E"
             />
           </svg>
+          <div v-if="activeTab !== 'login'" class="text-xs text-gray-500 text-center">
+            Login
+          </div>
+          <div v-else class="text-xs text-gray-800 text-center">Login</div>
         </router-link>
         <router-link
           v-if="userStatus !== 'vendor'"
           to="/cart"
-          class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          class="rounded-lg px-5 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
           :class="{ active: activeTab === 'cart' }"
           @click="changeTab('cart')"
           ><svg
+            v-if="activeTab !== 'cart'"
             width="28"
             height="28"
             viewBox="0 0 28 28"
@@ -101,11 +146,28 @@ const changeTab = (tab: string) => {
               fill="#1C1C1E"
             />
           </svg>
+          <svg
+            v-else
+            width="28"
+            height="28"
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3.55859 6.37695C3.55859 6.83398 3.94531 7.2207 4.38477 7.2207H7.13574L8.49805 16.5195C8.69141 17.8467 9.39453 18.6553 10.7393 18.6553H20.9697C21.3828 18.6553 21.7607 18.3301 21.7607 17.8643C21.7607 17.4072 21.3828 17.082 20.9697 17.082H10.9414C10.5195 17.082 10.2559 16.792 10.1943 16.3438L10.0537 15.4297H21.04C22.3848 15.4297 23.0967 14.6123 23.29 13.2764L23.9492 8.87305C23.9668 8.75879 23.9844 8.60938 23.9844 8.5127C23.9844 7.99414 23.624 7.64258 23.0176 7.64258H8.9375L8.79688 6.69336C8.68262 5.92871 8.375 5.54199 7.39941 5.54199H4.38477C3.94531 5.54199 3.55859 5.92871 3.55859 6.37695ZM9.92188 21.5293C9.92188 22.3818 10.6074 23.0674 11.46 23.0674C12.3125 23.0674 12.998 22.3818 12.998 21.5293C12.998 20.6768 12.3125 19.9912 11.46 19.9912C10.6074 19.9912 9.92188 20.6768 9.92188 21.5293ZM18.0342 21.5293C18.0342 22.3818 18.7285 23.0674 19.5811 23.0674C20.4336 23.0674 21.1104 22.3818 21.1104 21.5293C21.1104 20.6768 20.4336 19.9912 19.5811 19.9912C18.7285 19.9912 18.0342 20.6768 18.0342 21.5293Z"
+              fill="#1C1C1E"
+            />
+          </svg>
+          <div v-if="activeTab !== 'cart'" class="text-xs text-gray-500 text-center">
+            Cart
+          </div>
+          <div v-else class="text-xs text-gray-800 text-center">Cart</div>
         </router-link>
         <router-link
           v-if="userStatus === 'vendor'"
           to="/vendor"
-          class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          class="rounded-lg px-5 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
           :class="{ active: activeTab === 'vendor' }"
           @click="changeTab('vendor')"
           ><svg
@@ -120,15 +182,20 @@ const changeTab = (tab: string) => {
               fill="#1C1C1E"
             />
           </svg>
+          <div v-if="activeTab !== 'vendor'" class="text-xs text-gray-500 text-center">
+            Manage
+          </div>
+          <div v-else class="text-xs text-gray-800 text-center">Manage</div>
         </router-link>
         <router-link
           v-if="userStatus !== 'visitor'"
           to="/order"
-          class="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          class="rounded-lg px-5 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
           :class="{ active: activeTab === 'order' }"
           @click="changeTab('order')"
         >
           <svg
+            v-if="activeTab !== 'order'"
             width="28"
             height="28"
             viewBox="0 0 28 28"
@@ -140,6 +207,23 @@ const changeTab = (tab: string) => {
               fill="#1C1C1E"
             />
           </svg>
+          <svg
+            v-else
+            width="28"
+            height="28"
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19.0801 10.2178L22.3408 8.38086C22.2002 8.24023 22.0332 8.12598 21.8135 8.01172L15.6523 4.54883C15.1074 4.24121 14.5449 4.08301 14 4.08301C13.4463 4.08301 12.8838 4.24121 12.3389 4.54883L10.6514 5.49805L19.0801 10.2178ZM13.9912 13.0566L17.7266 10.9648L9.3418 6.23633L6.17773 8.01172C5.9668 8.12598 5.79102 8.24023 5.65039 8.38086L13.9912 13.0566ZM14.6416 23.2959C14.7295 23.2783 14.8086 23.2344 14.8965 23.1904L21.6992 19.376C22.5518 18.8926 22.9912 18.3916 22.9912 17.1348V10.1035C22.9912 9.88379 22.9736 9.69922 22.9297 9.52344L14.6416 14.1992V23.2959ZM13.3496 23.2959V14.1992L5.06152 9.52344C5.01758 9.69922 5 9.88379 5 10.1035V17.1348C5 18.3916 5.43945 18.8926 6.29199 19.376L13.0947 23.1904C13.1738 23.2344 13.2617 23.2783 13.3496 23.2959Z"
+              fill="#1C1C1E"
+            />
+          </svg>
+          <div v-if="activeTab !== 'order'" class="text-xs text-gray-500 text-center">
+            Order
+          </div>
+          <div v-else class="text-xs text-gray-800 text-center">Order</div>
         </router-link>
       </div>
     </div>

@@ -48,13 +48,27 @@ const setPrimaryAddress = (addrId: string) => {
   console.log("setPrimaryAddress to " + addrId);
   store.commit("setPrimaryAddress", addrId);
 };
+
+const activeTab = computed(() => {
+  return store.state.activeTab;
+});
+
+const viewingProduct = computed(() => {
+  return store.state.viewingProduct;
+});
 </script>
 
 <template>
   <div class="min-h-full flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <h2 class="text-left font-medium text-gray-900">
-        <router-link to="/profile">
+        <router-link v-if="viewingProduct !== ''" :to="'/product/' + viewingProduct">
+          <div class="pb-3 text-teal-800">
+            <div class="inline text-xl">&lsaquo;&nbsp;</div>
+            <div class="inline text-md">Go Back</div>
+          </div>
+        </router-link>
+        <router-link v-else :to="'/' + activeTab">
           <div class="pb-3 text-teal-800">
             <div class="inline text-xl">&lsaquo;&nbsp;</div>
             <div class="inline text-md">Go Back</div>

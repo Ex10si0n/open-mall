@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // // @ts-nocheck
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 import axios from "axios";
 import config from "../config";
 import { useStore } from "vuex";

@@ -39,33 +39,44 @@ axios
     });
   })
   .catch((error) => console.log(error));
+
+const chgViewingProduct = (pid: string) => {
+  store.commit("chgViewingProduct", pid);
+};
+
+chgViewingProduct("");
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-full px-4 py-6 bg-red sm:px-6 lg:px-8">
+  <div
+    class="flex items-center justify-center min-h-full px-4 py-6 bg-red sm:px-6 lg:px-8"
+  >
     <div class="w-full max-w-md space-y-8">
-    <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
-      <h2 class="text-2xl font-medium text-left text-gray-900">
-        <span class="font-bold">Open</span> Mall
-        <div class="text-sm text-gray-500">Online Shopping Mall Project for ISI</div>
-      </h2>
-    <div class="w-full max-w-md space-y-8">
-      <div class="relative flex flex-wrap items-stretch w-full mb-4 input-group">
-        <input
-          type="search"
-          class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-slate-200 bg-clip-padding border-2 border-solid border-gray-100 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none"
-          placeholder="Search"
-          aria-label="Search"
-          aria-describedby="button-addon2"
-        />
-      </div>
-      </div>
+      <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
+        <h2 class="text-2xl font-medium text-left text-gray-900">
+          <span class="font-bold">Open</span> Mall
+          <div class="text-sm text-gray-500">Online Shopping Mall Project for ISI</div>
+        </h2>
+        <div class="w-full max-w-md space-y-8">
+          <div class="relative flex flex-wrap items-stretch w-full mb-4 input-group">
+            <input
+              type="search"
+              class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-slate-200 bg-clip-padding border-2 border-solid border-gray-100 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none"
+              placeholder="Search"
+              aria-label="Search"
+              aria-describedby="button-addon2"
+            />
+          </div>
+        </div>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div
           v-for="product in products"
           class="max-w-md bg-white border rounded-lg grid-cols-1 shadow-sm"
-          @click="$router.push('/product/' + product.pid)"
+          @click="
+            $router.push('/product/' + product.pid);
+            chgViewingProduct(product.pid);
+          "
         >
           <img class="py-0 rounded-t-lg" :src="product.thumbnail" />
           <div class="px-5 py-2 pb-5">
