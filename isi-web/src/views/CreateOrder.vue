@@ -72,20 +72,6 @@ const sortedProducts = products.sort((a, b) => {
   }
   return 0;
 });
-
-const removeProduct = (pid: string) => {
-  const query =
-    "http://" +
-    config.apiServer +
-    ":" +
-    config.port +
-    "/api/cart/del/" +
-    pid +
-    "/" +
-    accId.value;
-  axios.get(query);
-  location.reload(); // responsive alternative
-};
 </script>
 
 <template>
@@ -94,25 +80,26 @@ const removeProduct = (pid: string) => {
     <div class="grid md:grid-cols-1 lg:grid-cols-3">
       <div class="lg:col-span-2">
         <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
+          <router-link to="/cart">
+            <div class="pb-3 text-indigo-800">
+              <div class="inline text-xl">&lsaquo;&nbsp;</div>
+              <div class="inline text-md">Go Back</div>
+            </div>
+          </router-link>
           <div class="flex items-start justify-between">
             <h2 class="text-left text-2xl font-medium text-gray-900">
-              Shopping Cart
+              Create Order
               <div class="text-sm text-gray-500">
                 {{ userEmail }}
               </div>
             </h2>
             <div class="ml-3 h-7 flex items-center"></div>
           </div>
-
-          <div class="mt-8">
+          <div
+            class="bg-white rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
+          >
             <div class="flow-root">
               <ul role="list" class="-my-6 divide-y divide-gray-200">
-                <li
-                  v-if="products.length == 0"
-                  class="px-6 py-16 text-lg text-gray-500 text-center"
-                >
-                  Nothing in Cart
-                </li>
                 <li v-for="product in sortedProducts" class="py-6 flex">
                   <div
                     class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden"
@@ -129,56 +116,50 @@ const removeProduct = (pid: string) => {
                         class="flex justify-between text-base font-medium text-gray-900"
                       >
                         <h3>
-                          <router-link :to="`/product/${product.pid}`">
-                            {{ product.pname }}
-                          </router-link>
+                          {{ product.pname }}
                         </h3>
+
                         <p class="ml-4">HK${{ product.price }}</p>
                       </div>
                       <p class="mt-1 text-sm text-gray-500">{{ product.brand }}</p>
                     </div>
                     <div class="flex-1 flex items-end justify-between text-sm">
-                      <!-- <p class="text-gray-500">Qty 1</p> -->
-                      <!-- <InputNumber :value="product.quantity"></InputNumber> -->
-                      <InputNumber
-                        :pid="product.pid"
-                        :quant="product.quantity"
-                      ></InputNumber>
-
-                      <div class="flex">
-                        <button
-                          type="button"
-                          class="font-medium text-indigo-600 hover:text-indigo-500"
-                          @click="removeProduct(product.pid)"
-                        >
-                          Remove
-                        </button>
-                      </div>
+                      Qty: {{ product.quantity }}
                     </div>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="col-span-1 h-full flex flex-col" v-if="products.length > 0">
-        <div class="py-6 px-4 sm:px-6">
-          <div class="flex justify-between text-base font-medium text-gray-900">
-            <p>Subtotal</p>
-            <p>${{ subtotal }}</p>
+          <div
+            class="p-4 border-t-transparent rounded-none shadow-sm border-gray-300 bg-slate-800 text-white"
+          >
+            <div class="flow-root">
+              <div class="col-span-1 flex flex-col">
+                <div class="">
+                  <div class="flex justify-between text-base font-medium text-gray-100">
+                    <p>Subtotal</p>
+                    <p>HK${{ subtotal }}</p>
+                  </div>
+                  <p class="mt-0.5 text-sm text-gray-400">
+                    Shipping and taxes calculated at checkout.
+                  </p>
+                  <div
+                    class="flex justify-center text-sm text-center text-gray-500"
+                  ></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <p class="mt-0.5 text-sm text-gray-500">
-            Shipping and taxes calculated at checkout.
-          </p>
-          <div class="mt-6">
-            <button
-              class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+          <div class="mt-0">
+            <router-link to="/order/create">
+              <button
+                class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indogo-800 rounded-t-none"
+              >
+                Pay
+              </button></router-link
             >
-              Checkout
-            </button>
           </div>
-          <div class="mt-6 flex justify-center text-sm text-center text-gray-500"></div>
         </div>
       </div>
     </div>

@@ -162,21 +162,23 @@ const removeProduct = (pid: string) => {
           </div>
         </div>
       </div>
-      <div class="col-span-1 h-full flex flex-col" v-if="products.length > 0">
-        <div class="py-6 px-4 sm:px-6">
+      <div class="col-span-1 h-full flex flex-col">
+        <div class="py-6 px-4">
           <div class="flex justify-between text-base font-medium text-gray-900">
             <p>Subtotal</p>
-            <p>${{ subtotal }}</p>
+            <p>HK${{ subtotal }}</p>
           </div>
           <p class="mt-0.5 text-sm text-gray-500">
             Shipping and taxes calculated at checkout.
           </p>
           <div class="mt-6">
-            <button
-              class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+            <router-link to="/order/create">
+              <button
+                class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+              >
+                Checkout
+              </button></router-link
             >
-              Checkout
-            </button>
           </div>
           <div class="mt-6 flex justify-center text-sm text-center text-gray-500"></div>
         </div>
