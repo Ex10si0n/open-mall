@@ -1122,8 +1122,8 @@ def update_status(pono: str, status: str):
         return playload
 
 
-def cancel_order (pono: str):
-    """cancel order
+def cancel_purchase (pono: str):
+    """Cancel order
 
     Args: 
         pono(str): purchase id, status(str): status of purchase
@@ -1143,6 +1143,7 @@ def cancel_order (pono: str):
                 if(status == 'pending' or status == 'hold'):
                     update_status(pono, 'cancelled')
                     playload['status'] = 'success'
+                    return playload
                 else:
                     playload['status'] = 'forbidden'
                     return playload
@@ -1150,6 +1151,36 @@ def cancel_order (pono: str):
         playload['status'] = 'error'
         return playload
 
+
+def ship_purchase(pono: str):
+    """Ship order
+
+    Args: 
+        pono(str): purchase id, status(str): status of purchase
+
+    Returns:
+        dict: status(success, error, forbidden)
+    """
+    playload = {'status': ''}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT STATUS FROM `purchase` WHERE `PONO` = %s"
+                cursor.execute(sql, (pono))
+                result = cursor.fetchone()
+                status = result['STATUS']
+                print(status)
+                if(status == 'pending'):
+                    update_status(pono, 'shipped')
+                    playload['status'] = 'success'
+                    return playload
+                else:
+                    playload['status'] = 'forbidden'
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
 
 def get_all_purchase():
     """Get all purchase
@@ -1237,6 +1268,7 @@ if __name__ == '__main__':
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = customer_filter_purchase('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'current')
     # res = vendor_filter_purchase('past')
-    res = cancel_order('0c09c90f-96f3-40ea-8e6d-b194525da7c3')
+    # res = cancel_purchase('0c09c90f-96f3-40ea-8e6d-b194525da7c3')
+    res = ship_purchase('cabc4448-08e7-4584-b952-a41af5356a09')
 
     print(res)
