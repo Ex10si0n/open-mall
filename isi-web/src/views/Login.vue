@@ -26,7 +26,11 @@ import { ref } from "vue";
           </router-link>
         </p>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
+      <form
+        class="mt-8 space-y-6"
+        action="http://127.0.0.1:8000/api/login_check/"
+        method="POST"
+      >
         <input type="hidden" name="remember" value="true" />
         <div class="rounded-md shadow-sm -space-y-px">
           <div>

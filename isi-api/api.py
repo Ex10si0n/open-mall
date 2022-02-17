@@ -2,9 +2,10 @@ import os
 import re
 import sys
 from turtle import up
-from fastapi import FastAPI
+from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 fpath = os.path.join(os.path.dirname(__file__), 'db')
 sys.path.append(fpath)
@@ -20,6 +21,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+class LoginData(BaseModel):
+    # remember: bool
+    email: str
+    password: str
+    # remember_me: str
 
 
 @app.get("/api/")
@@ -78,3 +86,9 @@ def get_cart_by_id(accId: str):
 def update_product_from_cart(pid: str, accId: str, quantity: int):
     from db.database import update_product_quantity_in_cart
     return update_product_quantity_in_cart(pid, accId, quantity)
+
+
+@app.post('/api/login_check/')
+async def login(remember: str = Form(...), email: str = Form(...), password: str = Form(...)):
+    from db.database import login_check
+    return login_check(email, password)

@@ -6,7 +6,7 @@ import axios from 'axios'
 export default createStore({
   state: {
     hello: 'Vue-SPA-Quickstart',
-    userStatus: 'active', // active vendor visitor
+    userStatus: 'visitor', // active vendor visitor
     activeTab: '',
     viewingProduct: '',
     userEmail: 'yzb.ex10si0n@icloud.com',
