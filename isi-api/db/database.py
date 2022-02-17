@@ -584,7 +584,7 @@ def add_product_to_cart(pid: str, accid: str, quantity: int):
         quantity (int): product quantity
 
     Returns:
-        dict: status(success, error), cartid
+        dict: status(success, duplicated, error), cartid
     """
     playload = {'status': ''}
     try:
@@ -602,7 +602,7 @@ def add_product_to_cart(pid: str, accid: str, quantity: int):
                     playload['status'] = 'success'
                     return playload
                 else:
-                    playload['status'] = 'error'
+                    playload['status'] = 'duplicated'
                     return playload
     except:
         playload['status'] = 'error'
@@ -691,9 +691,9 @@ def get_all_products_in_cart(accId: str):
         accId(str): user id
 
     Returns:
-        dict: status(success, error), product
+        dict: status(success, error), shopping cart list and total order amount
     """
-    playload = {'status': '', 'shopping_cart_list': []}
+    playload = {'status': '', 'shopping_cart_list': [], 'amount': 0}
     try:
         connection = create_connection()
         with connection:
@@ -711,14 +711,16 @@ def get_all_products_in_cart(accId: str):
                         quantity = row['QUANTITY']
                         cursor.execute(sql, (pid))
                         product = cursor.fetchone()
+                        price = product['PRICE']
                         shopping_cart = {
                             'pid': pid,
                             'pname': product['PNAME'],
-                            'price': product['PRICE'],
+                            'price': price,
                             'quantity': quantity
                         }
-                        playload['status'] = 'success'
+                        playload['amount'] = playload['amount'] + quantity * price
                         playload['shopping_cart_list'].append(shopping_cart)
+                    playload['status'] = 'success'
                     return playload
     except:
         playload['status'] = 'error'
@@ -856,6 +858,53 @@ def get_purchase_by_status(accId: str, status: str):
         playload['status'] = 'error'
         return playload
 
+
+def customer_filter_purchase(accId: str, period: str):
+    """Filter purchase by status
+
+    Args: 
+        accId(str): user id, period(str): current/past
+
+    Returns:
+        dict: status(success, error), purchase_list
+    """
+    playload = {'status': '', 'purchase_list': [] }
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                if(period == 'current'):
+                    result_pending = get_purchase_by_status(accId, 'pending')
+                    result_hold = get_purchase_by_status(accId, 'hold')
+                    if(result_pending['status'] == 'none' and result_hold['status'] == 'none'):
+                        playload['status'] = 'none'
+                        return playload
+                    else:
+                        for purchase in result_pending['purchase_list']:
+                            playload['purchase_list'].append(purchase)
+                        for purchase in result_hold['purchase_list']:
+                            playload['purchase_list'].append(purchase)
+                        playload['status'] = 'success'
+                        return playload
+                elif(period == 'past'):
+                    result_shipped = get_purchase_by_status(accId, 'shipped')
+                    result_cancelled = get_purchase_by_status(accId, 'cancelled')
+                    if(result_shipped['status'] == 'none' and result_cancelled['status'] == 'none'):
+                        playload['status'] = "none"
+                        return playload
+                    else:
+                        for purchase in result_shipped['purchase_list']:
+                            playload['purchase_list'].append(purchase)
+                        for purchase in result_cancelled['purchase_list']:
+                            playload['purchase_list'].append(purchase)
+                        playload['status'] = 'success'
+                        return playload
+                else:
+                    playload['status'] = 'error'
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
 
 def get_purchase_by_id(pono: str, accId: str, addrId: str):
     """Get purchase by id
@@ -1083,6 +1132,7 @@ if __name__ == '__main__':
     #                     '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp', '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp;8d56312f-79ac-4fb8-836e-0326817ddc1e.webp;7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp')
     # res = get_all_purchase()
     # res = get_all_products()
-    res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    res = customer_filter_purchase('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'current')
 
     print(res)
