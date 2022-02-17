@@ -1126,7 +1126,7 @@ def cancel_purchase (pono: str):
     """Cancel order
 
     Args: 
-        pono(str): purchase id, status(str): status of purchase
+        pono(str): purchase id
 
     Returns:
         dict: status(success, error, forbidden)
@@ -1156,7 +1156,7 @@ def ship_purchase(pono: str):
     """Ship order
 
     Args: 
-        pono(str): purchase id, status(str): status of purchase
+        pono(str): purchase id
 
     Returns:
         dict: status(success, error, forbidden)
@@ -1170,7 +1170,6 @@ def ship_purchase(pono: str):
                 cursor.execute(sql, (pono))
                 result = cursor.fetchone()
                 status = result['STATUS']
-                print(status)
                 if(status == 'pending'):
                     update_status(pono, 'shipped')
                     playload['status'] = 'success'
@@ -1181,6 +1180,66 @@ def ship_purchase(pono: str):
     except:
         playload['status'] = 'error'
         return playload
+
+
+def hold_purchase(pono: str):
+    """Hold order
+
+    Args: 
+        pono(str): purchase id
+
+    Returns:
+        dict: status(success, error, forbidden)
+    """
+    playload = {'status': ''}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT STATUS FROM `purchase` WHERE `PONO` = %s"
+                cursor.execute(sql, (pono))
+                result = cursor.fetchone()
+                status = result['STATUS']
+                if(status == 'pending'):
+                    update_status(pono, 'hold')
+                    playload['status'] = 'success'
+                    return playload
+                else:
+                    playload['status'] = 'forbidden'
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
+def unhold_purchase(pono: str):
+    """Unhold order
+
+    Args: 
+        pono(str): purchase id
+
+    Returns:
+        dict: status(success, error, forbidden)
+    """
+    playload = {'status': ''}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT STATUS FROM `purchase` WHERE `PONO` = %s"
+                cursor.execute(sql, (pono))
+                result = cursor.fetchone()
+                status = result['STATUS']
+                if(status == 'hold'):
+                    update_status(pono, 'shipped')
+                    playload['status'] = 'success'
+                    return playload
+                else:
+                    playload['status'] = 'forbidden'
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
 
 def get_all_purchase():
     """Get all purchase
