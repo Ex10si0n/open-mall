@@ -906,6 +906,80 @@ def customer_filter_purchase(accId: str, period: str):
         playload['status'] = 'error'
         return playload
 
+
+def vendor_filter_purchase(order_status: str):
+    """Filter purchase by status
+
+    Args: 
+        order_status(str): pending/hold/past
+
+    Returns:
+        dict: status(success, error), purchase_list
+    """
+    playload = {'status': '', 'purchase_list': [] }
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                if(order_status == 'pending' or order_status == 'hold'):
+                    sql = "SELECT * FROM `purchase` WHERE `STATUS` = %s"
+                    cursor.execute(sql, (order_status))
+                    result = cursor.fetchall()
+                    if (len(result) == 0):
+                        playload['status'] = 'none'
+                        return playload
+                    else:
+                        for row in result:
+                            purchase = {
+                                'pono': row['PONO'],
+                                'accId': row['ACCID'],
+                                'date': row['DATE'].strftime("%Y-%m-%d"),
+                                'amount': row['AMOUNT'],
+                                'status': row['STATUS']
+                            }
+                            playload['purchase_list'].append(purchase)
+                        playload['status'] = 'success'
+                        return playload    
+                elif(order_status == 'past'):
+                    sql = "SELECT * FROM `purchase` WHERE `STATUS` = %s"
+                    cursor.execute(sql, ('shipped'))
+                    result_shipped = cursor.fetchall()
+                    cursor.execute(sql, ('cancelled'))
+                    result_cancelled = cursor.fetchall()
+                    if (len(result_shipped) == 0 and len(result_cancelled) == 0):
+                        playload['status'] = 'none'
+                        return playload
+                    else:
+                        for row in result_shipped:
+                            purchase = {
+                                'pono': row['PONO'],
+                                'accId': row['ACCID'],
+                                'date': row['DATE'].strftime("%Y-%m-%d"),
+                                'amount': row['AMOUNT'],
+                                'status': row['STATUS']
+                            }
+                            playload['purchase_list'].append(purchase)
+                        for row in result_cancelled:
+                            purchase = {
+                                'pono': row['PONO'],
+                                'accId': row['ACCID'],
+                                'date': row['DATE'].strftime("%Y-%m-%d"),
+                                'amount': row['AMOUNT'],
+                                'status': row['STATUS']
+                            }
+                            playload['purchase_list'].append(purchase)
+                        playload['status'] = 'success'
+                        return playload    
+                   
+                else:
+                    playload['status'] = 'error'
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
+
+
 def get_purchase_by_id(pono: str, accId: str, addrId: str):
     """Get purchase by id
 
@@ -1133,6 +1207,7 @@ if __name__ == '__main__':
     # res = get_all_purchase()
     # res = get_all_products()
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
-    res = customer_filter_purchase('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'current')
+    # res = customer_filter_purchase('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'current')
+    # res = vendor_filter_purchase('past')
 
     print(res)
