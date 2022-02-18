@@ -586,7 +586,7 @@ def add_product_to_cart(pid: str, accid: str, quantity: int):
     Returns:
         dict: status(success, duplicated, error), cartid
     """
-    playload = {'status': ''}
+    playload = {'status': '', 'cartid': ''}
     try:
         connection = create_connection()
         with connection:
@@ -600,6 +600,7 @@ def add_product_to_cart(pid: str, accid: str, quantity: int):
                     cursor.execute(sql, (cartid, pid, accid, quantity))
                     connection.commit()
                     playload['status'] = 'success'
+                    playload['cartid'] = cartid
                     return playload
                 else:
                     playload['status'] = 'duplicated'

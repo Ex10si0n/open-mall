@@ -1,7 +1,28 @@
 <script setup lang="ts">
+import axios from "axios";
 import { ref } from "vue";
 
 // const count = ref(0)
+
+const test = {
+  data(){
+    return { remember: 'true', email: '', password: ''}
+  },
+  method: {
+    login(){
+      axios.post("http://127.0.0.1:8000/api/login_check/", {remember: this.remember, email: this.email, password: this.password})
+        .then(function(response){
+          console.log(response.data)
+          if(response.data.status == 'success'){
+            alert('success')
+            //window.location = "";
+          }else{
+            alert('error')
+          }
+        })
+    }
+  }
+}
 </script>
 
 <template>
@@ -28,10 +49,10 @@ import { ref } from "vue";
       </div>
       <form
         class="mt-8 space-y-6"
-        action="http://127.0.0.1:8000/api/login_check/"
-        method="POST"
+        action=""
+        method=""
       >
-        <input type="hidden" name="remember" value="true" />
+        <input type="hidden" name="remember" value="true"/>
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
             <label for="email-address" class="sr-only">Email address</label>
@@ -43,6 +64,7 @@ import { ref } from "vue";
               required
               class="appearance-none rounded-none relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Email address"
+              v-model="email"
             />
           </div>
           <div>
@@ -55,6 +77,7 @@ import { ref } from "vue";
               required
               class="appearance-none rounded-none relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Password"
+              v-model="password"
             />
           </div>
         </div>
@@ -84,6 +107,7 @@ import { ref } from "vue";
           <button
             type="submit"
             class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          @click="login"
           >
             Login
           </button>
