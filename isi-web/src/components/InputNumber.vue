@@ -4,6 +4,7 @@ import { computed } from "vue";
 import axios from "axios";
 import config from "../config";
 import { useStore } from "vuex";
+import router from "../router/router";
 
 const store = useStore();
 
@@ -29,6 +30,7 @@ const handleChange = (v: number) => {
   // console.log(query);
   axios.get(query);
   location.reload(); // responsive alternative
+  // router.push("/cart/");
 };
 </script>
 

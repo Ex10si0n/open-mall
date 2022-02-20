@@ -92,3 +92,15 @@ def update_product_from_cart(pid: str, accId: str, quantity: int):
 async def login(remember: str = Form(...), email: str = Form(...), password: str = Form(...)):
     from db.database import login_check
     return login_check(email, password)
+
+
+@app.get('/api/checkout/{accId}/{addrId}')
+def checkout(accId: str, addrId: str):
+    from db.database import check_out
+    return check_out(accId, addrId)
+
+
+@app.get('/api/order/{accId}')
+def get_orders(accId: str):
+    from db.database import get_all_purchase_of_customer
+    return get_all_purchase_of_customer(accId)

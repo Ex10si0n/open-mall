@@ -1,8 +1,56 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, reactive } from "vue";
 import { useStore } from "vuex";
+import axios from "axios";
+import config from "../config";
 
 const store = useStore();
+
+type ProductState = {
+  pid: string;
+  pname: string;
+  brand: string;
+  price: number;
+  pdesc: string;
+  thumbnail: string;
+  pic: string;
+};
+
+type PurchaseState = {
+  amount: number;
+  date: Date;
+  pono: string;
+  status: string;
+};
+
+const purchases = reactive([] as Array<PurchaseState>);
+
+const accId = computed(() => {
+  return store.state.accId;
+});
+
+const getOrders = () => {
+  axios
+    .get("http://" + config.apiServer + ":" + config.port + "/api/order/" + accId.value)
+    .then((res) => {
+      // console.log(res.data.product_list);
+      const productList = res.data.purchase_list;
+      console.log(productList);
+      productList.forEach((product: ProductState) => {
+        product.pic =
+          "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
+        product.thumbnail =
+          "http://" +
+          config.apiServer +
+          ":" +
+          config.port +
+          "/api/img/" +
+          product.thumbnail;
+        purchases.push(product as ProductState);
+      });
+    })
+    .catch((error) => console.log(error));
+};
 
 const userName = computed(() => {
   return store.state.userName;
@@ -11,6 +59,8 @@ const userName = computed(() => {
 const userEmail = computed(() => {
   return store.state.userEmail;
 });
+
+getOrders();
 </script>
 
 <template>
@@ -24,8 +74,8 @@ const userEmail = computed(() => {
       </h2>
       <div>
         <ul role="list" class="-my-6 divide-y divide-gray-200">
-          <li class="py-6 flex">
-            <div
+          <li v-for="purchase in purchases" class="py-6 flex">
+            <!-- <div
               class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden"
             >
               <img
@@ -33,27 +83,26 @@ const userEmail = computed(() => {
                 alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
                 class="w-full h-full object-center object-cover"
               />
-            </div>
+            </div> -->
 
             <div class="ml-4 flex-1 flex flex-col">
               <div>
                 <div class="flex justify-between text-base font-medium text-gray-900">
                   <h3>
-                    <a href="#"> Throwback Hip Bag </a>
+                    <a> {{ purchase.pono }}</a>
                   </h3>
-                  <p class="ml-4">$90.00</p>
+                  <p class="ml-4">HK$ {{ purchase.amount }}</p>
                 </div>
-                <p class="mt-1 text-sm text-gray-500">
-                  Salmon | Qty 1 | Status: Delivered
-                </p>
+                <p class="mt-1 text-sm text-gray-500">Status: {{ purchase.status }}</p>
               </div>
               <div class="flex-1 flex items-end justify-between text-sm">
-                <p class="text-gray-500">SF21376126328832651</p>
+                <p class="text-gray-500">{{ purchase.date }}</p>
 
                 <div class="flex">
                   <button
                     type="button"
                     class="font-medium text-indigo-600 hover:text-indigo-500"
+                    @click="$router.push('/order/' + purchase.pono)"
                   >
                     Detailed
                   </button>
