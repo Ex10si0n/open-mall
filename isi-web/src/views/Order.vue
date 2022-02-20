@@ -36,17 +36,8 @@ const getOrders = () => {
       // console.log(res.data.product_list);
       const productList = res.data.purchase_list;
       console.log(productList);
-      productList.forEach((product: ProductState) => {
-        product.pic =
-          "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
-        product.thumbnail =
-          "http://" +
-          config.apiServer +
-          ":" +
-          config.port +
-          "/api/img/" +
-          product.thumbnail;
-        purchases.push(product as ProductState);
+      productList.forEach((product: PurchaseState) => {
+        purchases.push(product as PurchaseState);
       });
     })
     .catch((error) => console.log(error));
