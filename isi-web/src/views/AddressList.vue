@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-import { computed, h, reactive } from "vue";
+import { computed, reactive } from "vue";
 import { useStore } from "vuex";
 import config from "../config";
 

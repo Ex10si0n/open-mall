@@ -1,3 +1,4 @@
+import re
 import settings
 import pymysql.cursors
 import uuid
@@ -176,19 +177,21 @@ def create_address(accId: str, tel: str, name: str, city: str, country: str, det
         detailed (str): user detailed address
 
     Returns:
-        dict: status(success, error)
+        dict: status(success, error), addrId
     """
-    playload = {'status': ''}
+    playload = {'status': '', 'addrId': ''}
     try:
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
                 sql = "INSERT INTO `address` (`ADDRID`, `ACCID`, `TEL`, `NAME`, `CITY`, `COUNTRY`, `DETAILED`, `TAG`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
                 addrId = str(uuid.uuid4())
+                print(sql, (addrId, accId, tel, name, city, country, detailed, tag))
                 cursor.execute(
                     sql, (addrId, accId, tel, name, city, country, detailed, tag))
                 connection.commit()
                 playload['status'] = 'success'
+                playload['addrId'] = addrId
                 return playload
     except:
         playload['status'] = 'error'
@@ -719,7 +722,8 @@ def get_all_products_in_cart(accId: str):
                             'price': price,
                             'quantity': quantity
                         }
-                        playload['amount'] = playload['amount'] + quantity * price
+                        playload['amount'] = playload['amount'] + \
+                            quantity * price
                         playload['shopping_cart_list'].append(shopping_cart)
                     playload['status'] = 'success'
                     return playload
@@ -728,7 +732,7 @@ def get_all_products_in_cart(accId: str):
         return playload
 
 
-def check_out(accId: str):
+def check_out(accId: str, addrId: str):
     """Check out all items in the shopping cart and create a purchase order
 
     Args: 
@@ -749,12 +753,19 @@ def check_out(accId: str):
                     playload['status'] = 'none'
                     return playload
                 else:
+                    sql = 'SELECT * FROM `address` WHERE `ADDRID` = %s'
+                    cursor.execute(sql, (addrId,))
+                    res = cursor.fetchone()
+                    if res is None:
+                        playload['status'] = 'invalid_address'
+                        return playload
                     amount = 0
                     pono = str(uuid.uuid4())
-                    sql = "INSERT INTO `purchase` (`PONO`, `ACCID`, `DATE`, `STATUS`, `AMOUNT`) VALUES (%s, %s, %s, %s, %s)"
+                    sql = "INSERT INTO `purchase` (`PONO`, `ACCID`, `DATE`, `STATUS`, `AMOUNT`, `COUNTRY`, `CITY`, `NAME`, `TEL`, `ADDRESS`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     today = date.today().strftime("%Y-%m-%d")
+
                     cursor.execute(
-                        sql, (pono, accId, today, 'pending', 0))
+                        sql, (pono, accId, today, 'pending', 0, res['COUNTRY'], res['CITY'], res['NAME'], res['TEL'], res['DETAILED']))
                     connection.commit()
                     for row in result:
                         cartId = row['CARTID']
@@ -768,7 +779,6 @@ def check_out(accId: str):
                         amount = amount + subtotal
                         sql = "INSERT INTO `order` (`PONO`, `PRICE`, `OID`, `PID`, `QUANTITY`, `SUBTOTAL`) VALUES (%s, %s, %s, %s, %s, %s)"
                         oid = str(uuid.uuid4())
-                        print(sql % (pono, price, oid, pid, quantity, subtotal))
                         cursor.execute(
                             sql, (pono, price, oid, pid, quantity, subtotal))
                         connection.commit()
@@ -778,6 +788,10 @@ def check_out(accId: str):
                     cursor.execute(
                         sql, (amount, pono))
                     connection.commit()
+                    sql = "DELETE FROM `shopping_cart` WHERE `ACCID` = %s"
+                    cursor.execute(sql, (accId,))
+                    connection.commit()
+
                     playload['status'] = 'success'
                     playload['PONO'] = pono
                     return playload
@@ -869,7 +883,7 @@ def customer_filter_purchase(accId: str, period: str):
     Returns:
         dict: status(success, error), purchase_list
     """
-    playload = {'status': '', 'purchase_list': [] }
+    playload = {'status': '', 'purchase_list': []}
     try:
         connection = create_connection()
         with connection:
@@ -889,7 +903,8 @@ def customer_filter_purchase(accId: str, period: str):
                         return playload
                 elif(period == 'past'):
                     result_shipped = get_purchase_by_status(accId, 'shipped')
-                    result_cancelled = get_purchase_by_status(accId, 'cancelled')
+                    result_cancelled = get_purchase_by_status(
+                        accId, 'cancelled')
                     if(result_shipped['status'] == 'none' and result_cancelled['status'] == 'none'):
                         playload['status'] = "none"
                         return playload
@@ -917,7 +932,7 @@ def vendor_filter_purchase(order_status: str):
     Returns:
         dict: status(success, error), purchase_list
     """
-    playload = {'status': '', 'purchase_list': [] }
+    playload = {'status': '', 'purchase_list': []}
     try:
         connection = create_connection()
         with connection:
@@ -940,7 +955,7 @@ def vendor_filter_purchase(order_status: str):
                             }
                             playload['purchase_list'].append(purchase)
                         playload['status'] = 'success'
-                        return playload    
+                        return playload
                 elif(order_status == 'past'):
                     sql = "SELECT * FROM `purchase` WHERE `STATUS` = %s"
                     cursor.execute(sql, ('shipped'))
@@ -970,14 +985,18 @@ def vendor_filter_purchase(order_status: str):
                             }
                             playload['purchase_list'].append(purchase)
                         playload['status'] = 'success'
-                        return playload    
-                   
+                        return playload
+
                 else:
                     playload['status'] = 'error'
                     return playload
     except:
         playload['status'] = 'error'
         return playload
+
+
+def get_purchase_by_accid(accId: str):
+    pass
 
 
 def get_purchase_by_id(pono: str, accId: str, addrId: str):
@@ -1123,7 +1142,7 @@ def update_status(pono: str, status: str):
         return playload
 
 
-def cancel_purchase (pono: str):
+def cancel_purchase(pono: str):
     """Cancel order
 
     Args: 
@@ -1211,6 +1230,7 @@ def hold_purchase(pono: str):
     except:
         playload['status'] = 'error'
         return playload
+
 
 def unhold_purchase(pono: str):
     """Unhold order
@@ -1314,7 +1334,7 @@ if __name__ == '__main__':
     #    'bea69416-d9a2-42b5-8323-bf2778093562', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
-    # res = get_all_purchase_of_customer('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    res = get_all_purchase_of_customer('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_purchase_by_status(
     #    'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'pending')
     # res = get_purchase_by_id('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '98409f31-ee40-404c-b6c5-896c85e3878a')
@@ -1329,6 +1349,8 @@ if __name__ == '__main__':
     # res = customer_filter_purchase('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'current')
     # res = vendor_filter_purchase('past')
     # res = cancel_purchase('0c09c90f-96f3-40ea-8e6d-b194525da7c3')
-    res = ship_purchase('cabc4448-08e7-4584-b952-a41af5356a09')
+    # res = ship_purchase('cabc4448-08e7-4584-b952-a41af5356a09')
+    # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa',
+    #                '98409f31-ee40-404c-b6c5-896c85e3878a')
 
     print(res)

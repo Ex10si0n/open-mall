@@ -5,6 +5,7 @@ import config from "../config"
 
 // const count = ref(0)
 
+<<<<<<< HEAD
 const email = ref("")
 const password = ref("")
 const login = () => {
@@ -22,6 +23,32 @@ const login = () => {
 }
 
 
+=======
+const test = {
+  data() {
+    return { remember: "true", email: "", password: "" };
+  },
+  method: {
+    login() {
+      axios
+        .post("http://127.0.0.1:8000/api/login_check/", {
+          remember: this.remember,
+          email: this.email,
+          password: this.password,
+        })
+        .then(function (response) {
+          console.log(response.data);
+          if (response.data.status == "success") {
+            alert("success");
+            //window.location = "";
+          } else {
+            alert("error");
+          }
+        });
+    },
+  },
+};
+>>>>>>> 35f820bf822ff166c72556bfd6aae8ddb8cbfe94
 </script>
 
 <template>
@@ -46,12 +73,8 @@ const login = () => {
           </router-link>
         </p>
       </div>
-      <form
-        class="mt-8 space-y-6"
-        action=""
-        method=""
-      >
-        <input type="hidden" name="remember" value="true"/>
+      <form class="mt-8 space-y-6" action="" method="">
+        <input type="hidden" name="remember" value="true" />
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
             <label for="email-address" class="sr-only">Email address</label>

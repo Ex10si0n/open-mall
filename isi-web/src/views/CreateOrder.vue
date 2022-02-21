@@ -4,8 +4,17 @@ import { useStore } from "vuex";
 import axios from "axios";
 import config from "../config";
 import InputNumber from "../components/InputNumber.vue";
+import router from "../router/router";
 
 const store = useStore();
+
+const activeTab = computed(() => {
+  return store.state.activeTab;
+});
+
+const addrId = computed(() => {
+  return store.state.primaryAddress.addrId;
+});
 
 const userEmail = computed(() => {
   return store.state.userEmail;
@@ -72,6 +81,34 @@ const sortedProducts = products.sort((a, b) => {
   }
   return 0;
 });
+
+const createOrder = () => {
+  const query =
+    "http://" +
+    config.apiServer +
+    ":" +
+    config.port +
+    "/api/checkout/" +
+    accId.value +
+    "/" +
+    addrId.value;
+  axios.get(query).then((response) => {
+    store.commit("chgActiveTab", "order");
+  });
+};
+// const order = {
+//   user_email: userEmail.value,
+//   subtotal: subtotal.value,
+//   products: products,
+// };
+// axios.post(query, order).then((res) => {
+//   if (res.data.success) {
+//     alert("Order created successfully!");
+//     window.location.href = "/";
+//   } else {
+//     alert("Order creation failed!");
+//   }
+// });
 </script>
 
 <template>
@@ -132,16 +169,16 @@ const sortedProducts = products.sort((a, b) => {
             </div>
           </div>
           <div
-            class="p-4 border-t-transparent rounded-none shadow-sm border-gray-300 bg-slate-800 text-white"
+            class="p-4 border-t-transparent rounded-none shadow-sm border-gray-300 bg-gray-200 text-white"
           >
             <div class="flow-root">
               <div class="col-span-1 flex flex-col">
                 <div class="">
-                  <div class="flex justify-between text-base font-medium text-gray-100">
+                  <div class="flex justify-between text-base font-medium text-gray-900">
                     <p>Subtotal</p>
                     <p>HK${{ subtotal }}</p>
                   </div>
-                  <p class="mt-0.5 text-sm text-gray-400">
+                  <p class="mt-0.5 text-sm text-gray-600">
                     Shipping and taxes calculated at checkout.
                   </p>
                   <div
@@ -152,9 +189,10 @@ const sortedProducts = products.sort((a, b) => {
             </div>
           </div>
           <div class="mt-0">
-            <router-link to="/order/create">
+            <router-link to="/order">
               <button
                 class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indogo-800 rounded-t-none"
+                @click="createOrder"
               >
                 Pay
               </button></router-link

@@ -1,11 +1,42 @@
 <script setup lang="ts">
 import axios from "axios";
-import { computed, h, reactive } from "vue";
+import { computed, ref, reactive } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import config from "../config";
 import countries from "../store/countries";
 
+const router = useRouter();
+const accId = computed(() => {
+  return store.state.accId;
+});
+
+const fname = ref("")
+const lname = ref("")
+const code = ref("")
+const tel = ref("")
+const country = ref("Select Country or Region")
+const city = ref("")
+const detailed = ref("")
+const tag = ref("")
 const store = useStore();
+
+const createAddress = () => {
+  const query = "http://" + config.apiServer + ":" + config.port + "/api/address/create/"
+  axios.post(query, {
+    accId: accId.value,
+    name: fname.value + " " + lname.value,
+    tel: code.value + " " + tel.value,
+    country: country.value,
+    city: city.value,
+    detailed: detailed.value,
+    tag: tag.value,
+  }).then((res) => {
+    const addrId = res.data.addrId
+    store.commit('setPrimaryAddress', addrId)
+    router.push("/profile")
+  })
+}
 
 const userName = computed(() => {
   return store.state.userName;
@@ -19,9 +50,6 @@ const address = computed(() => {
   return store.state.primaryAddress;
 });
 
-const accId = computed(() => {
-  return store.state.accId;
-});
 
 type AddressState = {
   addrId: string;
@@ -34,21 +62,6 @@ type AddressState = {
   tag: string;
 };
 
-const addr = reactive([] as Array<AddressState>);
-
-const query =
-  "http://" + config.apiServer + ":" + config.port + "/api/address/" + accId.value;
-axios.get(query).then((res) => {
-  const addressList = res.data.address_list;
-  addressList.forEach((address: AddressState) => {
-    addr.push(address as AddressState);
-  });
-});
-
-const setPrimaryAddress = (addrId: string) => {
-  console.log("setPrimaryAddress to " + addrId);
-  store.commit("setPrimaryAddress", addrId);
-};
 </script>
 
 <template>
@@ -64,7 +77,7 @@ const setPrimaryAddress = (addrId: string) => {
         <div class="text-2xl">Create New Address</div>
         <div class="text-sm text-gray-500">{{ userEmail }}</div>
       </h2>
-      <form class="creation_form">
+      <div class="creation_form">
         <div class="border rounded-lg rounded-b-none shadow-lg bg-white px-4">
           <div class="grid grid-cols-4 gap-4">
             <div class="mt-4 mb-4 col-span-2">
@@ -77,6 +90,7 @@ const setPrimaryAddress = (addrId: string) => {
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 required
+                v-model="fname"
               />
             </div>
             <div class="mt-4 mb-4 col-span-2">
@@ -89,6 +103,7 @@ const setPrimaryAddress = (addrId: string) => {
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 required
+                v-model="lname"
               />
             </div>
           </div>
@@ -103,6 +118,7 @@ const setPrimaryAddress = (addrId: string) => {
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="+853"
                 required
+                v-model="code"
               />
             </div>
             <div class="mb-4 col-span-4">
@@ -115,6 +131,7 @@ const setPrimaryAddress = (addrId: string) => {
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 required
+                v-model="tel"
               />
             </div>
           </div>
@@ -126,6 +143,7 @@ const setPrimaryAddress = (addrId: string) => {
           <select
             id="countries"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            v-model="country"
           >
             <option>Select Country or Region</option>
             <option v-for="region in countries.countryListAllIsoData">
@@ -141,6 +159,7 @@ const setPrimaryAddress = (addrId: string) => {
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder=""
               required
+              v-model="city"
             />
           </div>
           <div class="mt-4 mb-4">
@@ -152,6 +171,7 @@ const setPrimaryAddress = (addrId: string) => {
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder=""
               required
+              v-model="detailed"
             />
           </div>
           <div class="mt-4 mb-4">
@@ -163,6 +183,7 @@ const setPrimaryAddress = (addrId: string) => {
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Home / Work / School / Family / ..."
               required
+              v-model="tag"
             />
           </div>
         </div>
@@ -173,12 +194,13 @@ const setPrimaryAddress = (addrId: string) => {
             <button
               type="submit"
               class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
+              @click="createAddress"
             >
               Save
             </button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>

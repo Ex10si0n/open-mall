@@ -1,7 +1,39 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import axios from "axios";
+import config from '../config'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+const router = useRouter()
+const store = useStore()
 
-// const count = ref(0)
+const email = ref("")
+const password = ref("")
+const passwordVal = ref("")
+
+const createAccount = () => {
+  if (passwordVal.value === password.value) {
+    // create account
+    const query = "http://" + config.apiServer + ":" + config.port + "/api/register/"
+    axios.post(query, {
+      email: email.value,
+      password: password.value
+    }).then((res) => {
+      if (res.data.status === 'success') {
+        console.log(email.value + " created account")
+        store.commit('chgUser', {
+          accId: res.data.uuid,
+          userEmail: email.value,
+          userName: email.value.split('@')[0]
+        })
+        store.commit('chgStatus', 'active')
+        router.push('/')
+      } else {
+        alert(res.data.status)
+      }
+    })
+  }
+}
 </script>
 
 <template>
@@ -18,7 +50,7 @@ import { ref } from "vue";
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600"></p>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
+      <div class="mt-8 space-y-6" action="#" method="POST">
         <input type="hidden" name="remember" value="true" />
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
@@ -31,6 +63,7 @@ import { ref } from "vue";
               required
               class="appearance-none rounded-none relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Email address"
+              v-model="email"
             />
           </div>
           <div>
@@ -43,6 +76,7 @@ import { ref } from "vue";
               required
               class="appearance-none rounded-none relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Password"
+              v-model="password"
             />
           </div>
           <div>
@@ -55,6 +89,7 @@ import { ref } from "vue";
               required
               class="appearance-none rounded-none relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Confirm Password"
+              v-model="passwordVal"
             />
           </div>
         </div>
@@ -66,6 +101,7 @@ import { ref } from "vue";
               name="remember-me"
               type="checkbox"
               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              checked
             />
             <label for="remember-me" class="ml-2 block text-gray-900">
               I agree with the
@@ -80,13 +116,13 @@ import { ref } from "vue";
 
         <div>
           <button
-            type="submit"
             class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            @click="createAccount"
           >
             Signup and Login
           </button>
         </div>
-      </form>
+        </div>
     </div>
   </div>
 </template>
