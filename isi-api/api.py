@@ -29,6 +29,18 @@ class LoginData(BaseModel):
     password: str
     # remember_me: str
 
+class RegisterData(BaseModel):
+    email: str
+    password: str
+
+class AddressData(BaseModel):
+    accId: str
+    name: str
+    tel: str
+    country: str
+    city: str
+    detailed: str
+    tag: str
 
 @app.get("/api/")
 async def root():
@@ -46,6 +58,10 @@ def get_addrId(addrId: str):
     from db.database import get_address_by_id
     return get_address_by_id(addrId)
 
+@app.post('/api/address/create')
+def create_address(addressData: AddressData):
+    from db.database import create_address
+    return create_address(addressData.accId, addressData.tel, addressData.name, addressData.city, addressData.country, addressData.detailed, addressData.tag)
 
 @app.get("/api/img/{filename}")
 async def root(filename: str):
@@ -93,6 +109,11 @@ async def login(remember: str = Form(...), email: str = Form(...), password: str
     from db.database import login_check
     return login_check(email, password)
 
+@app.post('/api/register/')
+def register(registerData: RegisterData):
+    from db.database import create_account
+    return create_account(registerData.email.split('@')[0], registerData.email, registerData.password, 'user')
+
 
 @app.get('/api/checkout/{accId}/{addrId}')
 def checkout(accId: str, addrId: str):
@@ -104,3 +125,5 @@ def checkout(accId: str, addrId: str):
 def get_orders(accId: str):
     from db.database import get_all_purchase_of_customer
     return get_all_purchase_of_customer(accId)
+
+

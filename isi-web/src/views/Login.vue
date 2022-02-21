@@ -5,24 +5,29 @@ import { ref } from "vue";
 // const count = ref(0)
 
 const test = {
-  data(){
-    return { remember: 'true', email: '', password: ''}
+  data() {
+    return { remember: "true", email: "", password: "" };
   },
   method: {
-    login(){
-      axios.post("http://127.0.0.1:8000/api/login_check/", {remember: this.remember, email: this.email, password: this.password})
-        .then(function(response){
-          console.log(response.data)
-          if(response.data.status == 'success'){
-            alert('success')
-            //window.location = "";
-          }else{
-            alert('error')
-          }
+    login() {
+      axios
+        .post("http://127.0.0.1:8000/api/login_check/", {
+          remember: this.remember,
+          email: this.email,
+          password: this.password,
         })
-    }
-  }
-}
+        .then(function (response) {
+          console.log(response.data);
+          if (response.data.status == "success") {
+            alert("success");
+            //window.location = "";
+          } else {
+            alert("error");
+          }
+        });
+    },
+  },
+};
 </script>
 
 <template>
@@ -47,12 +52,8 @@ const test = {
           </router-link>
         </p>
       </div>
-      <form
-        class="mt-8 space-y-6"
-        action=""
-        method=""
-      >
-        <input type="hidden" name="remember" value="true"/>
+      <form class="mt-8 space-y-6" action="" method="">
+        <input type="hidden" name="remember" value="true" />
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
             <label for="email-address" class="sr-only">Email address</label>
@@ -107,7 +108,7 @@ const test = {
           <button
             type="submit"
             class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          @click="login"
+            @click="login"
           >
             Login
           </button>

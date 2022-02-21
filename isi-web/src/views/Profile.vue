@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import config from "../config";
 import axios from "axios";
 
 const store = useStore();
+const router = useRouter();
 
 const userName = computed(() => {
   return store.state.userName;
@@ -31,11 +33,21 @@ type AddressState = {
 
 const address = ref({} as AddressState);
 
+const hasAddress = ref(false);
+
+const signOut = () => {
+  store.commit("signOut");
+  router.push("/");
+};
+
 const query =
   "http://" + config.apiServer + ":" + config.port + "/api/address_by_id/" + addrId.value;
 axios.get(query).then((res) => {
-  const addressList = res.data.address;
-  address.value = addressList as AddressState;
+  const paddr = res.data.address;
+  if (res.data.status === "success") {
+    hasAddress.value = true;
+  }
+  address.value = paddr as AddressState;
 });
 </script>
 
@@ -189,8 +201,10 @@ axios.get(query).then((res) => {
       </div>
       <div class="max-w-sm overflow-hidden bg-white border rounded-lg shadow-sm">
         <router-link to="/address_list">
+          <div v-if="hasAddress === true" >
+
           <div class="px-6 py-4">
-            <div class="mb-2 text-xl font-medium">Primary address</div>
+            <div class="mb-2 text-xl font-medium"  >Primary address</div>
             <div class="grid grid-cols-3">
               <div class="mb-2 font-bold col-span-1 text-md">{{ address.NAME }}</div>
               <div class="mb-2 text-right col-span-2 text-md">{{ address.TEL }}</div>
@@ -211,12 +225,23 @@ axios.get(query).then((res) => {
               >
             </div>
           </div>
+          </div>
+          <div v-else>
+          <router-link to="/address_list/create">
+            <button
+                type="submit"
+                class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
+            >
+              Add Address
+            </button></router-link
+          ></div>
         </router-link>
       </div>
       <div>
         <button
           type="submit"
           class="relative flex justify-center w-full px-6 py-3 font-medium text-white bg-red-500 border border-transparent group rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+          @click="signOut"
         >
           Log Out
         </button>

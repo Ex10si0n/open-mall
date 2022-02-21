@@ -177,19 +177,21 @@ def create_address(accId: str, tel: str, name: str, city: str, country: str, det
         detailed (str): user detailed address
 
     Returns:
-        dict: status(success, error)
+        dict: status(success, error), addrId
     """
-    playload = {'status': ''}
+    playload = {'status': '', 'addrId': ''}
     try:
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
                 sql = "INSERT INTO `address` (`ADDRID`, `ACCID`, `TEL`, `NAME`, `CITY`, `COUNTRY`, `DETAILED`, `TAG`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
                 addrId = str(uuid.uuid4())
+                print(sql, (addrId, accId, tel, name, city, country, detailed, tag))
                 cursor.execute(
                     sql, (addrId, accId, tel, name, city, country, detailed, tag))
                 connection.commit()
                 playload['status'] = 'success'
+                playload['addrId'] = addrId
                 return playload
     except:
         playload['status'] = 'error'
