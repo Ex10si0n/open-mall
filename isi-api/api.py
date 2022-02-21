@@ -89,6 +89,6 @@ def update_product_from_cart(pid: str, accId: str, quantity: int):
 
 
 @app.post('/api/login_check/')
-async def login(remember: str = Form(...), email: str = Form(...), password: str = Form(...)):
+async def login(email: str, password: str):
     from db.database import login_check
     return login_check(email, password)
