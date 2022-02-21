@@ -105,9 +105,9 @@ def update_product_from_cart(pid: str, accId: str, quantity: int):
 
 
 @app.post('/api/login_check/')
-async def login(email: str, password: str):
+async def login(loginData: LoginData):
     from db.database import login_check
-    return login_check(email, password)
+    return login_check(loginData.email, loginData.password)
 
 @app.post('/api/register/')
 def register(registerData: RegisterData):
