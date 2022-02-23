@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
-import { useStore } from "vuex";
+import {computed, reactive, ref} from "vue";
+import {useStore} from "vuex";
 import axios from "axios";
 import config from "../config";
 import InputNumber from "../components/InputNumber.vue";
@@ -31,22 +31,22 @@ const subtotal = ref(0);
 const products = reactive([] as Array<ProductState>);
 
 const query =
-  "http://" + config.apiServer + ":" + config.port + "/api/cart/products/" + accId.value;
+    "http://" + config.apiServer + ":" + config.port + "/api/cart/products/" + accId.value;
 axios.get(query).then((res) => {
   const cartItems = res.data.shopping_cart_list;
   cartItems.forEach((cartItem: ProductState) => {
     const pid = cartItem.pid;
     const quantity = cartItem.quantity;
     const innerQuery =
-      "http://" + config.apiServer + ":" + config.port + "/api/product/" + pid;
+        "http://" + config.apiServer + ":" + config.port + "/api/product/" + pid;
     axios.get(innerQuery).then((res) => {
       const img =
-        "http://" +
-        config.apiServer +
-        ":" +
-        config.port +
-        "/api/img/" +
-        res.data.product.thumbnail;
+          "http://" +
+          config.apiServer +
+          ":" +
+          config.port +
+          "/api/img/" +
+          res.data.product.thumbnail;
       const product = {
         pid: cartItem.pid,
         pname: cartItem.pname,
@@ -75,14 +75,14 @@ const sortedProducts = products.sort((a, b) => {
 
 const removeProduct = (pid: string) => {
   const query =
-    "http://" +
-    config.apiServer +
-    ":" +
-    config.port +
-    "/api/cart/del/" +
-    pid +
-    "/" +
-    accId.value;
+      "http://" +
+      config.apiServer +
+      ":" +
+      config.port +
+      "/api/cart/del/" +
+      pid +
+      "/" +
+      accId.value;
   axios.get(query);
   location.reload(); // responsive alternative
 };
@@ -108,25 +108,25 @@ const removeProduct = (pid: string) => {
             <div class="flow-root">
               <ul role="list" class="-my-6 divide-y divide-gray-200">
                 <li
-                  v-if="products.length == 0"
-                  class="px-6 py-16 text-lg text-gray-500 text-center"
+                    v-if="products.length == 0"
+                    class="px-6 py-16 text-lg text-gray-500 text-center"
                 >
                   Nothing in Cart
                 </li>
                 <li v-for="product in sortedProducts" class="py-6 flex">
                   <div
-                    class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden"
+                      class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden"
                   >
                     <img
-                      :src="product.thumbnail"
-                      class="w-full h-full object-center object-cover"
+                        :src="product.thumbnail"
+                        class="w-full h-full object-center object-cover"
                     />
                   </div>
 
                   <div class="ml-4 flex-1 flex flex-col">
                     <div>
                       <div
-                        class="flex justify-between text-base font-medium text-gray-900"
+                          class="flex justify-between text-base font-medium text-gray-900"
                       >
                         <h3>
                           <router-link :to="`/product/${product.pid}`">
@@ -141,15 +141,15 @@ const removeProduct = (pid: string) => {
                       <!-- <p class="text-gray-500">Qty 1</p> -->
                       <!-- <InputNumber :value="product.quantity"></InputNumber> -->
                       <InputNumber
-                        :pid="product.pid"
-                        :quant="product.quantity"
+                          :pid="product.pid"
+                          :quant="product.quantity"
                       ></InputNumber>
 
                       <div class="flex">
                         <button
-                          type="button"
-                          class="font-medium text-indigo-600 hover:text-indigo-500"
-                          @click="removeProduct(product.pid)"
+                            type="button"
+                            class="font-medium text-indigo-600 hover:text-indigo-500"
+                            @click="removeProduct(product.pid)"
                         >
                           Remove
                         </button>
@@ -174,10 +174,11 @@ const removeProduct = (pid: string) => {
           <div class="mt-6">
             <router-link to="/order/create">
               <button
-                class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                  class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
               >
                 Checkout
-              </button></router-link
+              </button>
+            </router-link
             >
           </div>
           <div class="mt-6 flex justify-center text-sm text-center text-gray-500"></div>

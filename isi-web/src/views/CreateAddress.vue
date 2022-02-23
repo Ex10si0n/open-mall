@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import axios from "axios";
-import { computed, ref, reactive } from "vue";
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import {computed, ref} from "vue";
+import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 import config from "../config";
 import countries from "../store/countries";
 
@@ -82,68 +82,68 @@ type AddressState = {
           <div class="grid grid-cols-4 gap-4">
             <div class="mt-4 mb-4 col-span-2">
               <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >First Name</label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >First Name</label
               >
               <input
-                type="text"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-                v-model="fname"
+                  type="text"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                  v-model="fname"
               />
             </div>
             <div class="mt-4 mb-4 col-span-2">
               <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >Last Name</label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Last Name</label
               >
               <input
-                type="text"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-                v-model="lname"
+                  type="text"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                  v-model="lname"
               />
             </div>
           </div>
           <div class="grid grid-cols-6 gap-4">
             <div class="mb-4 col-span-2">
               <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >Area Code</label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Area Code</label
               >
               <input
-                type="text"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="+853"
-                required
-                v-model="code"
+                  type="text"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="+853"
+                  required
+                  v-model="code"
               />
             </div>
             <div class="mb-4 col-span-4">
               <label
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >Tel.</label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Tel.</label
               >
               <input
-                type="text"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                required
-                v-model="tel"
+                  type="text"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                  v-model="tel"
               />
             </div>
           </div>
           <label
-            for="countries"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
-            >Country or Region</label
+              for="countries"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
+          >Country or Region</label
           >
           <select
-            id="countries"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            v-model="country"
+              id="countries"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              v-model="country"
           >
             <option>Select Country or Region</option>
             <option v-for="region in countries.countryListAllIsoData">
@@ -152,49 +152,49 @@ type AddressState = {
           </select>
           <div class="mt-4 mb-4">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >City</label
+            >City</label
             >
             <input
-              type="text"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder=""
-              required
-              v-model="city"
+                type="text"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder=""
+                required
+                v-model="city"
             />
           </div>
           <div class="mt-4 mb-4">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >Detailed</label
+            >Detailed</label
             >
             <textarea
-              type="text"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder=""
-              required
-              v-model="detailed"
+                type="text"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder=""
+                required
+                v-model="detailed"
             />
           </div>
           <div class="mt-4 mb-4">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >Tag</label
+            >Tag</label
             >
             <input
-              type="text"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Home / Work / School / Family / ..."
-              required
-              v-model="tag"
+                type="text"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Home / Work / School / Family / ..."
+                required
+                v-model="tag"
             />
           </div>
         </div>
         <div
-          class="bg-white max-w-sm rounded-lg rounded-t-none overflow-hidden border shadow-lg"
+            class="bg-white max-w-sm rounded-lg rounded-t-none overflow-hidden border shadow-lg"
         >
           <div>
             <button
-              type="submit"
-              class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
-              @click="createAddress"
+                type="submit"
+                class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
+                @click="createAddress"
             >
               Save
             </button>

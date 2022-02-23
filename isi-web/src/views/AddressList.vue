@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import axios from "axios";
-import { computed, reactive } from "vue";
-import { useStore } from "vuex";
+import {computed, reactive} from "vue";
+import {useStore} from "vuex";
 import config from "../config";
 
 const store = useStore();
@@ -36,7 +36,7 @@ type AddressState = {
 const addr = reactive([] as Array<AddressState>);
 
 const query =
-  "http://" + config.apiServer + ":" + config.port + "/api/address/" + accId.value;
+    "http://" + config.apiServer + ":" + config.port + "/api/address/" + accId.value;
 axios.get(query).then((res) => {
   const addressList = res.data.address_list;
   addressList.forEach((address: AddressState) => {
@@ -79,11 +79,11 @@ const viewingProduct = computed(() => {
       </h2>
       <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-lg">
         <div v-for="a in addr">
-          <hr />
+          <hr/>
           <div
-            v-if="address.addrId === a.addrId"
-            class="px-6 py-4 bg-teal-50 border-2 border-teal-500 rounded-sm"
-            @click="setPrimaryAddress(a.addrId)"
+              v-if="address.addrId === a.addrId"
+              class="px-6 py-4 bg-teal-50 border-2 border-teal-500 rounded-sm"
+              @click="setPrimaryAddress(a.addrId)"
           >
             <router-link to="/address/edit"></router-link>
             <div class="font-medium text-xl mb-2">Primary Addresses</div>
@@ -100,8 +100,8 @@ const viewingProduct = computed(() => {
             <div class="grid grid-cols-3 pt-4">
               <div class="col-span-1">
                 <span
-                  class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-                  >#{{ a.tag }}</span
+                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                >#{{ a.tag }}</span
                 >
               </div>
             </div>
@@ -120,8 +120,8 @@ const viewingProduct = computed(() => {
             <div class="grid grid-cols-3 pt-4">
               <div class="col-span-1">
                 <span
-                  class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-                  >#{{ a.tag }}</span
+                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                >#{{ a.tag }}</span
                 >
               </div>
             </div>
@@ -130,11 +130,12 @@ const viewingProduct = computed(() => {
         <div>
           <router-link to="/address_list/create">
             <button
-              type="submit"
-              class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
+                type="submit"
+                class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
             >
               Add Address
-            </button></router-link
+            </button>
+          </router-link
           >
         </div>
       </div>
