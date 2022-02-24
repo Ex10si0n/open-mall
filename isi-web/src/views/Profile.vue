@@ -246,18 +246,18 @@ axios.get(query).then((res) => {
         <button
             type="submit"
             class="relative flex justify-center w-full px-6 py-3 font-medium text-white bg-red-500 border border-transparent group rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
-            @click="signOut"
+            @click="changePassword"
         >
-          Log Out
+          Change Password
         </button>
       </div>
       <div>
         <button
             type="submit"
             class="relative flex justify-center w-full px-6 py-3 font-medium text-white bg-red-500 border border-transparent group rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
-            @click="changePassword"
+            @click="signOut"
         >
-          Change Password
+          Log Out
         </button>
       </div>
     </div>

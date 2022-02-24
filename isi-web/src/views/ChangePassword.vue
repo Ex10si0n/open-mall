@@ -27,6 +27,7 @@ const changePassword = () => {
             }).then((res) => {
                 if (res.data.status === 'success') {
                     alert(res.data.status)
+                    router.push('/profile')
                 } else {
                     alert(res.data.status)
                 }
@@ -35,15 +36,40 @@ const changePassword = () => {
     }  
 }
 
-const message = ref("At least 6 characters; \nAt least one digit;\nAt least one capital letter")
+
 
 const checkPassword = () =>{
     let numberFlag = false
     let capitalFlag = false
-    if ((newPassword.value.length >= 6) && (/\d/.test(newPassword.value)) && (/A-Z/.test(newPassword.value))){
-        return true
+    if (newPassword.value.length >= 6){
+        for (var char of newPassword.value){
+            for (var digit of ['0','1','2','3','4','5','6','7','8','9']){
+                if (char == digit){
+                    numberFlag = true
+                    break
+                }
+            }
+            for (var letter of ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']){
+                if (char == letter){
+                    capitalFlag = true
+                    break
+                }
+            }
+        }
+        if (numberFlag == true && capitalFlag == true){
+                return true
+            }else if (numberFlag == false && capitalFlag == false){
+                alert("At least one digit\nAt least one capital letter")
+                return false
+            }else if (numberFlag == false && capitalFlag == true){
+                alert("At least one digit")
+                return false
+            }else{
+                alert("At least one capital letter")
+                return false
+            }
     }else{
-        alert(message.value)
+        alert("At least 6 characters")
         return false
     }
 }
