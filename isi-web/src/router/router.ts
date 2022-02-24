@@ -10,6 +10,7 @@ export default createRouter({
     { path: "/about", component: () => import(/* webpackChunkName: "home" */ "../views/About.vue") },
     { path: "/login", component: () => import(/* webpackChunkName: "home" */ "../views/Login.vue") },
     { path: "/signup", component: () => import(/* webpackChunkName: "home" */ "../views/Signup.vue") },
+    { path: "/change_password", component: () => import(/* webpackChunkName: "home" */ "../views/ChangePassword.vue")},
     { path: "/cart", component: () => import(/* webpackChunkName: "home" */ "../views/Cart.vue") },
     { path: "/profile", component: () => import(/* webpackChunkName: "home" */ "../views/Profile.vue") },
     { path: "/order", component: () => import(/* webpackChunkName: "home" */ "../views/Order.vue") },

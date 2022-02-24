@@ -40,6 +40,9 @@ const signOut = () => {
   router.push("/");
 };
 
+const changePassword = () => {
+  router.push('/change_password')
+}
 const query =
     "http://" + config.apiServer + ":" + config.port + "/api/address_by_id/" + addrId.value;
 axios.get(query).then((res) => {
@@ -246,6 +249,15 @@ axios.get(query).then((res) => {
             @click="signOut"
         >
           Log Out
+        </button>
+      </div>
+      <div>
+        <button
+            type="submit"
+            class="relative flex justify-center w-full px-6 py-3 font-medium text-white bg-red-500 border border-transparent group rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+            @click="changePassword"
+        >
+          Change Password
         </button>
       </div>
     </div>

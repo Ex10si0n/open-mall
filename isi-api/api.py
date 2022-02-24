@@ -42,6 +42,11 @@ class AddressData(BaseModel):
     detailed: str
     tag: str
 
+class ChangePasswordData(BaseModel):
+    email: str
+    oldPassword: str
+    newPassword: str
+
 @app.get("/api/")
 async def root():
     return {"message": "Hello World"}
@@ -126,4 +131,7 @@ def get_orders(accId: str):
     from db.database import get_all_purchase_of_customer
     return get_all_purchase_of_customer(accId)
 
-
+@app.post('/api/change_password/')
+def change_password(changePasswordData: ChangePasswordData):
+    from db.database import update_password
+    return update_password(changePasswordData.email, changePasswordData.oldPassword, changePasswordData.newPassword)
