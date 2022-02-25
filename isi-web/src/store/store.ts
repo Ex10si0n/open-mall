@@ -8,12 +8,12 @@ import axios from 'axios'
 export default createStore({
   state: {
     hello: 'Vue-SPA-Quickstart',
-    userStatus: 'visitor', // active vendor visitor
+    userStatus: 'active', // active vendor visitor
     activeTab: '',
     viewingProduct: '',
     userEmail: '',
     userName: '',
-    accId: '',
+    accId: '8994ddfc-6e7a-4e2b-84a7-f18d5008f0ac',
     primaryAddress: {
       addrId: '',
       // addrId: 'e224b00e-eb86-4203-9090-31de3970a0af',
