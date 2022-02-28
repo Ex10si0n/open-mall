@@ -11,6 +11,7 @@ const store = useStore()
 const email = ref("")
 const password = ref("")
 const passwordVal = ref("")
+const name = ref("")
 
 const createAccount = () => {
   if (passwordVal.value === password.value) {
@@ -25,10 +26,10 @@ const createAccount = () => {
         store.commit('chgUser', {
           accId: res.data.uuid,
           userEmail: email.value,
-          userName: email.value.split('@')[0]
+          userName: name.value,
         })
         store.commit('chgStatus', 'active')
-        router.push('/')
+        router.push('/address_list/create')
       } else {
         alert(res.data.status)
       }
@@ -65,6 +66,17 @@ const createAccount = () => {
                 class="appearance-none rounded-none relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 v-model="email"
+            />
+          </div>
+          <div>
+            <label for="email-address" class="sr-only">User Name</label>
+            <input
+                id="user_name"
+                name="email"
+                required
+                class="appearance-none rounded-none relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="User Name"
+                v-model="name"
             />
           </div>
           <div>
@@ -120,7 +132,7 @@ const createAccount = () => {
               class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               @click="createAccount"
           >
-            Signup and Login
+            Continue to add address
           </button>
         </div>
       </div>

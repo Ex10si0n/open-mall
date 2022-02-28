@@ -245,7 +245,7 @@ axios.get(query).then((res) => {
       <div>
         <button
             type="submit"
-            class="relative flex justify-center w-full px-6 py-3 font-medium text-white bg-red-500 border border-transparent group rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+            class="relative flex justify-center w-full px-6 py-3 font-medium text-white bg-indigo-600 border border-transparent group rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
             @click="changePassword"
         >
           Change Password
