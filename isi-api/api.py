@@ -135,3 +135,18 @@ def get_orders(accId: str):
 def change_password(changePasswordData: ChangePasswordData):
     from db.database import update_password
     return update_password(changePasswordData.email, changePasswordData.oldPassword, changePasswordData.newPassword)
+
+@app.get('/api/order/pono/{pono}')
+def get_detailed_purchase(pono: str):
+    from db.database import get_order_by_pono
+    return get_order_by_pono(pono)
+
+@app.get('/api/order/detailed/{pono}')
+def get_more_detailed_purchase(pono: str):
+    from db.database import get_more_order_by_pono
+    return get_more_order_by_pono(pono)
+
+@app.get('/api/purchase/{pono}')
+def get_purchase_info_by_id(pono: str):
+    from db.database import get_purchase_info_by_id
+    return get_purchase_info_by_id(pono)

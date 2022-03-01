@@ -799,6 +799,33 @@ def check_out(accId: str, addrId: str):
         playload['status'] = 'error'
         return playload
 
+def get_purchase_info_by_id(pono: str):
+    """ Get purchase information by purchase order number
+
+    Args: 
+        pono(str): purchase order number
+
+    Returns:
+        dict: status(success, error), purchase information
+    """
+    playload = {'status': '', 'purchase_info': {}}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `purchase` WHERE `PONO` = %s"
+                cursor.execute(sql, (pono,))
+                result = cursor.fetchone()
+                if result is None:
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    playload['status'] = 'success'
+                    playload['purchase_info'] = result
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
 
 def get_all_purchase_of_customer(accId: str):
     """List all purchase orders that the customer has placed
@@ -1074,6 +1101,57 @@ def get_purchase_by_id(pono: str, accId: str, addrId: str):
         return playload
 
 
+def get_more_order_by_pono(pono: str):
+    """Get order by pono
+
+    Args: 
+        pono(str): purchase id
+
+    Returns:
+        dict: status(success, error), order_list
+    """
+    playload = {'status': '', 'order_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT PID, PRICE, QUANTITY, SUBTOTAL FROM `order` WHERE `PONO` = %s"
+                cursor.execute(sql, (pono))
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    for row in result:
+                        pid = row['PID']
+                        sql = "SELECT * FROM `product` WHERE `PID` = %s"
+                        cursor.execute(sql, (pid))
+                        res = cursor.fetchone()
+                        thumbnail = ''
+                        if len(res) != 0:
+                            thumbnail = res['THUMBNAIL']
+                        price = row['PRICE']
+                        quantity = row['QUANTITY']
+                        subtotal = row['SUBTOTAL']
+                        sql = "SELECT PNAME FROM `product` WHERE `PID` = %s"
+                        cursor.execute(sql, (pid))
+                        name = cursor.fetchone()
+                        pname = name['PNAME']
+                        order = {
+                            'pid': pid,
+                            'thumbnail': thumbnail,
+                            'pname': pname,
+                            'quantity': quantity,
+                            'price': price,
+                            'subtotal': subtotal
+                        }
+                        playload['order_list'].append(order)
+                    playload['status'] = 'success'
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
 def get_order_by_pono(pono: str):
     """Get order by pono
 
@@ -1116,6 +1194,7 @@ def get_order_by_pono(pono: str):
     except:
         playload['status'] = 'error'
         return playload
+
 
 
 def update_status(pono: str, status: str):
