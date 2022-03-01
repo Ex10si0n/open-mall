@@ -3,9 +3,11 @@ import {computed, reactive, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import config from "../config";
-import router from "../router/router";
+// import router from "../router/router";
+import {useRouter} from "vue-router";
 
 const store = useStore();
+const router = useRouter();
 
 const activeTab = computed(() => {
   return store.state.activeTab;
@@ -22,93 +24,47 @@ const userEmail = computed(() => {
 type ProductState = {
   pid: string;
   pname: string;
-  brand: string;
   price: number;
-  pdesc: string;
   thumbnail: string;
-  pic: string;
   quantity: number;
 };
+
+const orderList = ref<ProductState>();
+
+const getOrders = () => {
+  const pono = router.currentRoute.value.params.pono
+  store.commit('setCurrentViewOrder', pono)
+  const query = "http://" + config.apiServer + ":" + config.port + "/api/order/detailed/" + pono;
+  axios.get(query).then((res) => {
+    orderList.value = res.data.order_list as ProductState
+  })
+}
 
 const accId = computed(() => {
   return store.state.accId;
 });
 
 const subtotal = ref(0);
+const info = ref();
 
-const products = reactive([] as Array<ProductState>);
 
-const query =
-    "http://" + config.apiServer + ":" + config.port + "/api/cart/products/" + accId.value;
-axios.get(query).then((res) => {
-  const cartItems = res.data.shopping_cart_list;
-  cartItems.forEach((cartItem: ProductState) => {
-    const pid = cartItem.pid;
-    const quantity = cartItem.quantity;
-    const innerQuery =
-        "http://" + config.apiServer + ":" + config.port + "/api/product/" + pid;
-    axios.get(innerQuery).then((res) => {
-      const img =
-          "http://" +
-          config.apiServer +
-          ":" +
-          config.port +
-          "/api/img/" +
-          res.data.product.thumbnail;
-      const product = {
-        pid: cartItem.pid,
-        pname: cartItem.pname,
-        brand: res.data.product.brand,
-        price: cartItem.price,
-        pdesc: res.data.product.pdesc,
-        thumbnail: img,
-        pic: res.data.product.pic,
-        quantity: quantity,
-      };
-      subtotal.value += product.price * product.quantity;
-      products.push(product);
-    });
-  });
-});
+const getInfo = () => {
+  const pono = router.currentRoute.value.params.pono
+  const query = "http://" + config.apiServer + ":" + config.port + "/api/purchase/" + pono;
+  axios.get(query).then((res) => {
+    info.value = res.data.purchase_info
+    console.log(info.value)
+  })
+}
 
-const sortedProducts = products.sort((a, b) => {
-  if (a.pname < b.pname) {
-    return -1;
-  }
-  if (a.pname > b.pname) {
-    return 1;
-  }
-  return 0;
-});
+getOrders()
+getInfo()
 
-const createOrder = () => {
-  const query =
-      "http://" +
-      config.apiServer +
-      ":" +
-      config.port +
-      "/api/checkout/" +
-      accId.value +
-      "/" +
-      addrId.value;
-  axios.get(query).then((response) => {
-    store.commit("chgActiveTab", "order");
-    router.push("/order");
-  });
-};
-// const order = {
-//   user_email: userEmail.value,
-//   subtotal: subtotal.value,
-//   products: products,
-// };
-// axios.post(query, order).then((res) => {
-//   if (res.data.success) {
-//     alert("Order created successfully!");
-//     window.location.href = "/";
-//   } else {
-//     alert("Order creation failed!");
-//   }
-// });
+const buildSrc = (thumbnail: string) => {
+  const res = "http://" + config.apiServer + ":" + config.port + "/api/img/" + thumbnail;
+  return res;
+}
+
 </script>
 
 <template>
@@ -117,7 +73,7 @@ const createOrder = () => {
     <div class="grid md:grid-cols-1 lg:grid-cols-3">
       <div class="lg:col-span-2">
         <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
-          <router-link to="/cart">
+          <router-link to="/order">
             <div class="pb-3 text-indigo-800">
               <div class="inline text-xl">&lsaquo;&nbsp;</div>
               <div class="inline text-md">Go Back</div>
@@ -125,7 +81,7 @@ const createOrder = () => {
           </router-link>
           <div class="flex items-start justify-between">
             <h2 class="text-left text-2xl font-medium text-gray-900">
-              Create Order
+              Checking Order
               <div class="text-sm text-gray-500">
                 {{ userEmail }}
               </div>
@@ -133,16 +89,22 @@ const createOrder = () => {
             <div class="ml-3 h-7 flex items-center"></div>
           </div>
           <div
-              class="bg-white rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
+              class="text-white bg-green-500 rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
           >
+            Status: {{ info['STATUS'] }}
+          </div>
+          <div
+              class="bg-white  p-4 shadow-sm border-gray-300 border-b-0 "
+          >
+
             <div class="flow-root">
               <ul role="list" class="-my-6 divide-y divide-gray-200">
-                <li v-for="product in sortedProducts" class="py-6 flex">
+                <li v-for="product in orderList" class="py-6 flex">
                   <div
                       class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden"
                   >
                     <img
-                        :src="product.thumbnail"
+                        :src="buildSrc(product.thumbnail)"
                         class="w-full h-full object-center object-cover"
                     />
                   </div>
@@ -152,13 +114,13 @@ const createOrder = () => {
                       <div
                           class="flex justify-between text-base font-medium text-gray-900"
                       >
+                        <router-link :to="`/product/${product.pid}`">
                         <h3>
                           {{ product.pname }}
-                        </h3>
+                        </h3></router-link>
 
-                        <p class="ml-4">HK${{ product.price }}</p>
+                        <p class="ml-4">HK$&nbsp;{{ product.price }}</p>
                       </div>
-                      <p class="mt-1 text-sm text-gray-500">{{ product.brand }}</p>
                     </div>
                     <div class="flex-1 flex items-end justify-between text-sm">
                       Qty: {{ product.quantity }}
@@ -169,17 +131,43 @@ const createOrder = () => {
             </div>
           </div>
           <div
-              class="p-4 border-t-transparent rounded-none shadow-sm border-gray-300 bg-gray-200 text-white"
+              class="bg-white text-black"
+          >
+          <div class="px-6 py-4">
+            <div class="mb-2 text-xl font-medium">Shipping to</div>
+            <div class="grid grid-cols-3">
+              <div class="mb-2 font-bold col-span-1 text-md">  NAME </div>
+              <div class="mb-2 text-right col-span-2 text-md"> address.TEL </div>
+            </div>
+            <div class="mb-2 col-span-1 text-md bold">
+               address.CITY,  address.COUNTRY
+            </div>
+            <div class="mb-2 col-span-1 text-md bold">
+              address.DETAILED
+            </div>
+            <p class="text-base text-gray-700"></p>
+          </div>
+          <div class="px-6 pt-4 pb-2 grid grid-cols-3">
+            <div class="col-span-1">
+              <span
+                  class="inline-block px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-full"
+              ># address.TAG </span
+              >
+            </div>
+          </div>
+          </div>
+          <div
+              class="p-4 border-t-transparent rounded-lg rounded-t-none shadow-sm border-gray-300 bg-gray-200 text-white"
           >
             <div class="flow-root">
               <div class="col-span-1 flex flex-col">
                 <div class="">
                   <div class="flex justify-between text-base font-medium text-gray-900">
                     <p>Subtotal</p>
-                    <p>HK${{ subtotal }}</p>
+                    <p>HK$&nbsp;{{ info['AMOUNT'] }}</p>
                   </div>
                   <p class="mt-0.5 text-sm text-gray-600">
-                    Shipping and taxes calculated at checkout.
+                    Shipping and taxes calculated.
                   </p>
                   <div
                       class="flex justify-center text-sm text-center text-gray-500"
@@ -187,17 +175,6 @@ const createOrder = () => {
                 </div>
               </div>
             </div>
-          </div>
-          <div class="mt-0">
-            <router-link to="/order">
-              <button
-                  class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indogo-800 rounded-t-none"
-                  @click="createOrder"
-              >
-                Pay
-              </button>
-            </router-link
-            >
           </div>
         </div>
       </div>

@@ -16,6 +16,13 @@ type ProductState = {
   pic: string;
 };
 
+type AliasState = {
+  pname: string;
+  price: number;
+  quantity: number;
+  subtotal: number;
+}
+
 type PurchaseState = {
   amount: number;
   date: Date;
@@ -51,6 +58,21 @@ const userEmail = computed(() => {
   return store.state.userEmail;
 });
 
+const aliases = reactive([] as Array<AliasState>);
+
+const getOrdersByPono = (pono: string) => {
+  const query = "http://" + config.apiServer + ":" + config.port + "/api/order/pono/" + pono
+  let alias = ""
+  axios.get(query).then((res) => {
+    let i = 0;
+    res.data.order_list.forEach((p: AliasState) => {
+      if (i === 0) aliases.push(p)
+      i += 1;
+    })
+  })
+  return ''
+}
+
 getOrders();
 </script>
 
@@ -80,14 +102,14 @@ getOrders();
               <div>
                 <div class="flex justify-between text-base font-medium text-gray-900">
                   <h3>
-                    <a> {{ purchase.pono }}</a>
+                    <a> Created at: {{purchase.date}}</a>
                   </h3>
-                  <p class="ml-4">HK$ {{ purchase.amount }}</p>
+                  <p class="ml-4 text-right">HK$&nbsp;{{ purchase.amount }}</p>
                 </div>
                 <p class="mt-1 text-sm text-gray-500">Status: {{ purchase.status }}</p>
               </div>
               <div class="flex-1 flex items-end justify-between text-sm">
-                <p class="text-gray-500">{{ purchase.date }}</p>
+                <p class="text-gray-500">ID: {{ purchase.pono.substring(0, 18) }}</p>
 
                 <div class="flex">
                   <button

@@ -14,6 +14,7 @@ export default createStore({
     userEmail: 'unit_test@mockemail.com',
     userName: 'unit_test',
     accId: 'd9f5b7e3-03d2-4630-9788-23ecd9242167',
+    currentViewOrderId: '',
     primaryAddress: {
       addrId: '7cd49540-3d41-4eb3-b530-3a40414473d7',
       // addrId: 'e224b00e-eb86-4203-9090-31de3970a0af',
@@ -29,6 +30,9 @@ export default createStore({
     setPrimaryAddress(state, addrId) {
       state.primaryAddress.addrId = addrId;
       console.log('set Primary Address to', addrId);
+    },
+    setCurrentViewOrder(state, pono) {
+      state.currentViewOrderId = pono;
     },
     chgActiveTab(state, tab) {
       state.activeTab = tab;

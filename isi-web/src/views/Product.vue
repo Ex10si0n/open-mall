@@ -107,12 +107,26 @@ axios
       // console.log(product);
     })
     .catch((error) => console.log(error));
+
+const activeTab = computed(() => {
+  return store.state.activeTab;
+});
+
+const currentViewOrderId = computed(() => {
+  return store.state.currentViewOrderId;
+});
 </script>
 
 <template>
   <div class="min-h-full flex items-center justify-center py-6 px-4 lg:px-8">
     <div class="max-w-md w-full space-y-4">
-      <router-link to="/">
+      <router-link v-if="activeTab === 'order'" :to="`/order/${currentViewOrderId}`">
+        <div class="text-orange-500">
+          <div class="inline text-xl">&lsaquo;&nbsp;</div>
+          <div class="inline text-md">Go Back</div>
+        </div>
+      </router-link>
+      <router-link v-else to="/">
         <div class="text-orange-500">
           <div class="inline text-xl">&lsaquo;&nbsp;</div>
           <div class="inline text-md">Go Back</div>

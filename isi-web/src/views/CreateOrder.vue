@@ -3,6 +3,7 @@ import {computed, reactive, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import config from "../config";
+import router from "../router/router";
 
 const store = useStore();
 
@@ -92,6 +93,7 @@ const createOrder = () => {
       addrId.value;
   axios.get(query).then((response) => {
     store.commit("chgActiveTab", "order");
+    router.push("/order");
   });
 };
 // const order = {
