@@ -44,6 +44,8 @@ type AddressState = {
   TAG: string;
 };
 
+const userStatus = store.state.userStatus;
+
 const address = ref({} as AddressState);
 
 const query =
@@ -151,7 +153,7 @@ const currentViewOrderId = computed(() => {
           </h2>
         </div>
       </div>
-
+      <div v-if="userStatus != 'vendor'">
       <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
         <button
             type="submit"
@@ -185,6 +187,7 @@ const currentViewOrderId = computed(() => {
           </div>
         </router-link
         >
+      </div>
       </div>
     </div>
   </div>

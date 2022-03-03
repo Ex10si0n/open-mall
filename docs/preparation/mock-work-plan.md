@@ -16,7 +16,7 @@ Work Breakdown Structure (WBS) is used to break the whole project into smaller c
 
 ### Milestones
 
-Milestones are significant events that normally have no duration. To be more specificm for this project, several milestones are created -- project work plan (Jan 21), Gantt chart and progress check form (Feb 18), accomplishing the implementation of basic requirements (Mar 18), accomplishing the advanced requirements and final report (Apr 8) and presentation and demo (Apr 11).
+Milestones are significant events that normally have no duration. To be more specificm for this project, several milestones are created -- project work plan (Jan 21), Gantt chart and progress check form (Feb 25), accomplishing the implementation of basic requirements (Mar 25), accomplishing the advanced requirements and final report (Apr 15) and presentation and demo (Apr 18).
 
 ### Summary tasks
 
@@ -30,7 +30,7 @@ In this part, Gantt chart is shown.
 
 The following is the draft Gantt chart. The Gantt chart describes the duration of each task, start and finish of each task and milestones (indicated by green square).
 
-![Gantt](../diagrams/Gantt.png)
+![Gantt](../diagrams/Gantt Update.jpg)
 
 ## Work plan table
 

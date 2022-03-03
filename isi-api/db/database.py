@@ -1392,6 +1392,7 @@ def get_all_purchase():
 # @TODO: generate a 'purchase recepit' by method purchase all products in shopping cart list
 if __name__ == '__main__':
     res = None
+    res = create_account("Vendor", 'vendor@ipm.edu.mo', password='Vendor', accType='vendor' )
     # res = create_account("Steve", 'p1908326@ipm.edu.mo',
     #                      password='somepassword', accType='admin')
     # res = login_check("p1908326@ipm.edu.mo", password='newpassword')
@@ -1413,7 +1414,7 @@ if __name__ == '__main__':
     #    'bea69416-d9a2-42b5-8323-bf2778093562', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
-    res = get_all_purchase_of_customer('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
+    # res = get_all_purchase_of_customer('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = get_purchase_by_status(
     #    'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'pending')
     # res = get_purchase_by_id('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '98409f31-ee40-404c-b6c5-896c85e3878a')
