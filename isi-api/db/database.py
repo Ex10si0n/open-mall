@@ -1392,7 +1392,7 @@ def get_all_purchase():
 # @TODO: generate a 'purchase recepit' by method purchase all products in shopping cart list
 if __name__ == '__main__':
     res = None
-    res = create_account("Vendor", 'vendor@ipm.edu.mo', password='Vendor', accType='vendor' )
+    # res = create_account("Vendor", 'vendor@ipm.edu.mo', password='Vendor', accType='endor' )
     # res = create_account("Steve", 'p1908326@ipm.edu.mo',
     #                      password='somepassword', accType='admin')
     # res = login_check("p1908326@ipm.edu.mo", password='newpassword')
@@ -1402,7 +1402,7 @@ if __name__ == '__main__':
     # res = update_password("p1908326@ipm.edu.mo", "somepassword", "newpassword")
     # res = get_products_by_name("iPhone")
     # res = update_product_price("9078f1ac-82db-461c-a6db-3b16ec6e6011", 6099)
-    # res = delete_product("123")
+    res = delete_product("990e89b0-759c-43b7-ad8f-124185c56c60")
     # res = add_product_to_cart(
     #    "11a45010-d203-438c-98ef-2ed2012b2eaf", 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 1)
     # res = create_address('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '18740060111', 'Steve Yan', 'Macao SAR',

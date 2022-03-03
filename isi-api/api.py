@@ -55,6 +55,15 @@ class CreateProductData(BaseModel):
     thumbnail: str
     pic: str
 
+class UpdateProductData(BaseModel):
+    pid: str
+    pName: str
+    brand: str
+    price: float
+    pDesc: str
+    thumbnail: str
+    pic: str
+
 @app.get("/api/")
 async def root():
     return {"message": "Hello World"}
@@ -162,4 +171,9 @@ def get_purchase_info_by_id(pono: str):
 @app.post('/api/product/create')
 def create_product(createProductData: CreateProductData):
     from db.database import create_product
-    return create_product()
+    return create_product(createProductData.pName, createProductData.brand, createProductData.price, createProductData.pDesc, createProductData.thumbnail, createProductData.pic)
+
+@app.post('/api/product/{pid}/update')
+def update_product(updateProductData: UpdateProductData):
+    from db.database import update_product
+    return update_product(updateProductData.pid, updateProductData.pName, updateProductData.brand, updateProductData.price, updateProductData.pDesc, updateProductData.thumbnail, updateProductData.pic)

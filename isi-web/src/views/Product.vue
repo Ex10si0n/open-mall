@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, reactive, ref} from "vue";
 import {useStore} from "vuex";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import Carousel from "../components/Carousel.vue";
 import config from "../config";
 import axios from "axios";
@@ -11,6 +11,8 @@ const store = useStore();
 // const address = computed(() => {
 //   return store.state.primaryAddress.addrId;
 // });
+
+const router = useRouter();
 
 const addrId = computed(() => {
   return store.state.primaryAddress.addrId;
@@ -117,6 +119,10 @@ const activeTab = computed(() => {
 const currentViewOrderId = computed(() => {
   return store.state.currentViewOrderId;
 });
+
+const editProduct = () => {
+  router.push('/product/' + route.params.pid + '/update')
+}
 </script>
 
 <template>
@@ -188,6 +194,17 @@ const currentViewOrderId = computed(() => {
         </router-link
         >
       </div>
+      </div>
+      <div v-if="userStatus === 'vendor'">
+        <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+        <button
+            type="submit"
+            class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
+            @click="editProduct"
+        >
+          Edit This Product
+        </button>
+        </div>
       </div>
     </div>
   </div>

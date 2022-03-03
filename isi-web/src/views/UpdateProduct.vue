@@ -2,12 +2,14 @@
 import axios from "axios";
 import {ref} from "vue";
 import config from "../config"
-import {useRouter} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import {useStore} from 'vuex'
 
 const router = useRouter()
+const route = useRoute()
 const store = useStore()
 
+const pid = route.params.pid
 const name = ref("")
 const brand = ref("")
 const price = ref("")
@@ -15,10 +17,11 @@ const thumbnail = ref("")
 const information = ref("")
 const pic = ref("")
 
-const createProduct = () => {
+const updateProduct = () => {
     if (store.state.userStatus === 'vendor'){
-        const query = "http://" + config.apiServer + ":" + config.port + "/api/product/create"
+        const query = "http://" + config.apiServer + ":" + config.port + "/api/product/" + pid + "/update"
         axios.post(query, {
+            pid: pid,
             pName: name.value,
             brand: brand.value,
             price: price.value,
@@ -43,7 +46,7 @@ const createProduct = () => {
     <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <h2 class="text-left font-medium text-gray-900">
-                <div class="text-2xl mt-4">Add New Product</div>
+                <div class="text-2xl mt-4">Update Product</div>
             </h2>
             <div class="creation_form">
                 <div class="border rounded-lg rounded-b-none shadow-lg bg-white px-4">
@@ -111,9 +114,9 @@ const createProduct = () => {
         <button
             class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             type="submit"
-            @click="createProduct"
+            @click="updateProduct"
         >
-          Add
+          Update
         </button>
         </div>
     </div>
