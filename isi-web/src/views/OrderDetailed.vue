@@ -46,6 +46,7 @@ const accId = computed(() => {
 
 const subtotal = ref(0);
 const info = ref();
+const uuid = ref(router.currentRoute.value.params.pono)
 
 
 const getInfo = () => {
@@ -91,7 +92,8 @@ const buildSrc = (thumbnail: string) => {
           <div
               class="text-white bg-green-500 rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
           >
-            Status: {{ info['STATUS'] }}
+            <span class="font-bold">Status: </span>{{ info['STATUS'] }}<br>
+            <div class="pt-1 font-mono text-xs">PONO: {{ uuid }}</div>
           </div>
           <div
               class="bg-white  p-4 shadow-sm border-gray-300 border-b-0 "
