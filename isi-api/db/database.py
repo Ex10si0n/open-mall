@@ -489,9 +489,20 @@ def get_products_by_name(name: str):
                 if (result is None):
                     playload['status'] = 'error'
                     return playload
-                playload['status'] = 'success'
-                playload['products'] = result
-                return playload
+                else:
+                    playload['status'] = 'success'
+                    for row in result:
+                        product = {
+                            'pid': row['PID'],
+                            'pname': row['PNAME'],
+                            'brand': row['BRAND'],
+                            'price': row['PRICE'],
+                            'pdesc': row['PDESC'],
+                            'thumbnail': row['THUMBNAIL'],
+                            'pic': row['PIC'],
+                        }
+                        playload['products'].append(product)
+                    return playload
     except:
         playload['status'] = 'error'
         return playload

@@ -1,14 +1,16 @@
 <script setup lang="ts">
-// import { reactive, ref, watch, computed } from 'vue'
-import {reactive} from "vue";
-import {useStore} from "vuex";
 import axios from "axios";
-import config from "../config";
-import {useRouter} from "vue-router"
+import {ref} from "vue";
+import config from "../config"
+import {useRouter} from 'vue-router'
+import {useStore} from 'vuex'
+import {reactive} from "vue";
 
-const store = useStore();
-const router = useRouter();
+const router = useRouter()
+const store = useStore()
+// const count = ref(0)
 
+const content = ref("")
 type ProductState = {
   pid: string;
   pname: string;
@@ -20,62 +22,73 @@ type ProductState = {
 };
 
 const products = reactive([] as Array<ProductState>);
-
-axios
-    .get("http://" + config.apiServer + ":" + config.port + "/api/products")
+const search = () => {
+    axios
+    .get("http://" + config.apiServer + ":" + config.port + "/api/search/name/" + content.value)
     .then((res) => {
-      // console.log(res.data.product_list);
-      const productList = res.data.product_list;
-      productList.forEach((product: ProductState) => {
-        product.pic =
+        if(res.data.status === 'success'){
+            const productList = res.data.products;
+            productList.forEach((product:ProductState) => {
+            product.pic =
             "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
-        product.thumbnail =
+            product.thumbnail =
             "http://" +
             config.apiServer +
             ":" +
             config.port +
             "/api/img/" +
             product.thumbnail;
-        products.push(product as ProductState);
-      });
+            products.push(product as ProductState);
+            })
+        }
     })
-    .catch((error) => console.log(error));
-
-const chgViewingProduct = (pid: string) => {
-  store.commit("chgViewingProduct", pid);
-};
-
-chgViewingProduct("");
-
-const search = () => {
-  router.push("/search")
+    if(store.state.userStatus === 'vendor'){
+        axios
+        .get("http://" + config.apiServer + ":" + config.port + "/api/search/id/" + content.value)
+        .then((res) => {
+        if(res.data.status === 'success'){
+            const product = res.data.product;
+            product.pic =
+            "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
+            product.thumbnail =
+            "http://" +
+            config.apiServer +
+            ":" +
+            config.port +
+            "/api/img/" +
+            product.thumbnail;
+            products.push(product as ProductState);    
+        }
+    })
+    }   
 }
 </script>
-
 <template>
-  <div
-      class="flex items-center justify-center min-h-full px-4 py-6 bg-red sm:px-6 lg:px-8"
-  >
+    <div class="flex items-center justify-center min-h-full px-4 py-6 bg-red sm:px-6 lg:px-8">       
     <div class="w-full max-w-md space-y-8">
-      <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
-        <h2 class="text-2xl font-medium text-left text-gray-900">
-          <span class="font-bold">Open</span> Mall
-          <div class="text-sm text-gray-500">Online Shopping Mall Project for ISI</div>
+        <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
+        <h2 class="text-3xl font-medium text-left text-gray-900">
+         <span class = "font-bold"> Search</span>
         </h2>
-        <div class="w-full max-w-md space-y-8">
-          <div class="relative flex flex-wrap items-stretch w-full mb-4 input-group">
+        </div>
+        <div class="relative flex flex-wrap items-stretch w-full mb-4 input-group">
             <input
                 type="search"
                 class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-slate-200 bg-clip-padding border-2 border-solid border-gray-100 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none"
-                placeholder="Search"
+                placeholder=""
                 aria-label="Search"
                 aria-describedby="button-addon2"
-                @click="search"
+                v-model="content"
             />
-          </div>
         </div>
-      </div>
-      <div class="grid grid-cols-2 gap-3">
+        <button
+            class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            type="submit"
+            @click="search"
+        >
+          Search
+        </button>
+        <div class="grid grid-cols-2 gap-3">
         <div
             v-for="product in products"
             class="max-w-md bg-white border rounded-lg grid-cols-1 shadow-sm"
@@ -105,5 +118,5 @@ const search = () => {
         </div>
       </div>
     </div>
-  </div>
+    </div>  
 </template>

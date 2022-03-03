@@ -177,3 +177,13 @@ def create_product(createProductData: CreateProductData):
 def update_product(updateProductData: UpdateProductData):
     from db.database import update_product
     return update_product(updateProductData.pid, updateProductData.pName, updateProductData.brand, updateProductData.price, updateProductData.pDesc, updateProductData.thumbnail, updateProductData.pic)
+
+@app.get('/api/search/name/{pName}')
+def get_products_by_name(pName: str):
+    from db.database import get_products_by_name
+    return get_products_by_name(pName)
+
+@app.get('/api/search/id/{pid}')
+def get_products_by_name(pid: str):
+    from db.database import get_product_by_id
+    return get_product_by_id(pid)
