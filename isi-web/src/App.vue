@@ -166,7 +166,7 @@ const changeTab = (tab: string) => {
         </router-link>
         <router-link
           v-if="userStatus === 'vendor'"
-          to="/vendor"
+          to="/product/create"
           class="rounded-lg px-5 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
           :class="{ active: activeTab === 'vendor' }"
           @click="changeTab('vendor')"

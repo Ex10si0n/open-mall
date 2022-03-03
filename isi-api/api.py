@@ -47,6 +47,14 @@ class ChangePasswordData(BaseModel):
     oldPassword: str
     newPassword: str
 
+class CreateProductData(BaseModel):
+    pName: str
+    brand: str
+    price: float
+    pDesc: str
+    thumbnail: str
+    pic: str
+
 @app.get("/api/")
 async def root():
     return {"message": "Hello World"}
@@ -150,3 +158,8 @@ def get_more_detailed_purchase(pono: str):
 def get_purchase_info_by_id(pono: str):
     from db.database import get_purchase_info_by_id
     return get_purchase_info_by_id(pono)
+
+@app.post('/api/product/create')
+def create_product(createProductData: CreateProductData):
+    from db.database import create_product
+    return create_product()

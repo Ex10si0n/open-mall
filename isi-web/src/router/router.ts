@@ -19,5 +19,6 @@ export default createRouter({
     { path: "/address_list", component: () => import(/* webpackChunkName: "home" */ "../views/AddressList.vue") },
     { path: "/address_list/create", component: () => import(/* webpackChunkName: "home" */ "../views/CreateAddress.vue") },
     { path: "/product/:pid", component: () => import(/* webpackChunkName: "home" */ "../views/Product.vue") },
+    { path: "/product/create", component: ()=> import(/* webpackChunkName: "home" */ "../views/CreateProduct.vue")},
   ]
 })
