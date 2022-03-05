@@ -1232,16 +1232,17 @@ def update_status(pono: str, status: str):
         return playload
 
 
-def cancel_purchase(pono: str):
+def cancel_purchase(accType: str, pono: str):
     """Cancel order
 
-    Args: 
+    Args:
+        accType(str): account type(admin, user, vendor) 
         pono(str): purchase id
 
     Returns:
         dict: status(success, error, forbidden)
     """
-    playload = {'status': ''}
+    playload = {'status': '', 'pono': pono}
     try:
         connection = create_connection()
         with connection:
@@ -1252,6 +1253,13 @@ def cancel_purchase(pono: str):
                 status = result['STATUS']
                 if(status == 'pending' or status == 'hold'):
                     update_status(pono, 'cancelled')
+                    print("finish updated")
+                    sql = "UPDATE `purchase` SET `CANCELBY` = %s, `CANCELDATE` = %s WHERE `PONO` = %s"
+                    cancelDate = date.today().strftime("%Y-%m-%d")
+                    print("finish preparation")
+                    cursor.execute(sql, (accType, cancelDate, pono))
+                    connection.commit()
+                    print("Done")
                     playload['status'] = 'success'
                     return playload
                 else:
@@ -1282,6 +1290,10 @@ def ship_purchase(pono: str):
                 status = result['STATUS']
                 if(status == 'pending'):
                     update_status(pono, 'shipped')
+                    sql = "UPDATE `purchase` SET `SHIPDATE` = %s WHERE `PONO` = %s"
+                    shipDate = date.today().strftime("%Y-%m-%d")
+                    cursor.execute(sql, (shipDate, pono))
+                    connection.commit()
                     playload['status'] = 'success'
                     return playload
                 else:
@@ -1413,7 +1425,7 @@ if __name__ == '__main__':
     # res = update_password("p1908326@ipm.edu.mo", "somepassword", "newpassword")
     # res = get_products_by_name("iPhone")
     # res = update_product_price("9078f1ac-82db-461c-a6db-3b16ec6e6011", 6099)
-    res = delete_product("990e89b0-759c-43b7-ad8f-124185c56c60")
+    # res = delete_product("990e89b0-759c-43b7-ad8f-124185c56c60")
     # res = add_product_to_cart(
     #    "11a45010-d203-438c-98ef-2ed2012b2eaf", 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 1)
     # res = create_address('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '18740060111', 'Steve Yan', 'Macao SAR',
@@ -1429,7 +1441,7 @@ if __name__ == '__main__':
     # res = get_purchase_by_status(
     #    'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'pending')
     # res = get_purchase_by_id('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '98409f31-ee40-404c-b6c5-896c85e3878a')
-    # res = update_status('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'cancelled')
+    # res = update_status('33e60f5e-1d66-401c-8a40-2d955e4574e2', 'pending')
     # res = update_product('11a45010-d203-438c-98ef-2ed2012b2eaf', 'iPhone 13 pro', 'Apple', '9899', 'Phone',
     #                      'img/iphone.png', 'img/iphone-2.png')
     # res = create_product('Nike Air Force 1 Mid 07 LV8', 'Nike', '819', 'Shoes',
@@ -1439,8 +1451,8 @@ if __name__ == '__main__':
     # res = get_all_products_in_cart('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa')
     # res = customer_filter_purchase('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'current')
     # res = vendor_filter_purchase('past')
-    # res = cancel_purchase('0c09c90f-96f3-40ea-8e6d-b194525da7c3')
-    # res = ship_purchase('cabc4448-08e7-4584-b952-a41af5356a09')
+    # res = cancel_purchase('vendor', '33e60f5e-1d66-401c-8a40-2d955e4574e2')
+    res = ship_purchase('33e60f5e-1d66-401c-8a40-2d955e4574e2')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa',
     #                '98409f31-ee40-404c-b6c5-896c85e3878a')
 
