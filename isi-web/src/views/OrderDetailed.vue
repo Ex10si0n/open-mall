@@ -61,6 +61,14 @@ const getInfo = () => {
 getOrders()
 getInfo()
 
+const cancel = () => {
+  const pono = router.currentRoute.value.params.pono
+  const query = "http://" + config.apiServer + ":" + config.port + "/api/order/cancel/" + pono;
+  axios.get(query).then((res) => {
+    router.push('/order')
+  })
+}
+
 const buildSrc = (thumbnail: string) => {
   const res = "http://" + config.apiServer + ":" + config.port + "/api/img/" + thumbnail;
   return res;
@@ -90,9 +98,25 @@ const buildSrc = (thumbnail: string) => {
             <div class="ml-3 h-7 flex items-center"></div>
           </div>
           <div
-              class="text-white bg-green-500 rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
+              v-if="info.STATUS === 'pending'"
+              class="text-white bg-blue-500 rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
           >
-            <span class="font-bold">Status: </span>{{ info['STATUS'] }}<br>
+            <span class="font-bold">Status: </span>Pending<br>
+            <div class="pt-1 font-mono text-xs">PONO: {{ uuid }}</div>
+          </div>
+          <div
+              v-if="info.STATUS === 'cancelled'"
+              class="text-white bg-orange-400 rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
+          >
+            <span class="font-bold">Status: </span>Cancelled<br>
+            <div class="pt-1 font-mono text-xs">PONO: {{ uuid }}</div>
+          </div>
+          <div
+              v-if="info.STATUS === 'shipped'"
+              class="text-white bg-green-400 rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
+          >
+            <span class="font-bold">Status: </span>Shipped<br>
+            <span class="font-bold">Ship Date: {{ info.SHIPDATE }}<br></span>
             <div class="pt-1 font-mono text-xs">PONO: {{ uuid }}</div>
           </div>
           <div
@@ -138,24 +162,16 @@ const buildSrc = (thumbnail: string) => {
           <div class="px-6 py-4">
             <div class="mb-2 text-xl font-medium">Shipping to</div>
             <div class="grid grid-cols-3">
-              <div class="mb-2 font-bold col-span-1 text-md">  NAME </div>
-              <div class="mb-2 text-right col-span-2 text-md"> address.TEL </div>
+              <div class="mb-2 font-bold col-span-1 text-md">  {{ info.NAME }} </div>
+              <div class="mb-2 text-right col-span-2 text-md"> {{info.TEL}} </div>
             </div>
             <div class="mb-2 col-span-1 text-md bold">
-               address.CITY,  address.COUNTRY
+               {{info.CITY}},  {{ info.COUNTRY}}
             </div>
             <div class="mb-2 col-span-1 text-md bold">
-              address.DETAILED
+              {{info.ADDRESS}}
             </div>
-            <p class="text-base text-gray-700"></p>
-          </div>
-          <div class="px-6 pt-4 pb-2 grid grid-cols-3">
-            <div class="col-span-1">
-              <span
-                  class="inline-block px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-full"
-              ># address.TAG </span
-              >
-            </div>
+            <p v-if="info.STATUS !== 'cancelled' && info.STATUS !== 'shipped'" class="text-base text-blue-700" @click="cancel">Cancel Order</p>
           </div>
           </div>
           <div

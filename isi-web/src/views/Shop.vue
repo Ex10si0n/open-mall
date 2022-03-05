@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // import { reactive, ref, watch, computed } from 'vue'
-import {reactive} from "vue";
+import {computed, reactive} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import config from "../config";
@@ -8,6 +8,10 @@ import {useRouter} from "vue-router"
 
 const store = useStore();
 const router = useRouter();
+
+const userStatus = computed(() => {
+  return store.state.userStatus;
+});
 
 type ProductState = {
   pid: string;
@@ -50,6 +54,10 @@ chgViewingProduct("");
 const search = () => {
   router.push("/search")
 }
+
+const userName = computed(() => {
+  return store.state.userName;
+});
 </script>
 
 <template>
@@ -58,10 +66,22 @@ const search = () => {
   >
     <div class="w-full max-w-md space-y-8">
       <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
-        <h2 class="text-2xl font-medium text-left text-gray-900">
-          <span class="font-bold">Open</span> Mall
-          <div class="text-sm text-gray-500">Online Shopping Mall Project for ISI</div>
+        <h2 v-if="userStatus !== 'vendor'" class="text-2xl grid grid-cols-2 font-medium text-gray-900">
+          <span class="col-span-1"><span class="font-bold ">Open</span>Mall</span>
+          <span class="col-span-1 text-gray-500 text-[19px] text-right">Hi, {{userName}}</span>
+          <div class="text-sm col-span-2 text-gray-500">Online Shopping Mall Project for ISI</div>
         </h2>
+        <div v-else class="">
+        <router-link to="/manage">
+          <div class="text-cyan-800">
+            <div class="inline text-xl">&lsaquo;&nbsp;</div>
+            <div class="inline text-md">Go Back</div>
+          </div>
+        </router-link>
+        <h2 class="text-2xl grid grid-cols-2 font-medium text-gray-900">
+          <span class="col-span-1"><span class="font-bold ">Modify</span> Products</span>
+        </h2></div>
+
         <div class="w-full max-w-md space-y-8">
           <div class="relative flex flex-wrap items-stretch w-full mb-4 input-group">
             <input

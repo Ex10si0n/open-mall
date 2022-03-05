@@ -68,27 +68,22 @@ const search = () => {
     <div class="w-full max-w-md space-y-8">
         <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
         <h2 class="text-3xl font-medium text-left text-gray-900">
-         <span class = "font-bold"> Search</span>
+         <span class = "font-bold">Search for {{content}}</span>
         </h2>
         </div>
         <div class="relative flex flex-wrap items-stretch w-full mb-4 input-group">
             <input
                 type="search"
                 class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-slate-200 bg-clip-padding border-2 border-solid border-gray-100 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none"
-                placeholder=""
+                placeholder="Search"
                 aria-label="Search"
                 aria-describedby="button-addon2"
                 v-model="content"
+                @keyup.enter="search"
+                autofocus
             />
         </div>
-        <button
-            class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            type="submit"
-            @click="search"
-        >
-          Search
-        </button>
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 gap-3">
         <div
             v-for="product in products"
             class="max-w-md bg-white border rounded-lg grid-cols-1 shadow-sm"

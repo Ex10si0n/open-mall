@@ -187,3 +187,8 @@ def get_products_by_name(pName: str):
 def get_products_by_name(pid: str):
     from db.database import get_product_by_id
     return get_product_by_id(pid)
+
+@app.get('/api/order/cancel/{pono}')
+def cancel(pono: str):
+    from db.database import cancel_purchase
+    return cancel_purchase(pono)

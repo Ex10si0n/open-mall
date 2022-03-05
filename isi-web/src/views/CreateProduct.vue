@@ -40,13 +40,19 @@ const createProduct = () => {
 
 </script>
 <template>
-    <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
+    <div class="min-h-full flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-4">
+          <router-link to="/manage">
+            <div class="text-cyan-800">
+              <div class="inline text-xl">&lsaquo;&nbsp;</div>
+              <div class="inline text-md">Go Back</div>
+            </div>
+          </router-link>
             <h2 class="text-left font-medium text-gray-900">
-                <div class="text-2xl mt-4">Add New Product</div>
+                <div class="text-2xl">Create New Product</div>
             </h2>
             <div class="creation_form">
-                <div class="border rounded-lg rounded-b-none shadow-lg bg-white px-4">
+                <div class="border rounded-lg shadow-lg bg-white px-4">
                      <div class="mt-4 mb-4">
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                         >Name</label

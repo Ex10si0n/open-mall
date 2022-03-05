@@ -22,6 +22,10 @@ const tag = ref("")
 const store = useStore();
 
 const createAddress = () => {
+  if (fname.value === "" || lname.value === "" || code.value === "" || tel.value === "" || country.value === "" || city.value === "" || detailed.value === "" || tag.value === "") {
+    alert("Please fill all the fields");
+    return
+  }
   const query = "http://" + config.apiServer + ":" + config.port + "/api/address/create/"
   axios.post(query, {
     accId: accId.value,

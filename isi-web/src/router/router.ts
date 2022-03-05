@@ -22,5 +22,6 @@ export default createRouter({
     { path: "/product/create", component: () => import(/* webpackChunkName: "home" */ "../views/CreateProduct.vue")},
     { path: "/product/:pid/update", component: () => import(/* webpackChunkName: "home" */ "../views/UpdateProduct.vue")},
     { path: "/search", component: () => import(/* webpackChunkName: "home" */ "../views/Search.vue")},
+    { path: "/manage", component: () => import(/* webpackChunkName: "home" */ "../views/Manage.vue")},
   ]
 })
