@@ -4,6 +4,9 @@ import Shop from "../views/Shop.vue";
 const webHistory = createWebHashHistory()
 
 export default createRouter({
+  scrollBehavior(to, from, position) {
+    return { top: 0 }
+  },
   history: webHistory,
   routes: [
     { path: "/", component: Shop },

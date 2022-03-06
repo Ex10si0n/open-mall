@@ -22,10 +22,10 @@ const changeTab = (tab: string) => {
 </script>
 
 <template>
-  <div class="my-10">
+  <div class="my-10 mb-24">
     <router-view class="" />
   </div>
-  <div class="w-full h-screen my-5">
+  <div class="w-full my-5">
     <div
       class="inline-block text-center mx-auto fixed inset-x-0 bottom-0 z-10 bg-white border-t-1 shadow-2xl p-3"
     >

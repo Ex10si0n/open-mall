@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // import { reactive, ref, watch, computed } from 'vue'
-import {computed, reactive} from "vue";
+import {computed, reactive, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import config from "../config";
@@ -24,6 +24,12 @@ type ProductState = {
 };
 
 const products = reactive([] as Array<ProductState>);
+
+const cnt = ref(4)
+
+const updateCnt = () => {
+  cnt.value = cnt.value + 4;
+}
 
 axios
     .get("http://" + config.apiServer + ":" + config.port + "/api/products")
@@ -95,9 +101,10 @@ const userName = computed(() => {
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 gap-3">
         <div
-            v-for="product in products"
+            v-for="(product, index) in products"
+            v-show="index < cnt"
             class="max-w-md bg-white border rounded-lg grid-cols-1 shadow-sm"
             @click="
             $router.push('/product/' + product.pid);
@@ -124,6 +131,7 @@ const userName = computed(() => {
           </div>
         </div>
       </div>
+      <div class="text-blue-500 text-center" @click="updateCnt">More</div>
     </div>
   </div>
 </template>
