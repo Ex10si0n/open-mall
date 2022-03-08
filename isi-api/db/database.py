@@ -487,7 +487,7 @@ def get_products_by_name(name: str):
                 cursor.execute(sql, ('%' + name + '%',))
                 result = cursor.fetchall()
                 if (result is None):
-                    playload['status'] = 'error'
+                    playload['status'] = 'none'
                     return playload
                 else:
                     playload['status'] = 'success'
@@ -1452,7 +1452,7 @@ if __name__ == '__main__':
     # res = customer_filter_purchase('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'current')
     # res = vendor_filter_purchase('past')
     # res = cancel_purchase('vendor', '33e60f5e-1d66-401c-8a40-2d955e4574e2')
-    res = ship_purchase('33e60f5e-1d66-401c-8a40-2d955e4574e2')
+    # res = ship_purchase('33e60f5e-1d66-401c-8a40-2d955e4574e2')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa',
     #                '98409f31-ee40-404c-b6c5-896c85e3878a')
 

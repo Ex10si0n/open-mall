@@ -21,12 +21,17 @@ type ProductState = {
   pic: string;
 };
 
+const result = ref("");
+
 const products = reactive([] as Array<ProductState>);
 const search = () => {
+  var searchResult1 = false
+  var searchResult2 = false
     axios
     .get("http://" + config.apiServer + ":" + config.port + "/api/search/name/" + content.value)
     .then((res) => {
         if(res.data.status === 'success'){
+            searchResult1 = true;
             const productList = res.data.products;
             productList.forEach((product:ProductState) => {
             product.pic =
@@ -47,6 +52,7 @@ const search = () => {
         .get("http://" + config.apiServer + ":" + config.port + "/api/search/id/" + content.value)
         .then((res) => {
         if(res.data.status === 'success'){
+            searchResult2 = true;
             const product = res.data.product;
             product.pic =
             "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
@@ -60,6 +66,9 @@ const search = () => {
             products.push(product as ProductState);    
         }
     })
+    }
+    if(!searchResult1 && !searchResult2){
+      result.value = "None"
     }   
 }
 </script>
@@ -83,6 +92,7 @@ const search = () => {
                 autofocus
             />
         </div>
+        <div><p>{{ result }}</p></div>
         <div class="grid grid-cols-1 gap-3">
         <div
             v-for="product in products"
