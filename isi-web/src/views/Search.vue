@@ -47,6 +47,26 @@ const search = () => {
             })
         }
     })
+    axios
+    .get("http://" + config.apiServer + ":" + config.port + "/api/search/brand/" + content.value)
+    .then((res) => {
+        if(res.data.status === 'success'){
+            searchResult1 = true;
+            const productList = res.data.products;
+            productList.forEach((product:ProductState) => {
+            product.pic =
+            "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
+            product.thumbnail =
+            "http://" +
+            config.apiServer +
+            ":" +
+            config.port +
+            "/api/img/" +
+            product.thumbnail;
+            products.push(product as ProductState);
+            })
+        }
+    })
     if(store.state.userStatus === 'vendor'){
         axios
         .get("http://" + config.apiServer + ":" + config.port + "/api/search/id/" + content.value)
