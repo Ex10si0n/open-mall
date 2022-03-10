@@ -146,7 +146,11 @@ def checkout(accId: str, addrId: str):
 @app.get('/api/order/{accId}')
 def get_orders(accId: str):
     from db.database import get_all_purchase_of_customer
-    return get_all_purchase_of_customer(accId)
+    from db.database import get_all_purchase_vendor
+    if accId == 'all':
+        return get_all_purchase_vendor()
+    else:
+        return get_all_purchase_of_customer(accId)
 
 @app.post('/api/change_password/')
 def change_password(changePasswordData: ChangePasswordData):
