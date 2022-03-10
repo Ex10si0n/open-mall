@@ -25,13 +25,13 @@ const result = ref("");
 
 const products = reactive([] as Array<ProductState>);
 const search = () => {
-  var searchResult1 = false
-  var searchResult2 = false
-    axios
+  var searchResult1 = true
+  var searchResult2 = true
+  var searchResult3 = true
+    /*axios
     .get("http://" + config.apiServer + ":" + config.port + "/api/search/name/" + content.value)
     .then((res) => {
         if(res.data.status === 'success'){
-            searchResult1 = true;
             const productList = res.data.products;
             productList.forEach((product:ProductState) => {
             product.pic =
@@ -45,13 +45,14 @@ const search = () => {
             product.thumbnail;
             products.push(product as ProductState);
             })
+        }else{
+          searchResult1 = false
         }
-    })
+    })*/
     axios
     .get("http://" + config.apiServer + ":" + config.port + "/api/search/brand/" + content.value)
     .then((res) => {
         if(res.data.status === 'success'){
-            searchResult1 = true;
             const productList = res.data.products;
             productList.forEach((product:ProductState) => {
             product.pic =
@@ -65,6 +66,8 @@ const search = () => {
             product.thumbnail;
             products.push(product as ProductState);
             })
+        }else{
+          searchResult3 = false
         }
     })
     if(store.state.userStatus === 'vendor'){
@@ -72,7 +75,6 @@ const search = () => {
         .get("http://" + config.apiServer + ":" + config.port + "/api/search/id/" + content.value)
         .then((res) => {
         if(res.data.status === 'success'){
-            searchResult2 = true;
             const product = res.data.product;
             product.pic =
             "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
@@ -84,19 +86,27 @@ const search = () => {
             "/api/img/" +
             product.thumbnail;
             products.push(product as ProductState);    
+        }else{
+          searchResult2 = false;
         }
     })
     }
     if(!searchResult1 && !searchResult2){
       result.value = "None"
-    }   
+    }
 }
 </script>
 <template>
     <div class="flex items-center justify-center min-h-full px-4 py-6 bg-red sm:px-6 lg:px-8">       
     <div class="w-full max-w-md space-y-8">
-        <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
-        <h2 class="text-3xl font-medium text-left text-gray-900">
+        <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100">
+        <router-link to="/">
+          <div class="text-cyan-800">
+            <div class="inline text-xl">&lsaquo;&nbsp;</div>
+            <div class="inline text-md">Go Back</div>
+          </div>
+        </router-link>
+        <h2 class="text-3xl font-medium text-left text-gray-900" >
          <span class = "font-bold">Search for {{content}}</span>
         </h2>
         </div>

@@ -437,9 +437,9 @@ def get_products_by_brand(brand: str):
         brand (str): product brand
 
     Returns:
-        dict: status(success, error), product list
+        dict: status(success, error), products
     """
-    playload = {'status': '', 'product_list': []}
+    playload = {'status': '', 'products': []}
     try:
         connection = create_connection()
         with connection:
@@ -458,11 +458,11 @@ def get_products_by_brand(brand: str):
                             'pName': row['PNAME'],
                             'brand': row['BRAND'],
                             'price': row['PRICE'],
-                            'pDesc': row['PDESC'],
+                            'pdesc': row['PDESC'],
                             'thumbnail': row['THUMBNAIL'],
                             'pic': row['PIC'],
                         }
-                        playload['product_list'].append(product)
+                        playload['products'].append(product)
                     return playload
     except:
         playload['status'] = 'error'
@@ -1492,5 +1492,6 @@ if __name__ == '__main__':
     # res = ship_purchase('33e60f5e-1d66-401c-8a40-2d955e4574e2')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa',
     #                '98409f31-ee40-404c-b6c5-896c85e3878a')
+    res = get_products_by_brand("Apple")
 
     print(res)
