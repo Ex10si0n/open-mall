@@ -28,6 +28,8 @@ function onFileChange(event){
         headers: {
             'Content-Type': 'multipart/form-data'
         }
+    }).then((res) => {
+        alert(res.data.type)
     })
 
     //var reader = new FileReader()

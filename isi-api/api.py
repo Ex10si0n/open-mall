@@ -2,10 +2,11 @@ import os
 import re
 import sys
 from turtle import up
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, File, UploadFile 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from PIL import Image
 
 fpath = os.path.join(os.path.dirname(__file__), 'db')
 sys.path.append(fpath)
@@ -215,3 +216,9 @@ def deliver(pono: str):
 def hold(pono: str):
     from db.database import hold_purchase
     return hold_purchase(pono)
+
+@app.post('/api/image/upload')
+async def upload_image(image: UploadFile):
+    path = os.path.join(fpath, 'img/' + image.filename)
+
+    return {'type': image.content_type}
