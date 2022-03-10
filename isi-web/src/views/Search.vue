@@ -26,9 +26,9 @@ const result = ref("");
 const products = reactive([] as Array<ProductState>);
 const search = () => {
   var searchResult1 = true
-  var searchResult2 = true
+  var searchResult2 = false
   var searchResult3 = true
-    /*axios
+    axios
     .get("http://" + config.apiServer + ":" + config.port + "/api/search/name/" + content.value)
     .then((res) => {
         if(res.data.status === 'success'){
@@ -48,7 +48,7 @@ const search = () => {
         }else{
           searchResult1 = false
         }
-    })*/
+    })
     axios
     .get("http://" + config.apiServer + ":" + config.port + "/api/search/brand/" + content.value)
     .then((res) => {
@@ -75,6 +75,7 @@ const search = () => {
         .get("http://" + config.apiServer + ":" + config.port + "/api/search/id/" + content.value)
         .then((res) => {
         if(res.data.status === 'success'){
+            searchResult2 = true;
             const product = res.data.product;
             product.pic =
             "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
@@ -91,7 +92,7 @@ const search = () => {
         }
     })
     }
-    if(!searchResult1 && !searchResult2){
+    if(!searchResult1 && !searchResult2 && !searchResult3){
       result.value = "None"
     }
 }
