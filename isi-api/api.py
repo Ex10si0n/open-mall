@@ -188,6 +188,11 @@ def get_products_by_name(pid: str):
     from db.database import get_product_by_id
     return get_product_by_id(pid)
 
+@app.get('/api/search/id/{brand}')
+def get_products_by_brand(brand: str):
+    from db.database import get_products_by_brand
+    return get_products_by_brand(brand)
+
 @app.get('/api/order/cancel/{pono}')
 def cancel(pono: str):
     from db.database import cancel_purchase
