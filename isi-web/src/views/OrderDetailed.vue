@@ -198,7 +198,7 @@ const buildSrc = (thumbnail: string) => {
             </div>
             <div class="grid grid-cols-2 ">
               <p v-if="info.STATUS !== 'cancelled' && info.STATUS !== 'shipped'" class="col-span-1 text-base text-red-500" @click="cancel">Cancel Order</p>
-              <p v-if="info.STATUS !== 'hold' && info.STATUS !== 'shipped' && userType === 'vendor'" class="col-span-1 text-right text-base text-blue-700" @click="hold">Hold Order</p>
+              <p v-if="info.STATUS !== 'hold' && info.STATUS !== 'shipped' && info.STATUS !== 'cancelled' && userType === 'vendor'" class="col-span-1 text-right text-base text-blue-700" @click="hold">Hold Order</p>
               <p v-if="info.STATUS === 'hold' && userType === 'vendor'" class="col-span-1 text-right text-base text-blue-700" @click="unhold">Unhold and Deliver order</p>
             </div>
           </div>
