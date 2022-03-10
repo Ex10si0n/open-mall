@@ -146,11 +146,7 @@ def checkout(accId: str, addrId: str):
 @app.get('/api/order/{accId}')
 def get_orders(accId: str):
     from db.database import get_all_purchase_of_customer
-    from db.database import get_all_purchase_vendor
-    if accId == 'all':
-        return get_all_purchase_vendor()
-    else:
-        return get_all_purchase_of_customer(accId)
+    return get_all_purchase_of_customer(accId)
 
 @app.post('/api/change_password/')
 def change_password(changePasswordData: ChangePasswordData):
@@ -192,27 +188,12 @@ def get_products_by_name(pid: str):
     from db.database import get_product_by_id
     return get_product_by_id(pid)
 
-@app.get('/api/order/cancel/vendor/{pono}')
+@app.get('/api/search/id/{brand}')
+def get_products_by_brand(brand: str):
+    from db.database import get_products_by_brand
+    return get_products_by_brand(brand)
+
+@app.get('/api/order/cancel/{pono}')
 def cancel(pono: str):
     from db.database import cancel_purchase
-    return cancel_purchase('vendor', pono)
-
-@app.get('/api/order/cancel/active/{pono}')
-def cancel(pono: str):
-    from db.database import cancel_purchase
-    return cancel_purchase('user', pono)
-
-@app.get('/api/order/hold/{pono}')
-def cancel(pono: str):
-    from db.database import hold_purchase
-    return hold_purchase(pono)
-
-@app.get('/api/order/unhold/{pono}')
-def cancel(pono: str):
-    from db.database import unhold_purchase
-    return unhold_purchase(pono)
-
-@app.get('/api/order/deliver/{pono}')
-def deliver(pono: str):
-    from db.database import ship_purchase
-    return ship_purchase(pono)
+    return cancel_purchase(pono)

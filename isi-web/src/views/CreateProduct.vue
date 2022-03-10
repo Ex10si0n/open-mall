@@ -4,6 +4,7 @@ import {ref} from "vue";
 import config from "../config"
 import {useRouter} from 'vue-router'
 import {useStore} from 'vuex'
+import FormData from 'form-data'
 
 const router = useRouter()
 const store = useStore()
@@ -14,6 +15,29 @@ const price = ref("")
 const thumbnail = ref("")
 const information = ref("")
 const pic = ref("")
+
+
+function onFileChange(event){
+    const files = event.target.files || event.dataTransfer.files;
+    const img = files[0]
+    thumbnail.value = img.name
+    const formData = new FormData();
+    formData.append("image", img)
+    const query = "http://" + config.apiServer + ":" + config.port + "/api/image/upload"
+    axios.post(query, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+
+    //var reader = new FileReader()
+    //reader.onload = () => {
+    //    alert(reader.result)
+    //}
+    //if (img){
+    //    reader.readAsArrayBuffer(img);
+    //}
+}
 
 const createProduct = () => {
     if (store.state.userStatus === 'vendor'){
@@ -98,6 +122,8 @@ const createProduct = () => {
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder=""
                             required
+                            @change="onFileChange"
+                            accept="image/*"
                         />
                     </div>
                     <div class="mt-4 mb-4">
