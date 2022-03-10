@@ -9,6 +9,8 @@ import {useRouter} from "vue-router";
 const store = useStore();
 const router = useRouter();
 
+const userType = computed(() => store.state.userStatus);
+
 const activeTab = computed(() => {
   return store.state.activeTab;
 });
@@ -63,9 +65,25 @@ getInfo()
 
 const cancel = () => {
   const pono = router.currentRoute.value.params.pono
-  const query = "http://" + config.apiServer + ":" + config.port + "/api/order/cancel/" + pono;
+  const query = "http://" + config.apiServer + ":" + config.port + `/api/order/cancel/${userType.value}/${pono}`;
   axios.get(query).then((res) => {
-    router.push('/order')
+    location.reload()
+  })
+}
+
+const hold = () => {
+  const pono = router.currentRoute.value.params.pono
+  const query = "http://" + config.apiServer + ":" + config.port + `/api/order/hold/${pono}`;
+  axios.get(query).then((res) => {
+    location.reload()
+  })
+}
+
+const unhold = () => {
+  const pono = router.currentRoute.value.params.pono
+  const query = "http://" + config.apiServer + ":" + config.port + `/api/order/unhold/${pono}`;
+  axios.get(query).then((res) => {
+    location.reload()
   })
 }
 
@@ -109,6 +127,13 @@ const buildSrc = (thumbnail: string) => {
               class="text-white bg-orange-400 rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
           >
             <span class="font-bold">Status: </span>Cancelled<br>
+            <div class="pt-1 font-mono text-xs">PONO: {{ uuid }}</div>
+          </div>
+          <div
+              v-if="info.STATUS === 'hold'"
+              class="text-white bg-purple-500 rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
+          >
+            <span class="font-bold">Status: </span>Held by Vendor<br>
             <div class="pt-1 font-mono text-xs">PONO: {{ uuid }}</div>
           </div>
           <div
@@ -171,7 +196,11 @@ const buildSrc = (thumbnail: string) => {
             <div class="mb-2 col-span-1 text-md bold">
               {{info.ADDRESS}}
             </div>
-            <p v-if="info.STATUS !== 'cancelled' && info.STATUS !== 'shipped'" class="text-base text-blue-700" @click="cancel">Cancel Order</p>
+            <div class="grid grid-cols-2 ">
+              <p v-if="info.STATUS !== 'cancelled' && info.STATUS !== 'shipped'" class="col-span-1 text-base text-red-500" @click="cancel">Cancel Order</p>
+              <p v-if="info.STATUS !== 'hold' && info.STATUS !== 'shipped' && userType === 'vendor'" class="col-span-1 text-right text-base text-blue-700" @click="hold">Hold Order</p>
+              <p v-if="info.STATUS === 'hold' && userType === 'vendor'" class="col-span-1 text-right text-base text-blue-700" @click="unhold">Unhold and Deliver order</p>
+            </div>
           </div>
           </div>
           <div

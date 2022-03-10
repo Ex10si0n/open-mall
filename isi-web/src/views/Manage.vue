@@ -1,10 +1,29 @@
 <script lang="ts" setup>
-import {computed} from "vue";
+import {computed, ref} from "vue";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
+import config from "../config";
+import axios from "axios";
 
 const store = useStore();
 const router = useRouter();
+const pono = ref('')
+const markDeliver = () => {
+  const query = "http://" + config.apiServer + ":" + config.port + "/api/order/deliver/" + pono.value
+  console.log(query)
+  axios.get(query).then(res => {
+    if (res.data.status == "success") {
+      alert("Success")
+      router.push("/manage")
+    } else {
+      if (res.data.status == "forbidden") {
+        alert("Purchase Already Delivered")
+      } else {
+        alert("Wrong Purchase Number")
+      }
+    }
+  })
+}
 
 const userName = computed(() => {
   return store.state.userName;
@@ -61,13 +80,13 @@ const addrId = computed(() => {
                   class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="pono"
                   required
-                  v-model="tag"
+                  v-model="pono"
               />
             </div>
 
             <div class="grid grid-cols-3 gap-4">
-              <button class="col-span-1 w-full shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">Modify</button>
-              <button class="col-span-2 w-full shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-green-100 text-green-600 border-green-600 ">Mark as Delivered</button>
+              <button @click="$router.push(`/order/${pono}`)" class="col-span-1 w-full shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">Modify</button>
+              <button @click="markDeliver" class="col-span-2 w-full shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-green-100 text-green-600 border-green-600 ">Mark as Delivered</button>
             </div>
 
           </div>

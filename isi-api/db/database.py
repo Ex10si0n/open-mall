@@ -874,6 +874,43 @@ def get_all_purchase_of_customer(accId: str):
         return playload
 
 
+def get_all_purchase_vendor():
+    """List all purchase orders that the customer has placed
+
+    Args:
+        accId(str): user id
+
+    Returns:
+        dict: status(success, error), purchase_list
+    """
+    playload = {'status': '', 'purchase_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT * FROM `purchase`"
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    for row in result:
+                        purchase = {
+                            'name': row['NAME'],
+                            'tel': row['TEL'],
+                            'pono': row['PONO'],
+                            'date': row['DATE'].strftime("%Y-%m-%d"),
+                            'amount': row['AMOUNT'],
+                            'status': row['STATUS']
+                        }
+                        playload['purchase_list'].append(purchase)
+                    playload['status'] = 'success'
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
+
 def get_purchase_by_status(accId: str, status: str):
     """Filter purchase by status
 
