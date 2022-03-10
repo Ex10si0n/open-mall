@@ -201,3 +201,8 @@ def get_products_by_brand(brand: str):
 def cancel(pono: str):
     from db.database import cancel_purchase
     return cancel_purchase(pono)
+
+@app.get('/api/order/deliver/{pono}')
+def cancel(pono: str):
+    from db.database import ship_purchase
+    return ship_purchase(pono)
