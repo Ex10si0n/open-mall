@@ -26,9 +26,9 @@ const login = () => {
         userEmail: email.value,
         userName: email.value.split('@')[0]
       })
-      if(res.data.type === 'vendor'){
+      if (res.data.type === 'vendor') {
         store.commit('chgStatus', 'vendor')
-      }else{
+      } else {
         store.commit('chgStatus', 'active')
       }
       router.push('/')

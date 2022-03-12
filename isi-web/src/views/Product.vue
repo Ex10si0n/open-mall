@@ -160,50 +160,50 @@ const editProduct = () => {
         </div>
       </div>
       <div v-if="userStatus != 'vendor'">
-      <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
-        <button
-            type="submit"
-            class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
-            @click="addToCart"
-        >
-          {{ buttonLabel }}
-        </button>
-        <router-link to="/address_list">
-          <div class="px-6 py-4">
-            <div class="font-medium text-xl mb-2">Shipping to</div>
-            <div class="grid grid-cols-3">
-              <div class="col-span-1 text-md font-bold mb-2">{{ address.NAME }}</div>
-              <div class="col-span-2 text-right text-md mb-2">{{ address.TEL }}</div>
+        <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+          <button
+              type="submit"
+              class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
+              @click="addToCart"
+          >
+            {{ buttonLabel }}
+          </button>
+          <router-link to="/address_list">
+            <div class="px-6 py-4">
+              <div class="font-medium text-xl mb-2">Shipping to</div>
+              <div class="grid grid-cols-3">
+                <div class="col-span-1 text-md font-bold mb-2">{{ address.NAME }}</div>
+                <div class="col-span-2 text-right text-md mb-2">{{ address.TEL }}</div>
+              </div>
+              <div class="col-span-1 text-md bold mb-2">
+                {{ address.CITY }}, {{ address.COUNTRY }}
+              </div>
+              <div class="col-span-1 text-md bold mb-2">
+                {{ address.DETAILED }}
+              </div>
+              <p class="text-gray-700 text-base"></p>
             </div>
-            <div class="col-span-1 text-md bold mb-2">
-              {{ address.CITY }}, {{ address.COUNTRY }}
-            </div>
-            <div class="col-span-1 text-md bold mb-2">
-              {{ address.DETAILED }}
-            </div>
-            <p class="text-gray-700 text-base"></p>
-          </div>
-          <div class="grid grid-cols-3 px-6 pt-4 pb-2">
-            <div class="col-span-1">
+            <div class="grid grid-cols-3 px-6 pt-4 pb-2">
+              <div class="col-span-1">
               <span
                   class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
               >#{{ address.TAG }}</span
               >
+              </div>
             </div>
-          </div>
-        </router-link
-        >
-      </div>
+          </router-link
+          >
+        </div>
       </div>
       <div v-if="userStatus === 'vendor'">
         <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
-        <button
-            type="submit"
-            class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
-            @click="editProduct"
-        >
-          Edit This Product
-        </button>
+          <button
+              type="submit"
+              class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
+              @click="editProduct"
+          >
+            Edit This Product
+          </button>
         </div>
       </div>
     </div>

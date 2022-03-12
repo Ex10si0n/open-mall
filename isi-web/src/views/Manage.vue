@@ -53,11 +53,16 @@ const addrId = computed(() => {
           <h3 class="font-bold text-xl">Product Management</h3>
           <p class="text-gray-700 text-base">
             Manage your products and their inventory.</p>
-          <button @click='$router.push("/product/create")' class="my-3 w-full col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-cyan-100 text-cyan-500 border-cyan-500 ">Create New</button>
+          <button @click='$router.push("/product/create")'
+                  class="my-3 w-full col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-cyan-100 text-cyan-500 border-cyan-500 ">
+            Create New
+          </button>
 
           <div class="grid grid-cols-2 mt-3 mb-3 gap-4">
-            <button @click="$router.push('/')" class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">Modify</button>
-            <button class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-pink-100 text-pink-600 border-pink-600 ">Delete</button>
+            <button @click="$router.push('/')"
+                    class="col-span-2 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">
+              Modify / Delete
+            </button>
 
 
           </div>
@@ -85,8 +90,14 @@ const addrId = computed(() => {
             </div>
 
             <div class="grid grid-cols-3 gap-4">
-              <button @click="$router.push(`/order/${pono}`)" class="col-span-1 w-full shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">Modify</button>
-              <button @click="markDeliver" class="col-span-2 w-full shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-green-100 text-green-600 border-green-600 ">Mark as Delivered</button>
+              <button @click="$router.push(`/order/${pono}`)"
+                      class="col-span-1 w-full shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">
+                Modify
+              </button>
+              <button @click="markDeliver"
+                      class="col-span-2 w-full shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-green-100 text-green-600 border-green-600 ">
+                Mark as Delivered
+              </button>
             </div>
 
           </div>
@@ -111,9 +122,15 @@ const addrId = computed(() => {
           </div>
 
           <div class="grid grid-cols-2 mt-3 mb-3 gap-4">
-<!--            <button @click='$router.push("/manage")' class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-cyan-100 text-cyan-500 border-cyan-500 ">Add</button>-->
-            <button class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">Modify</button>
-            <button class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-pink-100 text-pink-600 border-pink-600 ">Delete</button>
+            <!--            <button @click='$router.push("/manage")' class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-cyan-100 text-cyan-500 border-cyan-500 ">Add</button>-->
+            <button
+                class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">
+              Modify
+            </button>
+            <button
+                class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-pink-100 text-pink-600 border-pink-600 ">
+              Delete
+            </button>
 
 
           </div>

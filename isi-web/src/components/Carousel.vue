@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ArrowBack, ArrowForward } from "@vicons/ionicons5";
-import { defineComponent } from "vue";
+import {ArrowBack, ArrowForward} from "@vicons/ionicons5";
+import {defineComponent} from "vue";
 
 defineProps<{ pic: Array<string> }>();
 
@@ -13,24 +13,28 @@ defineComponent({
 </script>
 <template>
   <n-carousel show-arrow autoplay>
-    <img v-for="p in pic" class="carousel-img h-auto" :src="p" />
+    <img v-for="p in pic" class="carousel-img h-auto" :src="p"/>
     <template #arrow="{ prev, next }">
       <div class="custom-arrow">
         <button type="button" class="curtom-arrow--left" @click="prev">
-          <n-icon><ArrowBack /></n-icon>
+          <n-icon>
+            <ArrowBack/>
+          </n-icon>
         </button>
         <button type="button" class="curtom-arrow--right" @click="next">
-          <n-icon><ArrowForward /></n-icon>
+          <n-icon>
+            <ArrowForward/>
+          </n-icon>
         </button>
       </div>
     </template>
     <template #dots="{ total, currentIndex, to }">
       <ul class="custom-dots">
         <li
-          v-for="index of total"
-          :class="{ ['is-active']: currentIndex === index - 1 }"
-          :key="index"
-          @click="to(index - 1)"
+            v-for="index of total"
+            :class="{ ['is-active']: currentIndex === index - 1 }"
+            :key="index"
+            @click="to(index - 1)"
         ></li>
       </ul>
     </template>
