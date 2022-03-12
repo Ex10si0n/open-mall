@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, reactive, ref} from "vue";
+import {computed, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import config from "../config";
@@ -166,9 +166,9 @@ const buildSrc = (thumbnail: string) => {
                           class="flex justify-between text-base font-medium text-gray-900"
                       >
                         <router-link :to="`/product/${product.pid}`">
-                        <h3>
-                          {{ product.pname }}
-                        </h3></router-link>
+                          <h3>
+                            {{ product.pname }}
+                          </h3></router-link>
 
                         <p class="ml-4">HK$&nbsp;{{ product.price }}</p>
                       </div>
@@ -184,24 +184,27 @@ const buildSrc = (thumbnail: string) => {
           <div
               class="bg-white text-black"
           >
-          <div class="px-6 py-4">
-            <div class="mb-2 text-xl font-medium">Shipping to</div>
-            <div class="grid grid-cols-3">
-              <div class="mb-2 font-bold col-span-1 text-md">  {{ info.NAME }} </div>
-              <div class="mb-2 text-right col-span-2 text-md"> {{info.TEL}} </div>
+            <div class="px-6 py-4">
+              <div class="mb-2 text-xl font-medium">Shipping to</div>
+              <div class="grid grid-cols-3">
+                <div class="mb-2 font-bold col-span-1 text-md"> {{ info.NAME }}</div>
+                <div class="mb-2 text-right col-span-2 text-md"> {{ info.TEL }}</div>
+              </div>
+              <div class="mb-2 col-span-1 text-md bold">
+                {{ info.CITY }}, {{ info.COUNTRY }}
+              </div>
+              <div class="mb-2 col-span-1 text-md bold">
+                {{ info.ADDRESS }}
+              </div>
+              <div class="grid grid-cols-2 ">
+                <p v-if="info.STATUS !== 'cancelled' && info.STATUS !== 'shipped'"
+                   class="col-span-1 text-base text-red-500" @click="cancel">Cancel Order</p>
+                <p v-if="info.STATUS !== 'hold' && info.STATUS !== 'shipped' && info.STATUS !== 'cancelled' && userType === 'vendor'"
+                   class="col-span-1 text-right text-base text-blue-700" @click="hold">Hold Order</p>
+                <p v-if="info.STATUS === 'hold' && userType === 'vendor'"
+                   class="col-span-1 text-right text-base text-blue-700" @click="unhold">Unhold and Deliver order</p>
+              </div>
             </div>
-            <div class="mb-2 col-span-1 text-md bold">
-               {{info.CITY}},  {{ info.COUNTRY}}
-            </div>
-            <div class="mb-2 col-span-1 text-md bold">
-              {{info.ADDRESS}}
-            </div>
-            <div class="grid grid-cols-2 ">
-              <p v-if="info.STATUS !== 'cancelled' && info.STATUS !== 'shipped'" class="col-span-1 text-base text-red-500" @click="cancel">Cancel Order</p>
-              <p v-if="info.STATUS !== 'hold' && info.STATUS !== 'shipped' && info.STATUS !== 'cancelled' && userType === 'vendor'" class="col-span-1 text-right text-base text-blue-700" @click="hold">Hold Order</p>
-              <p v-if="info.STATUS === 'hold' && userType === 'vendor'" class="col-span-1 text-right text-base text-blue-700" @click="unhold">Unhold and Deliver order</p>
-            </div>
-          </div>
           </div>
           <div
               class="p-4 border-t-transparent rounded-lg rounded-t-none shadow-sm border-gray-300 bg-gray-200 text-white"

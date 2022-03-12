@@ -14,64 +14,63 @@ const email = computed(() => {
 const oldPassword = ref("")
 const newPassword = ref("")
 
-const changePassword = () => { 
-    if (store.state.userStatus != 'visitor'){
-        if (checkPassword()){
-            const query = "http://" + config.apiServer + ":" + config.port + "/api/change_password/"
-            axios
-            .post(query,
-            {
+const changePassword = () => {
+  if (store.state.userStatus != 'visitor') {
+    if (checkPassword()) {
+      const query = "http://" + config.apiServer + ":" + config.port + "/api/change_password/"
+      axios
+          .post(query,
+              {
                 email: email.value,
                 oldPassword: oldPassword.value,
                 newPassword: newPassword.value
-            }).then((res) => {
-                if (res.data.status === 'success') {
-                    alert(res.data.status)
-                    router.push('/profile')
-                } else {
-                    alert(res.data.status)
-                }
-            })
+              }).then((res) => {
+        if (res.data.status === 'success') {
+          alert(res.data.status)
+          router.push('/profile')
+        } else {
+          alert(res.data.status)
         }
-    }  
+      })
+    }
+  }
 }
 
 
-
-const checkPassword = () =>{
-    let numberFlag = false
-    let capitalFlag = false
-    if (newPassword.value.length >= 6){
-        for (var char of newPassword.value){
-            for (var digit of ['0','1','2','3','4','5','6','7','8','9']){
-                if (char == digit){
-                    numberFlag = true
-                    break
-                }
-            }
-            for (var letter of ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']){
-                if (char == letter){
-                    capitalFlag = true
-                    break
-                }
-            }
+const checkPassword = () => {
+  let numberFlag = false
+  let capitalFlag = false
+  if (newPassword.value.length >= 6) {
+    for (var char of newPassword.value) {
+      for (var digit of ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) {
+        if (char == digit) {
+          numberFlag = true
+          break
         }
-        if (numberFlag == true && capitalFlag == true){
-                return true
-            }else if (numberFlag == false && capitalFlag == false){
-                alert("At least one digit\nAt least one capital letter")
-                return false
-            }else if (numberFlag == false && capitalFlag == true){
-                alert("At least one digit")
-                return false
-            }else{
-                alert("At least one capital letter")
-                return false
-            }
-    }else{
-        alert("At least 6 characters")
-        return false
+      }
+      for (var letter of ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']) {
+        if (char == letter) {
+          capitalFlag = true
+          break
+        }
+      }
     }
+    if (numberFlag == true && capitalFlag == true) {
+      return true
+    } else if (numberFlag == false && capitalFlag == false) {
+      alert("At least one digit\nAt least one capital letter")
+      return false
+    } else if (numberFlag == false && capitalFlag == true) {
+      alert("At least one digit")
+      return false
+    } else {
+      alert("At least one capital letter")
+      return false
+    }
+  } else {
+    alert("At least 6 characters")
+    return false
+  }
 }
 
 </script>
@@ -141,8 +140,8 @@ const checkPassword = () =>{
       </div>
     </div>
   </div>
-    <div class="min-h-full flex items-center justify-center">
-        <div class="rounded-md shadow-sm">
-        </div>
+  <div class="min-h-full flex items-center justify-center">
+    <div class="rounded-md shadow-sm">
     </div>
+  </div>
 </template>

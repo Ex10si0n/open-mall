@@ -133,12 +133,13 @@ const selectUser = () => {
       <div>
         <div class="bg-white rounded-lg my-6 px-5 shadow-xl border py-2">
           <div v-if="userType === 'vendor'" class="my-3">
-            <input type="text" @blur="selectUser" v-model="selectName" placeholder="Name" class="text-sm p-3 w-full h-10 border rounded-lg bg-slate-50">
+            <input type="text" @blur="selectUser" v-model="selectName" placeholder="Name"
+                   class="text-sm p-3 w-full h-10 border rounded-lg bg-slate-50">
           </div>
           <div class="my-3">
             <select
-              v-model="selectStatus"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                v-model="selectStatus"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option>All Status</option>
               <option>pending</option>
@@ -161,14 +162,17 @@ const selectUser = () => {
               />
             </div> -->
 
-            <div v-if="(selectName === '' || selectName === purchase.name) && (selectStatus === 'All Status' || selectStatus === purchase.status)" class="py-6 ml-4 flex-1 flex flex-col">
+            <div
+                v-if="(selectName === '' || selectName === purchase.name) && (selectStatus === 'All Status' || selectStatus === purchase.status)"
+                class="py-6 ml-4 flex-1 flex flex-col">
               <div>
-                  <h3 class="text-orange-600 text-md" v-if="userType === 'vendor'">
-                    <div class="font-bold">{{purchase.name}}</div> <div>{{purchase.tel}}</div>
-                  </h3>
+                <h3 class="text-orange-600 text-md" v-if="userType === 'vendor'">
+                  <div class="font-bold">{{ purchase.name }}</div>
+                  <div>{{ purchase.tel }}</div>
+                </h3>
                 <div class="flex justify-between text-base font-medium text-gray-900">
                   <h3>
-                    <a> Created at: {{purchase.date}}</a>
+                    <a> Created at: {{ purchase.date }}</a>
                   </h3>
                   <p class="ml-4 text-right">HK$&nbsp;{{ purchase.amount }}</p>
                 </div>

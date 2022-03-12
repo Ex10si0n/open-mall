@@ -74,19 +74,19 @@ const userName = computed(() => {
       <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
         <h2 v-if="userStatus !== 'vendor'" class="text-2xl grid grid-cols-2 font-medium text-gray-900">
           <span class="col-span-1"><span class="font-bold ">Open</span>Mall</span>
-          <span class="col-span-1 text-gray-500 text-[19px] text-right">Hi, {{userName}}</span>
+          <span class="col-span-1 text-gray-500 text-[19px] text-right">Hi, {{ userName }}</span>
           <div class="text-sm col-span-2 text-gray-500">Online Shopping Mall Project for ISI</div>
         </h2>
         <div v-else class="">
-        <router-link to="/manage">
-          <div class="text-cyan-800">
-            <div class="inline text-xl">&lsaquo;&nbsp;</div>
-            <div class="inline text-md">Go Back</div>
-          </div>
-        </router-link>
-        <h2 class="text-2xl grid grid-cols-2 font-medium text-gray-900">
-          <span class="col-span-1"><span class="font-bold ">Modify</span> Products</span>
-        </h2></div>
+          <router-link to="/manage">
+            <div class="text-cyan-800">
+              <div class="inline text-xl">&lsaquo;&nbsp;</div>
+              <div class="inline text-md">Go Back</div>
+            </div>
+          </router-link>
+          <h2 class="text-2xl grid grid-cols-2 font-medium text-gray-900">
+            <span class="col-span-1"><span class="font-bold ">Modify</span> Products</span>
+          </h2></div>
 
         <div class="w-full max-w-md space-y-8">
           <div class="relative flex flex-wrap items-stretch w-full mb-4 input-group">
