@@ -448,7 +448,7 @@ def get_products_by_brand(brand: str):
                 cursor.execute(sql, (brand,))
                 result = cursor.fetchall()
                 if (len(result) == 0):
-                    playload['status'] = 'success'
+                    playload['status'] = 'none'
                     return playload
                 else:
                     playload['status'] = 'success'
@@ -486,7 +486,7 @@ def get_products_by_name(name: str):
                 sql = "SELECT * FROM `product` WHERE `PNAME` LIKE %s"
                 cursor.execute(sql, ('%' + name + '%',))
                 result = cursor.fetchall()
-                if (result is None):
+                if (len(result) == 0):
                     playload['status'] = 'none'
                     return playload
                 else:

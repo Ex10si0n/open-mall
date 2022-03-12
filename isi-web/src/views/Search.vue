@@ -25,8 +25,7 @@ const result = ref("");
 const products = reactive([] as Array<ProductState>);
 const search = () => {
   var searchResult1 = true
-  var searchResult2 = false
-  var searchResult3 = true
+  var searchResult2 = true
   axios
       .get("http://" + config.apiServer + ":" + config.port + "/api/search/name/" + content.value)
       .then((res) => {
@@ -44,56 +43,38 @@ const search = () => {
                 product.thumbnail;
             products.push(product as ProductState);
           })
-        } else {
+        } else if (res.data.status === 'none'){
           searchResult1 = false
-        }
-      })
-  axios
-      .get("http://" + config.apiServer + ":" + config.port + "/api/search/brand/" + content.value)
-      .then((res) => {
-        if (res.data.status === 'success') {
-          const productList = res.data.products;
-          productList.forEach((product: ProductState) => {
-            product.pic =
-                "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
-            product.thumbnail =
-                "http://" +
-                config.apiServer +
-                ":" +
-                config.port +
-                "/api/img/" +
-                product.thumbnail;
-            products.push(product as ProductState);
-          })
-        } else {
-          searchResult3 = false
-        }
-      })
-  if (store.state.userStatus === 'vendor') {
-    axios
-        .get("http://" + config.apiServer + ":" + config.port + "/api/search/id/" + content.value)
-        .then((res) => {
-          if (res.data.status === 'success') {
-            searchResult2 = true;
-            const product = res.data.product;
-            product.pic =
-                "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
-            product.thumbnail =
-                "http://" +
-                config.apiServer +
-                ":" +
-                config.port +
-                "/api/img/" +
-                product.thumbnail;
-            products.push(product as ProductState);
-          } else {
-            searchResult2 = false;
+          if(store.state.userStatus != 'vendor'){
+            result.value = "None"
           }
-        })
-  }
-  if (!searchResult1 && !searchResult2 && !searchResult3) {
-    result.value = "None"
-  }
+        }
+        if (store.state.userStatus === 'vendor') {
+          axios
+          .get("http://" + config.apiServer + ":" + config.port + "/api/search/id/" + content.value)
+          .then((res) => {
+            if (res.data.status === 'success') {
+              searchResult2 = true;
+              const product = res.data.product;
+              product.pic =
+                "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
+              product.thumbnail =
+                "http://" +
+                config.apiServer +
+                ":" +
+                config.port +
+                "/api/img/" +
+                product.thumbnail;
+              products.push(product as ProductState);
+            } else if (res.data.status === 'none'){
+                searchResult2 = false;
+              if (!searchResult1 && !searchResult2) {
+                result.value = "None"
+              }
+            }
+          })
+        }
+      })
 }
 </script>
 <template>

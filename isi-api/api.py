@@ -170,7 +170,7 @@ def get_more_detailed_purchase(pono: str):
 @app.get('/api/purchase/{pono}')
 def get_purchase_info_by_id(pono: str):
     from db.database import get_purchase_info_by_id
-    return get_purchase_info_by_id(pono)s
+    return get_purchase_info_by_id(pono)
 
 @app.post('/api/product/create')
 def create_product(createProductData: CreateProductData):
