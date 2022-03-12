@@ -6,7 +6,6 @@ from fastapi import FastAPI, Form, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
-from PIL import Image
 
 fpath = os.path.join(os.path.dirname(__file__), 'db')
 sys.path.append(fpath)
@@ -171,7 +170,7 @@ def get_more_detailed_purchase(pono: str):
 @app.get('/api/purchase/{pono}')
 def get_purchase_info_by_id(pono: str):
     from db.database import get_purchase_info_by_id
-    return get_purchase_info_by_id(pono)
+    return get_purchase_info_by_id(pono)s
 
 @app.post('/api/product/create')
 def create_product(createProductData: CreateProductData):
@@ -217,8 +216,3 @@ def hold(pono: str):
     from db.database import hold_purchase
     return hold_purchase(pono)
 
-@app.post('/api/image/upload')
-async def upload_image(image: UploadFile):
-    path = os.path.join(fpath, 'img/' + image.filename)
-
-    return {'type': image.content_type}
