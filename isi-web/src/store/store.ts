@@ -15,13 +15,6 @@ export default createStore({
         currentViewOrderId: '',
         primaryAddress: {
             addrId: '7cd49540-3d41-4eb3-b530-3a40414473d7',
-            // addrId: 'e224b00e-eb86-4203-9090-31de3970a0af',
-            // name: 'Zhongbo Yan',
-            // tel: '(853) 6886-0187',
-            // country: 'China',
-            // city: 'Macao',
-            // detailed: 'Rua de Bruxelas, Nam On Gardon, Macao Polytechnic Institute Student Hostel',
-            // tag: 'home',
         },
     },
     mutations: {

@@ -64,14 +64,19 @@ const search = () => {
 const userName = computed(() => {
   return store.state.userName;
 });
+
+const products_brands = computed(() => {
+  return products.map((product) => product.brand).filter((brand, index, self) => self.indexOf(brand) === index).sort();
+});
+
 </script>
 
 <template>
   <div
-      class="flex items-center justify-center min-h-full px-4 py-6 bg-red sm:px-6 lg:px-8"
+      class="flex items-center justify-center min-h-full px-4 py-6 sm:px-6 lg:px-8"
   >
     <div class="w-full max-w-md space-y-8">
-      <div class="sticky top-0 z-50 w-full max-w-md bg-slate-100 space-y-8">
+      <div class="sticky top-0 z-55 w-full max-w-md bg-slate-100 space-y-8">
         <h2 v-if="userStatus !== 'vendor'" class="text-2xl grid grid-cols-2 font-medium text-gray-900">
           <span class="col-span-1"><span class="font-bold ">Open</span>Mall</span>
           <span class="col-span-1 text-gray-500 text-[19px] text-right">Hi, {{ userName }}</span>
@@ -88,8 +93,8 @@ const userName = computed(() => {
             <span class="col-span-1"><span class="font-bold ">Modify</span> Products</span>
           </h2></div>
 
-        <div class="w-full max-w-md space-y-8">
-          <div class="relative flex flex-wrap items-stretch w-full mb-4 input-group">
+        <div class="w-full max-w-md space-y-8 ">
+          <div class="relative flex flex-wrap items-stretch w-full input-group backdrop-blur-sm rounded-2xl ">
             <input
                 type="search"
                 class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-slate-200 bg-clip-padding border-2 border-solid border-gray-100 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none"
@@ -98,6 +103,19 @@ const userName = computed(() => {
                 aria-describedby="button-addon2"
                 @click="search"
             />
+            <div class="grid grid-cols-2 gap-3">
+              <select class="col-span-1 bg-white rounded-lg w-full p-2 mt-4 mb-3 shadow-2xl">
+                <option value="all">All Brands</option>
+                <option v-for="brand in products_brands" :value="brand">{{ brand }}</option>
+              </select>
+              <select class="col-span-1 bg-white rounded-lg w-full p-2 mt-4 mb-3 shadow-2xl">
+                <option value="all">Sort default</option>
+                <option>Price (Low to High)</option>
+                <option>Price (High to Low)</option>
+                <option>Mostly Viewed</option>
+                <option>Featured</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>

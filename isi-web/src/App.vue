@@ -22,7 +22,7 @@ const changeTab = (tab: string) => {
 </script>
 
 <template>
-  <div class="my-10 mb-24">
+  <div class="mb-24">
     <router-view class=""/>
   </div>
   <div class="w-full my-5">
