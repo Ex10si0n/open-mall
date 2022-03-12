@@ -60,12 +60,8 @@ const addrId = computed(() => {
 
           <div class="grid grid-cols-2 mt-3 mb-3 gap-4">
             <button @click="$router.push('/')"
-                    class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">
-              Modify
-            </button>
-            <button
-                class="col-span-1 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-pink-100 text-pink-600 border-pink-600 ">
-              Delete
+                    class="col-span-2 shadow-lg hover:shadow-none rounded-lg h-10 text-center border-2 bg-indigo-100 text-indigo-600 border-indigo-600 ">
+              Modify / Delete
             </button>
 
 

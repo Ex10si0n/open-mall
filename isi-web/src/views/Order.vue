@@ -142,10 +142,11 @@ const selectUser = () => {
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option>All Status</option>
-              <option>pending</option>
-              <option>shipped</option>
-              <option>hold</option>
-              <option>cancelled</option>
+              <option value="pending">Pending</option>
+              <option value="past">Past Orders (Shipped or Cancelled)</option>
+              <option value="shipped">Shipped</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="hold">On Hold</option>
             </select>
 
           </div>
@@ -163,7 +164,7 @@ const selectUser = () => {
             </div> -->
 
             <div
-                v-if="(selectName === '' || selectName === purchase.name) && (selectStatus === 'All Status' || selectStatus === purchase.status)"
+                v-if="(selectName === '' || selectName === purchase.name) && (selectStatus === 'All Status' || selectStatus === purchase.status || selectStatus === 'past' && (purchase.status === 'cancelled' || purchase.status === 'shipped'))"
                 class="py-6 ml-4 flex-1 flex flex-col">
               <div>
                 <h3 class="text-orange-600 text-md" v-if="userType === 'vendor'">
