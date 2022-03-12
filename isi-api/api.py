@@ -217,8 +217,15 @@ def hold(pono: str):
     from db.database import hold_purchase
     return hold_purchase(pono)
 
+
+@app.get('/api/order/unhold/{pono}')
+def unhold(pono: str):
+    from db.database import unhold_purchase
+    return unhold_purchase(pono)
+
 @app.post('/api/image/upload')
 async def upload_image(image: UploadFile):
     path = os.path.join(fpath, 'img/' + image.filename)
-
+    with open(path, 'wb') as f:
+        f.write(image.file.read())
     return {'type': image.content_type}
