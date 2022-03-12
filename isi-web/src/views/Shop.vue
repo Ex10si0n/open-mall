@@ -80,7 +80,13 @@ const products_brands = computed(() => {
 const filtered_products = computed(() => {
 
   if (brandFilter.value === "all") {
-    return products;
+    if (sortPrice.value === "default") {
+      return products;
+    } else if (sortPrice.value === "l2h") {
+      return products.sort((a, b) => a.price - b.price);
+    } else if (sortPrice.value === "h2l") {
+      return products.sort((a, b) => b.price - a.price);
+    }
   } else {
     if (sortPrice.value === 'l2h') {
       return products.sort((a, b) => a.price - b.price).filter((product) => product.brand === brandFilter.value);
