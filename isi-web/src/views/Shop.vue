@@ -5,6 +5,7 @@ import {useStore} from "vuex";
 import axios from "axios";
 import config from "../config";
 import {useRouter} from "vue-router"
+// import Pagination from '../components/Pagination.vue';
 
 const store = useStore();
 const router = useRouter();
@@ -27,9 +28,16 @@ const products = reactive([] as Array<ProductState>);
 
 const cnt = ref(4)
 
-const updateCnt = () => {
-  cnt.value = cnt.value + 4;
-}
+const currentPage = ref(1);
+
+const sortPrice = ref("default")
+
+const brandFilter = ref("all")
+
+
+// const updateCnt = () => {
+//   cnt.value = cnt.value + 4;
+// }
 
 axios
     .get("http://" + config.apiServer + ":" + config.port + "/api/products")
@@ -69,6 +77,61 @@ const products_brands = computed(() => {
   return products.map((product) => product.brand).filter((brand, index, self) => self.indexOf(brand) === index).sort();
 });
 
+const filtered_products = computed(() => {
+
+  if (brandFilter.value === "all") {
+    return products;
+  } else {
+    if (sortPrice.value === 'l2h') {
+      return products.sort((a, b) => a.price - b.price).filter((product) => product.brand === brandFilter.value);
+    } else if (sortPrice.value === 'h2l') {
+      return products.sort((a, b) => b.price - a.price).filter((product) => product.brand === brandFilter.value);
+    } else {
+      return products.filter((product) => product.brand === brandFilter.value);
+    }
+  }
+});
+
+const maxPage = computed(() => {
+  return Math.ceil(filtered_products.value.length / cnt.value);
+});
+
+const displayed_products = computed(() => {
+  const start = (currentPage.value - 1) * cnt.value;
+  const end = start + cnt.value;
+  return filtered_products.value.slice(start, end);
+});
+
+const chgPage = () => {
+  // console.log(displayed_products.value);
+
+  if (typeof currentPage.value === "number") {
+    if (currentPage.value > maxPage.value) {
+      currentPage.value = maxPage.value;
+    } else if (currentPage.value < 1) {
+      currentPage.value = 1;
+    }
+  } else {
+    currentPage.value = 1;
+  }
+  window.scrollTo(0,0);
+};
+
+const prevPage = () => {
+  currentPage.value = currentPage.value - 1;
+  chgPage()
+};
+
+const nextPage = () => {
+  currentPage.value = currentPage.value + 1;
+  chgPage()
+}
+
+const initPage = () => {
+  currentPage.value = 1;
+  chgPage()
+}
+
 </script>
 
 <template>
@@ -104,16 +167,16 @@ const products_brands = computed(() => {
                 @click="search"
             />
             <div class="grid grid-cols-2 gap-3">
-              <select class="col-span-1 bg-white rounded-lg w-full p-2 mt-4 mb-3 shadow-2xl">
+              <select @change="initPage()" v-model="brandFilter" class="col-span-1 bg-white rounded-lg w-full p-2 mt-4 mb-3 shadow-2xl">
                 <option value="all">All Brands</option>
                 <option v-for="brand in products_brands" :value="brand">{{ brand }}</option>
               </select>
-              <select class="col-span-1 bg-white rounded-lg w-full p-2 mt-4 mb-3 shadow-2xl">
-                <option value="all">Sort default</option>
-                <option>Price (Low to High)</option>
-                <option>Price (High to Low)</option>
-                <option>Mostly Viewed</option>
-                <option>Featured</option>
+              <select @change="initPage()" v-model="sortPrice" class="col-span-1 bg-white rounded-lg w-full p-2 mt-4 mb-3 shadow-2xl">
+                <option value="default">Sort default</option>
+                <option value="l2h">Price (Low to High)</option>
+                <option value="h2l">Price (High to Low)</option>
+                <option value="most">Mostly Viewed</option>
+                <option value="feat">Featured</option>
               </select>
             </div>
           </div>
@@ -121,35 +184,52 @@ const products_brands = computed(() => {
       </div>
       <div class="grid grid-cols-1 gap-3">
         <div
-            v-for="(product, index) in products"
-            v-show="index < cnt"
+            v-for="product in displayed_products"
             class="max-w-md bg-white border rounded-lg grid-cols-1 shadow-sm"
             @click="
-            $router.push('/product/' + product.pid);
-            chgViewingProduct(product.pid);
-          "
+              $router.push('/product/' + product.pid);
+              chgViewingProduct(product.pid);
+            "
         >
-          <img class="py-0 rounded-t-lg" :src="product.thumbnail"/>
-          <div class="px-5 py-2 pb-5">
-            <h3 class="font-semibold tracking-tight text-gray-900 text-md">
-              {{ product.pname }}
-            </h3>
-            <h3 class="text-sm font-semibold tracking-tight text-gray-500">
-              {{ product.pdesc.split(" ").slice(0, 8).join(" ") }}
-            </h3>
-            <div class="flex items-center mt-2.5 mb-5">
-              <span
-                  class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
-              >{{ product.brand }}</span
-              >
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-gray-700 text-md">HK${{ product.price }}</span>
+<!--          <div v-if="product.brand == brandFilter || brandFilter === 'all'">-->
+            <img class="py-0 rounded-t-lg" :src="product.thumbnail"/>
+            <div class="px-5 py-2 pb-5">
+              <h3 class="font-semibold tracking-tight text-gray-900 text-md">
+                {{ product.pname }}
+              </h3>
+              <h3 class="text-sm font-semibold tracking-tight text-gray-500">
+                {{ product.pdesc.split(" ").slice(0, 8).join(" ") }}
+              </h3>
+              <div class="flex items-center mt-2.5 mb-5">
+                <span
+                    class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+                >{{ product.brand }}</span
+                >
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-gray-700 text-md">HK${{ product.price }}</span>
+              </div>
             </div>
           </div>
-        </div>
+<!--        </div>-->
       </div>
-      <div class="text-blue-500 text-center" @click="updateCnt">More</div>
+<!--      <div class="text-blue-500 text-center" @click="updateCnt">More</div>-->
+      <div class="w-full">
+        <div class="bg-black p-2 bg-white rounded-lg text-white rounded-b-none shadow">
+          Page {{ currentPage }} of {{ maxPage }}
+          </div>
+          <div class="p-2 bg-white rounded-lg shadow rounded-t-none">
+            <div class="text-lg text-left">
+              <input @update="chgPage" class="h-6 rounded w-full text-center bg-slate-100 font-mono h-6 text-blue-500" v-model="currentPage" type="text"> <span class="p-2 "></span>
+          </div>
+          <div class="mt-2 grid grid-cols-2 gap-2">
+            <button @click="prevPage" class="hover:bg-slate-100 hover:shadow-none border text-blue-500 h-14 rounded h-6 shadow">Previous</button>
+            <button @click="nextPage" class="hover:bg-slate-100 hover:shadow-none border text-blue-500 h-14 rounded h-6 shadow">Next</button>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </template>

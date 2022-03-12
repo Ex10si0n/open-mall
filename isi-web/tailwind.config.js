@@ -4,7 +4,11 @@ module.exports = {
         "./src/**/*.{vue,js,ts,jsx,tsx}",
     ],
     theme: {
-        extend: {},
+        extend: {
+            screens: {
+                'hover-hover': { 'raw': '(hover: hover) and (pointer: fine)' },
+            }
+        },
     },
     plugins: [],
 }
