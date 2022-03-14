@@ -15,8 +15,10 @@ const price = ref("")
 const thumbnail = ref("")
 const information = ref("")
 const pic = ref("")
+const file = new File([],'')
+const img = ref(file)
 
-
+/*
 function onFileChange(event) {
   const files = event.target.files || event.dataTransfer.files;
   const img = files[0]
@@ -31,34 +33,41 @@ function onFileChange(event) {
   }).then((res) => {
     alert(res.data.type)
   })
-
-  //var reader = new FileReader()
-  //reader.onload = () => {
-  //    alert(reader.result)
-  //}
-  //if (img){
-  //    reader.readAsArrayBuffer(img);
-  //}
+}
+*/
+const onFileChange = (event) => {
+  const files = event.target.files || event.dataTransfer.files;
+  img.value = files[0]
 }
 
 const createProduct = () => {
   if (store.state.userStatus === 'vendor') {
-    const query = "http://" + config.apiServer + ":" + config.port + "/api/product/create"
-    axios.post(query, {
-      pName: name.value,
-      brand: brand.value,
-      price: price.value,
-      pDesc: information.value,
-      thumbnail: thumbnail.value,
-      pic: pic.value,
-    }).then((res) => {
-      if (res.data.status === 'success') {
-        alert(res.data.status)
-        router.push('/product/' + res.data.pid)
-      } else {
-        alert(res.data.status)
-      }
-    })
+    thumbnail.value = img.value.name
+    pic.value = img.value.name
+    const formData = new FormData();
+    formData.append("image", img.value)
+    const queryImage = "http://" + config.apiServer + ":" + config.port + "/api/image/upload"
+    axios.post(queryImage, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+    }).then(() => {
+      const query = "http://" + config.apiServer + ":" + config.port + "/api/product/create"
+      axios.post(query, {
+        pName: name.value,
+        brand: brand.value,
+        price: price.value,
+        pDesc: information.value,
+        thumbnail: thumbnail.value,
+        pic: pic.value,
+      }).then((res) => {
+        if (res.data.status === 'success') {
+          router.push('/product/' + res.data.pid)
+        } else {
+          alert(res.data.status)
+        }
+      })
+    })  
   } else {
     alert("You do not have the authority to add a new product.")
   }

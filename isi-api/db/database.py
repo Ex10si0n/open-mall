@@ -1462,7 +1462,7 @@ if __name__ == '__main__':
     # res = update_password("p1908326@ipm.edu.mo", "somepassword", "newpassword")
     # res = get_products_by_name("iPhone")
     # res = update_product_price("9078f1ac-82db-461c-a6db-3b16ec6e6011", 6099)
-    # res = delete_product("990e89b0-759c-43b7-ad8f-124185c56c60")
+    res = delete_product("bcee73c7-47d2-4299-aa0f-49dd449e6ef7")
     # res = add_product_to_cart(
     #    "11a45010-d203-438c-98ef-2ed2012b2eaf", 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 1)
     # res = create_address('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '18740060111', 'Steve Yan', 'Macao SAR',
@@ -1492,6 +1492,6 @@ if __name__ == '__main__':
     # res = ship_purchase('33e60f5e-1d66-401c-8a40-2d955e4574e2')
     # res = check_out('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa',
     #                '98409f31-ee40-404c-b6c5-896c85e3878a')
-    res = get_products_by_brand("Apple")
+    # res = get_products_by_brand("Apple")
 
     print(res)
