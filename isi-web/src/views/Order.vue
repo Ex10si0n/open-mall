@@ -144,8 +144,8 @@ const selectUser = () => {
               <option>All Status</option>
               <option value="pending">Pending</option>
               <option value="past">Past Orders (Shipped or Cancelled)</option>
-              <option value="shipped">Shipped</option>
-              <option value="cancelled">Cancelled</option>
+<!--              <option value="shipped">Shipped</option>-->
+<!--              <option value="cancelled">Cancelled</option>-->
               <option value="hold">On Hold</option>
             </select>
 

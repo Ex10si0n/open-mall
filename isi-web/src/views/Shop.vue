@@ -26,7 +26,7 @@ type ProductState = {
 
 const products = reactive([] as Array<ProductState>);
 
-const cnt = ref(4)
+const cnt = ref(8)
 
 const currentPage = ref(1);
 
