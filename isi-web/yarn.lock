@@ -2,13 +2,6 @@
 # yarn lockfile v1
 
 
-"@angular/forms@^13.2.3":
-  version "13.2.3"
-  resolved "https://registry.npmjs.org/@angular/forms/-/forms-13.2.3.tgz"
-  integrity sha512-fOsWiimPTQCDtZj+Hqc4+Io7v4aKjJJUIRoxN/wQqik66Gg/1rs4iWtpdxm4vgyQD0rUFZaRLHhsh+ldIFw7CA==
-  dependencies:
-    tslib "^2.3.0"
-
 "@babel/code-frame@^7.0.0":
   version "7.16.7"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.16.7.tgz"
@@ -1510,11 +1503,6 @@ treemate@^0.3.9:
   version "0.3.10"
   resolved "https://registry.npmjs.org/treemate/-/treemate-0.3.10.tgz"
   integrity sha512-uxN98H84/zXAkn02rEeip9SNnOR889QIBXfpZnwjaanp8JRElxjdmDaKmVULclrn54J8RcJVCqfeQZsdeMjwow==
-
-tslib@^2.3.0:
-  version "2.3.1"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
-  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
 typescript@^4.4.4:
   version "4.5.4"
