@@ -1,8 +1,7 @@
 import os
 import re
 import sys
-from turtle import up
-from fastapi import FastAPI, Form, File, UploadFile 
+from fastapi import FastAPI, Form, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
