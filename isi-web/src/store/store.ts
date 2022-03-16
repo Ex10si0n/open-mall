@@ -6,7 +6,7 @@ import {createStore} from 'vuex'
 export default createStore({
     state: {
         hello: 'Vue-SPA-Quickstart',
-        userStatus: 'visitor', // active vendor visitor
+        userStatus: 'vendor', // active vendor visitor
         activeTab: '',
         viewingProduct: '',
         userEmail: 'unit_test@mockemail.com',

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import axios from "axios";
-import {ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import config from "../config"
 import {useRouter} from 'vue-router'
 import {useStore} from 'vuex'
@@ -16,7 +16,8 @@ const thumbnail = ref("")
 const information = ref("")
 const pic = ref("")
 const file = new File([],'')
-const img = ref(file)
+//const img = ref(file)
+const img = reactive([] as Array<File>)
 
 /*
 function onFileChange(event) {
@@ -37,15 +38,28 @@ function onFileChange(event) {
 */
 const onFileChange = (event) => {
   const files = event.target.files || event.dataTransfer.files;
-  img.value = files[0]
+  //img.value = files[0]
+  for (let i = 0; i < files.length; i++){
+    img.push(files[i])
+  }
 }
 
 const createProduct = () => {
   if (store.state.userStatus === 'vendor') {
-    thumbnail.value = img.value.name
-    pic.value = img.value.name
+    //thumbnail.value = img.value.name
+    thumbnail.value = img[0].name
+    //pic.value = img.value.name
+    let picString = ''
+    for (let i = 0; i < img.length - 1; i++){
+      picString = picString + img[i].name + ';'
+    }
+    picString = picString + img[img.length - 1].name
+    pic.value = picString
     const formData = new FormData();
-    formData.append("image", img.value)
+    //formData.append("image", img.value)
+    for (let i = 0; i < img.length; i++){
+      formData.append('images', img[i])
+    }
     const queryImage = "http://" + config.apiServer + ":" + config.port + "/api/image/upload"
     axios.post(queryImage, formData, {
     headers: {
@@ -135,6 +149,7 @@ const createProduct = () => {
                 required
                 type="file"
                 @change="onFileChange"
+                multiple
             />
           </div>
           <div class="mt-4 mb-4">

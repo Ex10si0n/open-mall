@@ -1456,13 +1456,13 @@ if __name__ == '__main__':
     # res = create_account("Steve", 'p1908326@ipm.edu.mo',
     #                      password='somepassword', accType='admin')
     # res = login_check("p1908326@ipm.edu.mo", password='newpassword')
-    # res = create_product("iPhone 13", "Apple", "8899", "Phone",
-    #                    "img/iphone.png", "img/iphone-2.png")
+    res = create_product("Nintendo Switch with Neon Blue and Neon Red Joy‑Con - HAC-001(-01)", "Nintendo", 2340, "3 Play Styles: TV Mode, Tabletop Mode, Handheld Mode. 6.2-inch, multi-touch capacitive touch screen. 4.5-9+ Hours of Battery Life will vary depending on software usage conditions. Connects over Wi-Fi for multiplayer gaming; Up to 8 consoles can be connected for local wireless multiplayer. Model number: HAC-001(-01",
+                       "Switch1.jpg", "Switch2.jpg")
     # res = delete_account("p1908326@ipm.edu.mo", "somepassword")
     # res = update_password("p1908326@ipm.edu.mo", "somepassword", "newpassword")
     # res = get_products_by_name("iPhone")
     # res = update_product_price("9078f1ac-82db-461c-a6db-3b16ec6e6011", 6099)
-    res = delete_product("bcee73c7-47d2-4299-aa0f-49dd449e6ef7")
+    # res = delete_product("bcee73c7-47d2-4299-aa0f-49dd449e6ef7")
     # res = add_product_to_cart(
     #    "11a45010-d203-438c-98ef-2ed2012b2eaf", 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 1)
     # res = create_address('c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '18740060111', 'Steve Yan', 'Macao SAR',

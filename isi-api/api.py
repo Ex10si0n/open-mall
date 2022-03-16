@@ -5,6 +5,8 @@ from fastapi import FastAPI, Form, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from typing import List
+
 
 fpath = os.path.join(os.path.dirname(__file__), 'db')
 sys.path.append(fpath)
@@ -222,8 +224,9 @@ def unhold(pono: str):
     return unhold_purchase(pono)
 
 @app.post('/api/image/upload')
-async def upload_image(image: UploadFile):
-    path = os.path.join(fpath, 'img/' + image.filename)
-    with open(path, 'wb') as f:
-        f.write(image.file.read())
-    return {'type': image.content_type}
+async def upload_image(images: List[UploadFile]):
+    for image in images:
+        path = os.path.join(fpath, 'img/' + image.filename)
+        with open(path, 'wb') as f:
+            f.write(image.file.read())
+    
