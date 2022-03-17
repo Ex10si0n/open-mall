@@ -2,16 +2,18 @@
 import axios from "axios";
 import {ref} from "vue";
 import config from "../config"
-import {useRouter} from 'vue-router'
-import {useStore} from 'vuex'
+import { useRouter } from 'vue-router'
+import { useStore} from 'vuex'
 
 const router = useRouter()
 const store = useStore()
-// const count = ref(0)
-
+    // const count = ref(0)
 const email = ref("")
 const password = ref("")
+const userToken = ref("")
+
 const login = () => {
+
   const query = "http://" + config.apiServer + ":" + config.port + "/api/login_check/"
   axios
       .post(query,
@@ -25,6 +27,9 @@ const login = () => {
         accId: res.data.uuid,
         userEmail: email.value,
         userName: email.value.split('@')[0]
+      })
+      store.commit('chgLogin', {
+        Authorization: res.data.token
       })
       if (res.data.type === 'vendor') {
         store.commit('chgStatus', 'vendor')

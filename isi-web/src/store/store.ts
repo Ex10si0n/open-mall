@@ -16,6 +16,7 @@ export default createStore({
         primaryAddress: {
             addrId: '7cd49540-3d41-4eb3-b530-3a40414473d7',
         },
+        Authorization: localStorage.getItem('Authorization') ? localStorage.getItem('Authorization') : ""
     },
     mutations: {
         setPrimaryAddress(state, addrId) {
@@ -48,6 +49,10 @@ export default createStore({
             state.primaryAddress.addrId = '';
             state.activeTab = '';
         },
+        chgLogin(state, user){
+            state.Authorization = user.Authorization;
+            localStorage.setItem('Authorization', user.Authorization);
+        }
     },
     actions: {}
 })
