@@ -16,7 +16,7 @@ const thumbnail = ref("")
 const information = ref("")
 const pic = ref("")
 const file = new File([],'')
-//const img = ref(file)
+const thumbnailImage = ref(file)
 const img = reactive([] as Array<File>)
 
 /*
@@ -38,25 +38,36 @@ function onFileChange(event) {
 */
 const onFileChange = (event) => {
   const files = event.target.files || event.dataTransfer.files;
-  //img.value = files[0]
-  for (let i = 0; i < files.length; i++){
+  if (files.length > 4){
+    alert("We can only handle 4 different detailed photographs at most.")
+    for (let i = 0; i < 4; i++){
     img.push(files[i])
   }
+  }else{
+    for (let i = 0; i < files.length; i++){
+      img.push(files[i])
+    }
+  }
+}
+const thumbnailChange = (event) => {
+  const files = event.target.files || event.dataTransfer.files;
+  thumbnailImage.value = files[0]
 }
 
 const createProduct = () => {
   if (store.state.userStatus === 'vendor') {
-    //thumbnail.value = img.value.name
-    thumbnail.value = img[0].name
+    thumbnail.value = thumbnailImage.value.name
+    //thumbnail.value = img[0].name
     //pic.value = img.value.name
     let picString = ''
+    picString = thumbnail.value + ";"
     for (let i = 0; i < img.length - 1; i++){
       picString = picString + img[i].name + ';'
     }
     picString = picString + img[img.length - 1].name
     pic.value = picString
     const formData = new FormData();
-    //formData.append("image", img.value)
+    formData.append("images", thumbnailImage.value)
     for (let i = 0; i < img.length; i++){
       formData.append('images', img[i])
     }
@@ -141,6 +152,19 @@ const createProduct = () => {
           <div class="mt-4 mb-4">
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >Thumbnail Image</label
+            >
+            <input
+                accept="image/*"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder=""
+                required
+                type="file"
+                @change="thumbnailChange"
+            />
+          </div>
+          <div class="mt-4 mb-4">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >Detailed Photographs (1-4 Photographs)</label
             >
             <input
                 accept="image/*"
