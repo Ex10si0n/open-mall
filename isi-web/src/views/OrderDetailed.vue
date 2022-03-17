@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// @ts-nocheck
 import {computed, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
@@ -24,11 +25,11 @@ const userEmail = computed(() => {
 });
 
 type ProductState = {
-  pid: string;
-  pname: string;
-  price: number;
-  thumbnail: string;
-  quantity: number;
+  pid: any;
+  pname: any;
+  price: any;
+  thumbnail: any;
+  quantity: any;
 };
 
 const orderList = ref<ProductState>();
@@ -87,7 +88,7 @@ const unhold = () => {
   })
 }
 
-const buildSrc = (thumbnail: string) => {
+const buildSrc = (thumbnail) => {
   const res = "http://" + config.apiServer + ":" + config.port + "/api/img/" + thumbnail;
   return res;
 }

@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import axios from "axios";
-import {reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import config from "../config"
 import {useRouter} from 'vue-router'
 import {useStore} from 'vuex'
+
 
 const router = useRouter()
 const store = useStore()
 // const count = ref(0)
 
 const content = ref("")
+const chgViewingProduct = (pid: string) => {
+  store.commit("chgViewingProduct", pid);
+};
 type ProductState = {
   pid: string;
   pname: string;
@@ -20,6 +24,9 @@ type ProductState = {
   pic: string;
 };
 
+const products_brands = computed(() => {
+  return products.map((product) => product.brand).filter((brand, index, self) => self.indexOf(brand) === index).sort();
+});
 const result = ref("");
 
 const products = reactive([] as Array<ProductState>);
