@@ -29,7 +29,7 @@ const changeTab = (tab: string) => {
     <div
         class="inline-block text-center mx-auto fixed inset-x-0 bottom-0 z-10 bg-white border-t-1 shadow-2xl p-3"
     >
-      <div class="justify-center flex space-x-4" id="nav">
+      <div class="hidden justify-center flex space-x-4" id="nav">
         <router-link
             v-if="userStatus !== 'vendor'"
             to="/"
