@@ -2,15 +2,17 @@
 import axios from "axios";
 import {ref} from "vue";
 import config from "../config"
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore} from 'vuex'
 
 const router = useRouter()
 const store = useStore()
+const route = useRoute()
     // const count = ref(0)
 const email = ref("")
 const password = ref("")
 const userToken = ref("")
+const pid = route.params.pid
 
 const login = () => {
 
@@ -36,7 +38,11 @@ const login = () => {
       } else {
         store.commit('chgStatus', 'active')
       }
-      router.push('/')
+      if (pid === ""){
+        router.push('/')
+      }else{
+        router.push('/product/' + pid)
+      }
     } else {
       alert(res.data.status)
     }
