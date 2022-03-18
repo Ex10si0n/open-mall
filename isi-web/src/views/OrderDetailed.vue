@@ -128,7 +128,7 @@ const buildSrc = (thumbnail) => {
               v-if="info.STATUS === 'cancelled'"
               class="text-white bg-orange-400 rounded-lg p-4 mt-8 shadow-sm border-gray-300 border-b-0 rounded-b-none"
           >
-            <span class="font-bold">Status: </span>Cancelled<br>
+            <span class="font-bold">Status: </span>Cancelled by {{info.CANCELBY}}<br>
             <span class="font-bold">Purchase Date: {{ info.DATE }}<br></span>
             <span class="font-bold">Cancel Date: {{ info.CANCELDATE }}<br></span>
             <div class="pt-1 font-mono text-xs">PONO: {{ uuid }}</div>
