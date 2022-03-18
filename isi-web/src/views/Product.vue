@@ -66,8 +66,8 @@ const addToCart = () => {
     alert("Already in cart");
   }
   if (userStatus === "visitor"){
-    
-    router.push("/:pid/login")
+
+    router.push("/login")
   }
   const query =
       "http://" +
