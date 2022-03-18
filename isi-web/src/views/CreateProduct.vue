@@ -36,7 +36,17 @@ function onFileChange(event) {
   })
 }
 */
+
+const initImage = () => {
+  if (img.length > 0) {
+    while (img.length > 0) {
+      img.pop()
+    }
+  }
+}
+
 const onFileChange = (event) => {
+  initImage()
   const files = event.target.files || event.dataTransfer.files;
   if (files.length > 4){
     alert("We can only handle 4 different detailed photographs at most.")
