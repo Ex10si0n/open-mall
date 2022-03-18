@@ -9,8 +9,8 @@ export default createStore({
         userStatus: 'vendor', // active vendor visitor
         activeTab: '',
         viewingProduct: '',
-        userEmail: 'unit_test@mockemail.com',
-        userName: 'unit_test',
+        userEmail: 'test@email.com',
+        userName: 'Unit Test',
         accId: 'd9f5b7e3-03d2-4630-9788-23ecd9242167',
         currentViewOrderId: '',
         primaryAddress: {
