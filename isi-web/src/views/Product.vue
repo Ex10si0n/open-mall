@@ -67,7 +67,7 @@ const addToCart = () => {
   }
   if (userStatus === "visitor"){
 
-    router.push("/login")
+    router.push("/" + route.params.pid +"/login")
   }
   const query =
       "http://" +
