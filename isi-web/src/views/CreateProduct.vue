@@ -47,44 +47,50 @@ const thumbnailChange = (event) => {
 }
 
 const createProduct = () => {
-  if (store.state.userStatus === 'vendor') {
-    thumbnail.value = thumbnailImage.value.name
-    let picString = ''
-    picString = thumbnail.value + ";"
-    for (let i = 0; i < img.length - 1; i++){
-      picString = picString + img[i].name + ';'
-    }
-    picString = picString + img[img.length - 1].name
-    pic.value = picString
-    const formData = new FormData();
-    formData.append("images", thumbnailImage.value)
-    for (let i = 0; i < img.length; i++){
-      formData.append('images', img[i])
-    }
-    const queryImage = "http://" + config.apiServer + ":" + config.port + "/api/image/upload"
-    axios.post(queryImage, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-    }).then(() => {
-      const query = "http://" + config.apiServer + ":" + config.port + "/api/product/create"
-      axios.post(query, {
-        pName: name.value,
-        brand: brand.value,
-        price: price.value,
-        pDesc: information.value,
-        thumbnail: thumbnail.value,
-        pic: pic.value,
-      }).then((res) => {
-        if (res.data.status === 'success') {
-          router.push('/product/' + res.data.pid)
-        } else {
-          alert(res.data.status)
-        }
-      })
-    })  
+  if (name.value === "" || brand.value === "" || price.value === "" || information.value === "") {
+    alert("Please fill in all the fields.")
   } else {
-    alert("You do not have the authority to add a new product.")
+    if (store.state.userStatus === 'vendor') {
+      thumbnail.value = thumbnailImage.value.name
+      //thumbnail.value = img[0].name
+      //pic.value = img.value.name
+      let picString = ''
+      picString = thumbnail.value + ";"
+      for (let i = 0; i < img.length - 1; i++) {
+        picString = picString + img[i].name + ';'
+      }
+      picString = picString + img[img.length - 1].name
+      pic.value = picString
+      const formData = new FormData();
+      formData.append("images", thumbnailImage.value)
+      for (let i = 0; i < img.length; i++) {
+        formData.append('images', img[i])
+      }
+      const queryImage = "http://" + config.apiServer + ":" + config.port + "/api/image/upload"
+      axios.post(queryImage, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(() => {
+        const query = "http://" + config.apiServer + ":" + config.port + "/api/product/create"
+        axios.post(query, {
+          pName: name.value,
+          brand: brand.value,
+          price: price.value,
+          pDesc: information.value,
+          thumbnail: thumbnail.value,
+          pic: pic.value,
+        }).then((res) => {
+          if (res.data.status === 'success') {
+            router.push('/product/' + res.data.pid)
+          } else {
+            alert(res.data.status)
+          }
+        })
+      })
+    } else {
+      alert("You do not have the authority to add a new product.")
+    }
   }
 }
 
