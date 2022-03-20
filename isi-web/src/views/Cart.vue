@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {computed, reactive, ref} from "vue";
 import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 import axios from "axios";
 import config from "../config";
 import InputNumber from "../components/InputNumber.vue";
 
 const store = useStore();
+const router = useRouter();
 
 const userEmail = computed(() => {
   return store.state.userEmail;
@@ -98,7 +100,7 @@ const removeProduct = (pid: string) => {
       "/" +
       accId.value;
   axios.get(query);
-  location.reload(); // responsive alternative
+  router.push("/cart/");
 };
 </script>
 

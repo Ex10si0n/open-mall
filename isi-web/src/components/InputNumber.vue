@@ -4,8 +4,10 @@ import {computed} from "vue";
 import axios from "axios";
 import config from "../config";
 import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 
 const store = useStore();
+const router = useRouter();
 
 const accId = computed(() => {
   return store.state.accId;
@@ -28,9 +30,9 @@ const handleChange = (v: number) => {
       v;
   // console.log(query);
   axios.get(query);
-  location.reload(); // responsive alternative
-  // router.push("/cart/");
-};
+  // location.reload(); // responsive alternative
+  router.push("/cart/");
+}
 </script>
 
 <template>
