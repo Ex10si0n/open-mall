@@ -3,13 +3,17 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import {computed} from "vue";
 import {useStore} from "vuex";
+import config from "./config";
+import axios from "axios";
+import {ref} from "vue";
 
 const store = useStore();
-
+const email = ref("")
+const password = ref("")
 const userStatus = computed(() => {
   return store.state.userStatus;
 });
-
+//const userStatus = ref("")
 const activeTab = computed(() => {
   return store.state.activeTab;
 });
@@ -19,6 +23,23 @@ const activeTab = computed(() => {
 const changeTab = (tab: string) => {
   store.commit("chgActiveTab", tab);
 };
+
+const query_token =
+    "http://" + config.apiServer + ":" + config.port + "/api/current_user";
+  axios.get(query_token,{headers:{'Authorization':"Bearer " + localStorage.getItem('Authorization')}}).then((res) => {
+      store.commit('chgUser', {
+          accId: res.data.uuid,
+          userEmail: res.data.email,
+          userName: res.data.email.value.split('@')[0]})
+      alert(res.data.uuid)
+      if (res.data.type === 'vendor') {
+        userStatus: 'vendor'
+        store.commit('chgStatus', 'vendor')
+      } else {
+        userStatus: 'active'
+        store.commit('chgStatus', 'active')
+      }
+  });
 </script>
 
 <template>

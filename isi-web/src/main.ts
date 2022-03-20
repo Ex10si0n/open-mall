@@ -11,6 +11,8 @@ app.use(router)
 app.use(store)
 app.use(naive)
 app.mount('#app')
+import {getToken} from "./storage"
+axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('Authorization');
 
 axios.interceptors.request.use(
     config => {
@@ -18,7 +20,7 @@ axios.interceptors.request.use(
         config.headers = {};
       }
       if (localStorage.getItem('Authorization')) {
-        config.headers.Authorization = localStorage.getItem('Authorization');
+        config.headers.Authorization = "Bearer " + localStorage.getItem('Authorization');
       }
  
       return config;

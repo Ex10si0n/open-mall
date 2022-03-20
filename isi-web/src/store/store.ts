@@ -1,22 +1,22 @@
 import {createStore} from 'vuex'
-
+import {saveToken, getToken} from "../storage"
 
 // @ts-ignore
 // @ts-ignore
 export default createStore({
     state: {
         hello: 'Vue-SPA-Quickstart',
-        userStatus: 'vendor', // active vendor visitor
+        userStatus: 'visitor', // active vendor visitor
         activeTab: '',
         viewingProduct: '',
-        userEmail: 'unit_test@mockemail.com',
-        userName: 'unit_test',
-        accId: 'd9f5b7e3-03d2-4630-9788-23ecd9242167',
+        userEmail: '',
+        userName: '',
+        accId: '',
         currentViewOrderId: '',
         primaryAddress: {
-            addrId: '7cd49540-3d41-4eb3-b530-3a40414473d7',
+            addrId: '',
         },
-        Authorization: localStorage.getItem('Authorization') ? localStorage.getItem('Authorization') : ""
+        Authorization: getToken() 
     },
     mutations: {
         setPrimaryAddress(state, addrId) {
@@ -49,9 +49,9 @@ export default createStore({
             state.primaryAddress.addrId = '';
             state.activeTab = '';
         },
-        chgLogin(state, user){
-            state.Authorization = user.Authorization;
-            localStorage.setItem('Authorization', user.Authorization);
+        chgLogin(state, authorization){
+            state.Authorization = authorization;
+            localStorage.setItem('Authorization', authorization);
         }
     },
     actions: {}

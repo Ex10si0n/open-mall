@@ -34,7 +34,19 @@ type AddressState = {
 };
 
 const addr = reactive([] as Array<AddressState>);
-
+const query_token =
+    "http://" + config.apiServer + ":" + config.port + "/api/current_user";
+axios.get(query_token,{headers:{'Authorization':"Bearer " + localStorage.getItem('Authorization')}}).then((res) => {
+  store.commit('chgUser', {
+        accId: res.data.uuid,
+        userEmail: res.data.email,
+        userName: res.data.email.value.split('@')[0]})
+    if (res.data.type === 'vendor') {
+      store.commit('chgStatus', 'vendor')
+    } else {
+      store.commit('chgStatus', 'active')
+    }
+});
 const query =
     "http://" + config.apiServer + ":" + config.port + "/api/address/" + accId.value;
 axios.get(query).then((res) => {

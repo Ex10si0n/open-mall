@@ -87,6 +87,21 @@ def login_check(email: str, password: str):
         playload['status'] = 'error'
         return playload
 
+def get_user(email: str):
+    playload = {'email':email, 'uuid': '', 'type': ''}
+    connection = create_connection()
+    with connection:
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM `account` WHERE `email`=%s"
+            cursor.execute(sql, (email,))
+            result = cursor.fetchone()
+            if (result is None):
+                return playload
+                   
+            else:
+                playload['uuid'] = result['ACCID']
+                playload['type'] = result['ACCTYPE']
+                return playload
 
 def delete_account(email: str, password: str):
     """ delete a user by email permanently

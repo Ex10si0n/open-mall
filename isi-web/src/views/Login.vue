@@ -4,6 +4,7 @@ import {ref} from "vue";
 import config from "../config"
 import { useRouter } from 'vue-router'
 import { useStore} from 'vuex'
+import qs from 'qs';
 
 const router = useRouter()
 const store = useStore()
@@ -14,9 +15,9 @@ const userToken = ref("")
 
 const login = () => {
 
-  const query = "http://" + config.apiServer + ":" + config.port + "/api/login_check/"
+  const query1 = "http://" + config.apiServer + ":" + config.port + "/api/login_check/"
   axios
-      .post(query,
+      .post(query1,
           {
             email: email.value,
             password: password.value
@@ -28,9 +29,6 @@ const login = () => {
         userEmail: email.value,
         userName: email.value.split('@')[0]
       })
-      store.commit('chgLogin', {
-        Authorization: res.data.token
-      })
       if (res.data.type === 'vendor') {
         store.commit('chgStatus', 'vendor')
       } else {
@@ -41,6 +39,13 @@ const login = () => {
       alert(res.data.status)
     }
   })
+  const query2 = "http://" + config.apiServer + ":" + config.port + "/api/token/"
+  axios.post(query2,qs.stringify({username: email.value, password: password.value})).then((res) => {
+    store.commit('chgLogin', {
+        Authorization: res.data.access_token});
+    localStorage.setItem('Authorization', res.data.access_token);
+  })
+  
 }
 
 

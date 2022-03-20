@@ -11,6 +11,8 @@ const userEmail = computed(() => {
   return store.state.userEmail;
 });
 
+const Token = localStorage.getItem('Authorization');
+
 type ProductState = {
   pid: string;
   pname: string;
@@ -29,7 +31,19 @@ const accId = computed(() => {
 const subtotal = ref(0);
 
 const products = reactive([] as Array<ProductState>);
-
+/*const query_token =
+    "http://" + config.apiServer + ":" + config.port + "/api/current_user";
+  axios.get(query_token,{headers:{'Authorization':"Bearer " + localStorage.getItem('Authorization')}}).then((res) => {
+    store.commit('chgUser', {
+          accId: res.data.uuid,
+          userEmail: res.data.email,
+          userName: res.data.email.value.split('@')[0]})
+      if (res.data.type === 'vendor') {
+        store.commit('chgStatus', 'vendor')
+      } else {
+        store.commit('chgStatus', 'active')
+      }
+  });*/
 const query =
     "http://" + config.apiServer + ":" + config.port + "/api/cart/products/" + accId.value;
 axios.get(query).then((res) => {
@@ -97,6 +111,9 @@ const removeProduct = (pid: string) => {
           <div class="flex items-start justify-between">
             <h2 class="text-left text-2xl font-medium text-gray-900">
               Shopping Cart
+              <div class="text-sm text-gray-500">
+                {{ Token }}
+              </div>
               <div class="text-sm text-gray-500">
                 {{ userEmail }}
               </div>

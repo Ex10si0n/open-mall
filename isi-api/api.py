@@ -1,17 +1,30 @@
+import email
 import os
 import re
 import sys
-from fastapi import FastAPI, Form, File, UploadFile
+import jwt
+from tkinter import E
+from click import password_option
+from fastapi import Depends, FastAPI, Form, File, HTTPException, UploadFile, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jwt import PyJWTError
+from datetime import datetime, timedelta
+from typing import Optional
 
+SECRET_KEY = "6a5c696a4469597fe2962bcd83e05846fe86ec5bbde835c7983955a295e092da"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 10080
 
 fpath = os.path.join(os.path.dirname(__file__), 'db')
 sys.path.append(fpath)
 
 app = FastAPI()
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 
 origins = ["*"]
 
@@ -23,6 +36,47 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str = Field(default='Bearer')
+
+class TokenData(BaseModel):
+    username: str = None
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=10080)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    TokenVerifyException = HTTPException(
+        status_code= 401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise TokenVerifyException
+        token_data = TokenData(username=username)
+    except PyJWTError:
+        raise TokenVerifyException
+    from db.database import get_user
+    user = get_user(email=token_data.username)
+    if user is None:
+        raise TokenVerifyException
+    return user
+
+class User(BaseModel):
+    email: str
+    accId: str
+    type: str
 
 class LoginData(BaseModel):
     # remember: bool
@@ -64,6 +118,7 @@ class UpdateProductData(BaseModel):
     pDesc: str
     thumbnail: str
     pic: str
+
 
 @app.get("/api/")
 async def root():
@@ -131,6 +186,25 @@ def update_product_from_cart(pid: str, accId: str, quantity: int):
 async def login(loginData: LoginData):
     from db.database import login_check
     return login_check(loginData.email, loginData.password)
+
+@app.post('/api/token/')
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    from db.database import login_check
+    user = login_check(form_data.username, form_data.password)
+    if user['status'] == 'success':
+        access_token_expire = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(data={"sub": form_data.username},expires_delta=access_token_expire)
+    else:
+        raise HTTPException(
+        status_code= 401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    return {"access_token": access_token, "token_type": "bearer"}   
+
+@app.get('/api/current_user/')
+async def read_user(current_user: User = Depends(get_current_user)):
+    return current_user
 
 @app.post('/api/register/')
 def register(registerData: RegisterData):
