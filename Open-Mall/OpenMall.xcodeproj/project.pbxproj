@@ -29,6 +29,7 @@
 		589DE8C327E094340097D021 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
 		589DE8C527E0943B0097D021 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		589DE8C727E094430097D021 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		58FDFD3327E46CA700EB82F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +62,7 @@
 		589DE8AF27E093D50097D021 /* OpenMall */ = {
 			isa = PBXGroup;
 			children = (
+				58FDFD3327E46CA700EB82F8 /* Info.plist */,
 				589DE8BE27E0940F0097D021 /* Views */,
 				589DE8B027E093D50097D021 /* OpenMallApp.swift */,
 				589DE8B427E093D50097D021 /* Assets.xcassets */,
@@ -300,6 +302,7 @@
 				DEVELOPMENT_TEAM = JA396LY6BC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OpenMall/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -329,6 +332,7 @@
 				DEVELOPMENT_TEAM = JA396LY6BC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OpenMall/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

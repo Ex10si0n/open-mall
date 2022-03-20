@@ -111,10 +111,10 @@ const removeProduct = (pid: string) => {
           <div class="flex items-start justify-between">
             <h2 class="text-left text-2xl font-medium text-gray-900">
               Shopping Cart
+<!--              <div class="text-sm text-gray-500">-->
+<!--              </div>-->
               <div class="text-sm text-gray-500">
-                {{ Token }}
-              </div>
-              <div class="text-sm text-gray-500">
+<!--                {{ Token }}-->
                 {{ userEmail }}
               </div>
             </h2>

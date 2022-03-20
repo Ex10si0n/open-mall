@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
     var body: some View {
-        let urlString: String = "https://isi-open-mall.surge.sh/#/profile"
+        let urlString: String = "http://isi-open-mall.surge.sh/#/profile"
             VStack {
 //                Text("Open Mall").font(.headline)
 //                Text("Email").font(.subheadline)

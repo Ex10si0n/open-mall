@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OrderView: View {
     var body: some View {
-        let urlString: String = "https://isi-open-mall.surge.sh/#/order"
+        let urlString: String = "http://isi-open-mall.surge.sh/#/order"
             VStack {
                 WebView(url: URL(string: urlString)!)
                     .cornerRadius(0)

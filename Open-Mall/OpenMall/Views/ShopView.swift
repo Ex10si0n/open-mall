@@ -9,15 +9,15 @@ import SwiftUI
 
 struct ShopView: View {
     var body: some View {
-        let urlString: String = "https://isi-open-mall.surge.sh/#/"
-            VStack {
+        let urlString: String = "http://isi-open-mall.surge.sh/#/"
+        VStack {
 //                Text("Open Mall").font(.headline)
 //                Text("Email").font(.subheadline)
-                WebView(url: URL(string: urlString)!)
-                    .cornerRadius(0)
-                    .navigationBarTitleDisplayMode(.inline)
-            }
+            WebView(url: URL(string: urlString)!)
+                .cornerRadius(0)
+                .navigationBarTitleDisplayMode(.inline)
         }
+    }
 }
 
 

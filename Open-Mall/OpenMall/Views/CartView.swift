@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CartView: View {
     var body: some View {
-        let urlString: String = "https://isi-open-mall.surge.sh/#/cart"
+        let urlString: String = "http://isi-open-mall.surge.sh/#/cart"
 
             VStack {
                 WebView(url: URL(string: urlString)!)
