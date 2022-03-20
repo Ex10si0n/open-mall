@@ -10,6 +10,14 @@ const router = useRouter()
 const store = useStore()
 // const count = ref(0)
 
+const cnt = ref(2)
+
+const currentPage = ref(1);
+
+const sortPrice = ref("default")
+
+const brandFilter = ref("all")
+
 const content = ref("")
 const chgViewingProduct = (pid: string) => {
   store.commit("chgViewingProduct", pid);
@@ -30,6 +38,15 @@ const products_brands = computed(() => {
 const result = ref("");
 
 const products = reactive([] as Array<ProductState>);
+
+const initProduct = () => {
+  if(products.length > 0){
+    while(products.length > 0){
+      products.pop()
+    }
+  }
+}
+
 const search = () => {
   var searchResult1 = true
   var searchResult2 = true
@@ -38,6 +55,7 @@ const search = () => {
       .then((res) => {
         if (res.data.status === 'success') {
           const productList = res.data.products;
+          initProduct()
           productList.forEach((product: ProductState) => {
             product.pic =
                 "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
@@ -83,6 +101,71 @@ const search = () => {
         }
       })
 }
+
+const filtered_products = computed(() => {
+
+  if (brandFilter.value === "all") {
+    if (sortPrice.value === "default") {
+      return products;
+    } else if (sortPrice.value === "l2h") {
+      return products.sort((a, b) => a.price - b.price);
+    } else if (sortPrice.value === "h2l") {
+      return products.sort((a, b) => b.price - a.price);
+    }
+  } else {
+    if (sortPrice.value === 'l2h') {
+      return products.sort((a, b) => a.price - b.price).filter((product) => product.brand === brandFilter.value);
+    } else if (sortPrice.value === 'h2l') {
+      return products.sort((a, b) => b.price - a.price).filter((product) => product.brand === brandFilter.value);
+    } else {
+      return products.filter((product) => product.brand === brandFilter.value);
+    }
+  }
+});
+
+const maxPage = computed(() => {
+  if (Math.ceil(filtered_products.value.length / cnt.value) === 0){
+    return 1
+  }else{
+    return Math.ceil(filtered_products.value.length / cnt.value);
+  }
+});
+
+const displayed_products = computed(() => {
+  const start = (currentPage.value - 1) * cnt.value;
+  const end = start + cnt.value;
+  return filtered_products.value.slice(start, end);
+});
+
+const chgPage = () => {
+  // console.log(displayed_products.value);
+
+  if (typeof currentPage.value === "number") {
+    if (currentPage.value > maxPage.value) {
+      currentPage.value = maxPage.value;
+    } else if (currentPage.value < 1) {
+      currentPage.value = 1;
+    }
+  } else {
+    currentPage.value = 1;
+  }
+  window.scrollTo(0,0);
+};
+
+const prevPage = () => {
+  currentPage.value = currentPage.value - 1;
+  chgPage()
+};
+
+const nextPage = () => {
+  currentPage.value = currentPage.value + 1;
+  chgPage()
+}
+
+const initPage = () => {
+  currentPage.value = 1;
+  chgPage()
+}
 </script>
 <template>
   <div class="flex items-center justify-center min-h-full px-4 py-6 bg-red sm:px-6 lg:px-8">
@@ -126,7 +209,7 @@ const search = () => {
       <div><p>{{ result }}</p></div>
       <div class="grid grid-cols-1 gap-3">
         <div
-            v-for="product in products"
+            v-for="product in displayed_products"
             class="max-w-md bg-white border rounded-lg grid-cols-1 shadow-sm"
             @click="
             $router.push('/product/' + product.pid);
@@ -152,6 +235,21 @@ const search = () => {
             </div>
           </div>
         </div>
+      </div>
+       <div class="w-full">
+        <div class="bg-black p-2 bg-white rounded-lg text-white rounded-b-none shadow">
+          Page {{ currentPage }} of {{ maxPage }}
+          </div>
+          <div class="p-2 bg-white rounded-lg shadow rounded-t-none">
+            <div class="text-lg text-left">
+              <input @update="chgPage" class="h-6 rounded w-full text-center bg-slate-100 font-mono h-6 text-blue-500" v-model="currentPage" type="text"> <span class="p-2 "></span>
+          </div>
+          <div class="mt-2 grid grid-cols-2 gap-2">
+            <button @click="prevPage" class="hover:bg-slate-100 hover:shadow-none border text-blue-500 h-14 rounded h-6 shadow">Previous</button>
+            <button @click="nextPage" class="hover:bg-slate-100 hover:shadow-none border text-blue-500 h-14 rounded h-6 shadow">Next</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

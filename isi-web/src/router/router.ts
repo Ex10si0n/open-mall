@@ -12,6 +12,7 @@ export default createRouter({
         {path: "/", component: Shop},
         {path: "/about", component: () => import(/* webpackChunkName: "home" */ "../views/About.vue")},
         {path: "/login", component: () => import(/* webpackChunkName: "home" */ "../views/Login.vue")},
+        {path: "/:pid/login", component: () => import(/* webpackChunkName: "home" */ "../views/Login.vue")},
         {path: "/signup", component: () => import(/* webpackChunkName: "home" */ "../views/Signup.vue")},
         {
             path: "/change_password",

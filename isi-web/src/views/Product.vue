@@ -65,6 +65,10 @@ const addToCart = () => {
   if (buttonLabel.value === "In Shopping Cart") {
     alert("Already in cart");
   }
+  if (userStatus === "visitor"){
+
+    router.push("/" + route.params.pid +"/login")
+  }
   const query =
       "http://" +
       config.apiServer +
