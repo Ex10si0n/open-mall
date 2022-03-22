@@ -48,6 +48,7 @@ export default createStore({
             state.accId = '';
             state.primaryAddress.addrId = '';
             state.activeTab = '';
+            localStorage.setItem('Authorization', ' ');
         },
         chgLogin(state, authorization){
             state.Authorization = authorization;
