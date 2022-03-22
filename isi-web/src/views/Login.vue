@@ -36,7 +36,7 @@ const login = () => {
       } else {
         store.commit('chgStatus', 'active')
       }
-      if (pid === ""){
+      if (pid === undefined){
         router.push('/')
       }else{
         router.push('/product/' + pid)
