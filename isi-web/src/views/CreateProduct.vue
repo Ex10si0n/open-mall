@@ -47,6 +47,9 @@ const thumbnailChange = (event) => {
 }
 
 const createProduct = () => {
+  if (thumbnailImage.value.name === "" || img.length == 0){
+    alert("Please fill in at least one thumbnail image and at least one detailed image.")
+  }else{
   if (name.value === "" || brand.value === "" || price.value === "" || information.value === "") {
     alert("Please fill in all the fields.")
   } else {
@@ -91,6 +94,7 @@ const createProduct = () => {
     } else {
       alert("You do not have the authority to add a new product.")
     }
+  }
   }
 }
 
