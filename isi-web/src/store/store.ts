@@ -51,7 +51,6 @@ export default createStore({
         },
         chgLogin(state, user){
             state.Authorization = user.Authorization;
-            localStorage.setItem('Authorization', user.Authorization);
         }
     },
     actions: {}
