@@ -1,8 +1,16 @@
 import {createStore} from 'vuex'
-import {saveToken, getToken} from "../storage"
+import VuexPersist from 'vuex-persist';
+
+
 
 // @ts-ignore
 // @ts-ignore
+
+const vuexLocalStorage = new VuexPersist({
+    key: 'vuex',
+    storage: window.localStorage, // or window.sessionStorage or localForage
+})
+
 export default createStore({
     state: {
         hello: 'Vue-SPA-Quickstart',
@@ -50,10 +58,10 @@ export default createStore({
             state.activeTab = '';
             localStorage.setItem('Authorization', ' ');
         },
-        chgLogin(state, authorization){
-            state.Authorization = authorization;
-            localStorage.setItem('Authorization', authorization);
+        chgLogin(state, user){
+            state.Authorization = user.Authorization;
         }
     },
-    actions: {}
+    actions: {},
+    plugins: [vuexLocalStorage.plugin]
 })
