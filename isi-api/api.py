@@ -119,6 +119,8 @@ class UpdateProductData(BaseModel):
     thumbnail: str
     pic: str
 
+class DeleteImageData(BaseModel):
+    picName: str
 
 @app.get("/api/")
 async def root():
@@ -303,4 +305,8 @@ async def upload_image(images: List[UploadFile]):
         path = os.path.join(fpath, 'img/' + image.filename)
         with open(path, 'wb') as f:
             f.write(image.file.read())
-    
+
+@app.post('/api/image/delete')
+async def delete_image(deleteImageData: DeleteImageData):
+    path = os.path.join(fpath, 'img/' + deleteImageData.picName)
+    os.remove(path)

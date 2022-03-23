@@ -6,7 +6,7 @@ import {saveToken, getToken} from "../storage"
 export default createStore({
     state: {
         hello: 'Vue-SPA-Quickstart',
-        userStatus: 'visitor', // active vendor visitor
+        userStatus: 'vendor', // active vendor visitor
         activeTab: '',
         viewingProduct: '',
         userEmail: '',

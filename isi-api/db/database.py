@@ -1471,8 +1471,8 @@ if __name__ == '__main__':
     # res = create_account("Steve", 'p1908326@ipm.edu.mo',
     #                      password='somepassword', accType='admin')
     # res = login_check("p1908326@ipm.edu.mo", password='newpassword')
-    res = create_product("Nintendo Switch with Neon Blue and Neon Red Joy‑Con - HAC-001(-01)", "Nintendo", 2340, "3 Play Styles: TV Mode, Tabletop Mode, Handheld Mode. 6.2-inch, multi-touch capacitive touch screen. 4.5-9+ Hours of Battery Life will vary depending on software usage conditions. Connects over Wi-Fi for multiplayer gaming; Up to 8 consoles can be connected for local wireless multiplayer. Model number: HAC-001(-01",
-                       "Switch1.jpg", "Switch2.jpg")
+    # res = create_product("Nintendo Switch with Neon Blue and Neon Red Joy‑Con - HAC-001(-01)", "Nintendo", 2340, "3 Play Styles: TV Mode, Tabletop Mode, Handheld Mode. 6.2-inch, multi-touch capacitive touch screen. 4.5-9+ Hours of Battery Life will vary depending on software usage conditions. Connects over Wi-Fi for multiplayer gaming; Up to 8 consoles can be connected for local wireless multiplayer. Model number: HAC-001(-01",
+    #                   "Switch1.jpg", "Switch2.jpg")
     # res = delete_account("p1908326@ipm.edu.mo", "somepassword")
     # res = update_password("p1908326@ipm.edu.mo", "somepassword", "newpassword")
     # res = get_products_by_name("iPhone")
@@ -1494,8 +1494,8 @@ if __name__ == '__main__':
     #    'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', 'pending')
     # res = get_purchase_by_id('0c09c90f-96f3-40ea-8e6d-b194525da7c3', 'c3f58d35-e6c1-4185-bd49-c99a9ae1f9fa', '98409f31-ee40-404c-b6c5-896c85e3878a')
     # res = update_status('33e60f5e-1d66-401c-8a40-2d955e4574e2', 'pending')
-    # res = update_product('11a45010-d203-438c-98ef-2ed2012b2eaf', 'iPhone 13 pro', 'Apple', '9899', 'Phone',
-    #                      'img/iphone.png', 'img/iphone-2.png')
+    res = update_product('679d16a9-db09-42e1-9f59-f9c530a6711f', 'Nike Air Force 1 Mid 07 LV8', 'Nike', '819', 'The "Nike Athletic Club," Nike\'s fictional athletics team, brings \'70s inspiration to streetwear staples. Mixing retro fun with iconic hoops style, this AF1 delivers a fresh spin on what you know best: stitched overlays, bold colors and the perfect amount of hoops style to make heads turn. Era-echoing leather is smoother than backboard glass, while letterman style "AF-1" patching on the heel adds a varsity finish.',
+                          '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp', '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp;8d56312f-79ac-4fb8-836e-0326817ddc1e.webp;b639c2f4-e94b-412c-a57c-be38c5e1c02d.webp')
     # res = create_product('Nike Air Force 1 Mid 07 LV8', 'Nike', '819', 'Shoes',
     #                     '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp', '7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp;8d56312f-79ac-4fb8-836e-0326817ddc1e.webp;7e33824f-b8ce-460f-8387-c231c3e0c7b1.webp')
     # res = get_all_purchase()
