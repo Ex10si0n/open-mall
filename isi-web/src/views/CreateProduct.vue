@@ -18,11 +18,13 @@ const pic = ref("")
 const file = new File([],'')
 const thumbnailImage = ref(file)
 const img = reactive([] as Array<File>)
+const imgList = ref([])
 
 const initImage = () => {
   if(img.length > 0){
     while(img.length > 0){
       img.pop()
+      imgList.value.pop()
     }
   }
 }
@@ -31,7 +33,7 @@ const onFileChange = (event) => {
   initImage()
   const files = event.target.files || event.dataTransfer.files;
   if (files.length > 4){
-    alert("We can only handle 4 different detailed photographs at most.")
+    alert("We can only handle at most 4 different detailed photographs.")
     for (let i = 0; i < 4; i++){
     img.push(files[i])
   }
@@ -40,17 +42,29 @@ const onFileChange = (event) => {
       img.push(files[i])
     }
   }
+  for(let i = 0; i < img.length; i++){
+      let reader = new FileReader()
+      reader.readAsDataURL(img[i])
+      reader.onload = function (){
+        let dataURL = reader.result as string
+        imgList.value.push(dataURL)
+      }
+    }
 }
 const thumbnailChange = (event) => {
   const files = event.target.files || event.dataTransfer.files;
   thumbnailImage.value = files[0]
+  let reader = new FileReader()
+  reader.readAsDataURL(thumbnailImage.value)
+  reader.onload = function (){
+  let dataURL = reader.result as string
+  let output = document.getElementById('ThumbnailImage') as HTMLImageElement
+  output.src = dataURL
+  }
 }
 
 const createProduct = () => {
-  if (thumbnailImage.value.name === "" || img.length == 0){
-    alert("Please fill in at least one thumbnail image and at least one detailed image.")
-  }else{
-  if (name.value === "" || brand.value === "" || price.value === "" || information.value === "") {
+  if (name.value === "" || brand.value === "" || price.value === "" || information.value === "" || thumbnailImage.value.name === "" || img.length == 0) {
     alert("Please fill in all the fields.")
   } else {
     if (store.state.userStatus === 'vendor') {
@@ -95,7 +109,7 @@ const createProduct = () => {
       alert("You do not have the authority to add a new product.")
     }
   }
-  }
+  
 }
 
 </script>
@@ -153,6 +167,7 @@ const createProduct = () => {
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >Thumbnail Image</label
             >
+            <img class="shadow-xl rounded-xl border" id="ThumbnailImage">
             <input
                 accept="image/*"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -166,6 +181,9 @@ const createProduct = () => {
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >Detailed Photographs (1-4 Photographs)</label
             >
+            <div v-for="pic in imgList">
+              <img :src="pic" class="shadow-xl rounded-xl border">
+            </div>
             <input
                 accept="image/*"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
