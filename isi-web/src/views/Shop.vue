@@ -26,6 +26,7 @@ type ProductState = {
 };
 
 const products = reactive([] as Array<ProductState>);
+const productsAll = reactive ([] as Array<ProductState>);
 
 const cnt = ref(8)
 
@@ -35,6 +36,9 @@ const sortPrice = ref("default")
 
 const brandFilter = ref("all")
 
+const content = ref("")
+
+const result = ref("")
 
 // const updateCnt = () => {
 //   cnt.value = cnt.value + 4;
@@ -56,6 +60,7 @@ axios
             "/api/img/" +
             product.thumbnail;
         products.push(product as ProductState);
+        productsAll.push(product as ProductState);
       });
     })
     .catch((error) => console.log(error));
@@ -66,8 +71,73 @@ const chgViewingProduct = (pid: string) => {
 
 chgViewingProduct("");
 
-const search = () => {
+/*const search = () => {
   router.push("/search")
+}*/
+
+const initProduct = () => {
+  if(products.length > 0){
+    while(products.length > 0){
+      products.pop()
+    }
+  }
+}
+
+const search = () => {
+  var searchResult1 = true
+  var searchResult2 = true
+  axios
+      .get("http://" + config.apiServer + ":" + config.port + "/api/search/name/" + content.value)
+      .then((res) => {
+        if (res.data.status === 'success') {
+          const productList = res.data.products;
+          initProduct()
+          productList.forEach((product: ProductState) => {
+            product.pic =
+                "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
+            product.thumbnail =
+                "http://" +
+                config.apiServer +
+                ":" +
+                config.port +
+                "/api/img/" +
+                product.thumbnail;
+            products.push(product as ProductState);
+          })
+        } else if (res.data.status === 'none'){
+          searchResult1 = false
+          if(store.state.userStatus != 'vendor'){
+            result.value = "None"
+            initProduct()
+          }
+        }
+        if (store.state.userStatus === 'vendor') {
+          axios
+          .get("http://" + config.apiServer + ":" + config.port + "/api/search/id/" + content.value)
+          .then((res) => {
+            if (res.data.status === 'success') {
+              searchResult2 = true;
+              const product = res.data.product;
+              product.pic =
+                "http://" + config.apiServer + ":" + config.port + "/api/img/" + product.pic;
+              product.thumbnail =
+                "http://" +
+                config.apiServer +
+                ":" +
+                config.port +
+                "/api/img/" +
+                product.thumbnail;
+              products.push(product as ProductState);
+            } else if (res.data.status === 'none'){
+                searchResult2 = false;
+              if (!searchResult1 && !searchResult2) {
+                result.value = "None"
+                initProduct()
+              }
+            }
+          })
+        }
+      })
 }
 
 const userName = computed(() => {
@@ -100,7 +170,11 @@ const filtered_products = computed(() => {
 });
 
 const maxPage = computed(() => {
-  return Math.ceil(filtered_products.value.length / cnt.value);
+    if (Math.ceil(filtered_products.value.length / cnt.value) === 0){
+    return 1
+  }else{
+    return Math.ceil(filtered_products.value.length / cnt.value);
+  }
 });
 
 const displayed_products = computed(() => {
@@ -181,7 +255,9 @@ const initPage = () => {
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="button-addon2"
-                @click="search"
+                v-model="content"
+                @keyup.enter="search"
+                autofocus
             />
             <div class="grid grid-cols-2 gap-3">
               <select @change="initPage()" v-model="brandFilter" class="col-span-1 bg-white rounded-lg w-full p-2 mt-4 mb-3 shadow-2xl">
@@ -199,6 +275,7 @@ const initPage = () => {
           </div>
         </div>
       </div>
+      <div><p>{{ result }}</p></div>
       <div class="grid grid-cols-1 gap-3">
         <div
             v-for="product in displayed_products"
