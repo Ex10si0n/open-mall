@@ -77,7 +77,7 @@ const viewingProduct = computed(() => {
         <div class="text-2xl">Manage Addresses</div>
         <div class="text-sm text-gray-500">{{ userEmail }}</div>
       </h2>
-      <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-lg">
+      <div class="bg-white w-full rounded-lg overflow-hidden border shadow-lg">
         <div v-for="a in addr">
           <hr/>
           <div

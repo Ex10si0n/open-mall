@@ -105,7 +105,7 @@ const removeProduct = (pid: string) => {
 
 <template>
   <!-- This example requires Tailwind CSS v2.0+ -->
-  <div class="max-w-screen">
+  <div class="max-w-screen m-2">
     <div class="grid md:grid-cols-1 lg:grid-cols-3">
       <div class="lg:col-span-2">
         <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
