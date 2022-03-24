@@ -98,8 +98,9 @@ const buildSrc = (thumbnail) => {
 <template>
   <!-- This example requires Tailwind CSS v2.0+ -->
   <div class="max-w-screen">
-    <div class="grid md:grid-cols-1 lg:grid-cols-3">
-      <div class="lg:col-span-2">
+    <div class="grid md:grid-cols-1 lg:grid-cols-5">
+      <div class="lg:col-span-1"></div>
+      <div class="lg:col-span-3">
         <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
           <router-link to="/order">
             <div class="pb-3 text-indigo-800">

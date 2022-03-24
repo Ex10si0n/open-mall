@@ -154,7 +154,7 @@ const changeTab = (tab: string) => {
           <div v-else class="text-xs text-gray-800 text-center">Login</div>
         </router-link>
         <router-link
-            v-if="userStatus !== 'vendor'"
+            v-if="userStatus !== 'vendor' && userStatus !== 'visitor'"
             to="/cart"
             class="rounded-lg px-5 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
             :class="{ active: activeTab === 'cart' }"
@@ -186,7 +186,7 @@ const changeTab = (tab: string) => {
                 fill="#1C1C1E"
             />
           </svg>
-          <div v-if="activeTab !== 'cart'" class="text-xs text-gray-500 text-center">
+          <div v-if="activeTab !== 'cart' " class="text-xs text-gray-500 text-center">
             Cart
           </div>
           <div v-else class="text-xs text-gray-800 text-center">Cart</div>
