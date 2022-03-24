@@ -13,27 +13,67 @@ const password = ref("")
 const passwordVal = ref("")
 const name = ref("")
 
-const createAccount = () => {
-  if (passwordVal.value === password.value) {
-    // create account
-    const query = "http://" + config.apiServer + ":" + config.port + "/api/register/"
-    axios.post(query, {
-      email: email.value,
-      password: password.value
-    }).then((res) => {
-      if (res.data.status === 'success') {
-        console.log(email.value + " created account")
-        store.commit('chgUser', {
-          accId: res.data.uuid,
-          userEmail: email.value,
-          userName: name.value,
-        })
-        store.commit('chgStatus', 'active')
-        router.push('/address_list/create')
-      } else {
-        alert(res.data.status)
+
+const checkPassword = () => {
+  let numberFlag = false
+  let capitalFlag = false
+  if (password.value.length >= 6) {
+    for (var char of password.value) {
+      for (var digit of ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) {
+        if (char == digit) {
+          numberFlag = true
+          break
+        }
       }
-    })
+      for (var letter of ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']) {
+        if (char == letter) {
+          capitalFlag = true
+          break
+        }
+      }
+    }
+    if (numberFlag == true && capitalFlag == true) {
+      return true
+    } else if (numberFlag == false && capitalFlag == false) {
+      alert("At least one digit\nAt least one capital letter")
+      return false
+    } else if (numberFlag == false && capitalFlag == true) {
+      alert("At least one digit")
+      return false
+    } else {
+      alert("At least one capital letter")
+      return false
+    }
+  } else {
+    alert("At least 6 characters")
+    return false
+  }
+}
+
+const createAccount = () => {
+  if (checkPassword()) {
+    if (passwordVal.value === password.value) {
+      // create account
+      const query = "http://" + config.apiServer + ":" + config.port + "/api/register/"
+      axios.post(query, {
+        email: email.value,
+        password: password.value
+      }).then((res) => {
+        if (res.data.status === 'success') {
+          console.log(email.value + " created account")
+          store.commit('chgUser', {
+            accId: res.data.uuid,
+            userEmail: email.value,
+            userName: name.value,
+          })
+          store.commit('chgStatus', 'active')
+          router.push('/address_list/create')
+        } else {
+          alert(res.data.status)
+        }
+      })
+    }
+
   }
 }
 </script>

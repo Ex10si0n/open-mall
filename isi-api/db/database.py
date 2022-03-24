@@ -1406,6 +1406,9 @@ def unhold_purchase(pono: str):
                 status = result['STATUS']
                 if(status == 'hold'):
                     update_status(pono, 'shipped')
+                    sql = "UPDATE `purchase` SET `SHIPDATE` = %s WHERE `PONO` = %s"
+                    cursor.execute(sql, (date.today().strftime("%Y-%m-%d"), pono))
+                    connection.commit()
                     playload['status'] = 'success'
                     return playload
                 else:

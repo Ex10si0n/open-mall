@@ -66,7 +66,6 @@ const addToCart = () => {
     alert("Already in cart");
   }
   if (userStatus === "visitor"){
-
     router.push("/" + route.params.pid +"/login")
   }
   const query =
@@ -138,6 +137,13 @@ const editProduct = () => {
           <div class="inline text-md">Go Back</div>
         </div>
       </router-link>
+      <router-link v-else-if="activeTab === 'cart'" to="/cart">
+        <div class="text-orange-500">
+          <div class="inline text-xl">&lsaquo;&nbsp;</div>
+          <div class="inline text-md">Go Back</div>
+        </div>
+      </router-link
+      >
       <router-link v-else to="/">
         <div class="text-orange-500">
           <div class="inline text-xl">&lsaquo;&nbsp;</div>
@@ -145,7 +151,7 @@ const editProduct = () => {
         </div>
       </router-link
       >
-      <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+      <div class="bg-white w-full rounded-lg overflow-hidden border shadow-sm">
         <div>
           <!-- <img v-for="pic in product.pic" :src="pic" alt="Product" /> -->
           <!-- <img :src="product.pic" alt="" /> -->
@@ -164,7 +170,7 @@ const editProduct = () => {
         </div>
       </div>
       <div v-if="userStatus != 'vendor'">
-        <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+        <div class="bg-white w-full rounded-lg overflow-hidden border shadow-sm">
           <button
               type="submit"
               class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
@@ -201,7 +207,7 @@ const editProduct = () => {
         </div>
       </div>
       <div v-if="userStatus === 'vendor'">
-        <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+        <div class="bg-white w-full rounded-lg overflow-hidden border shadow-sm">
           <button
               type="submit"
               class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
