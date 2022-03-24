@@ -903,7 +903,7 @@ def get_all_purchase_vendor():
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
-                sql = "SELECT * FROM `purchase`"
+                sql = "SELECT * FROM `purchase` ORDER BY `DATE` DESC"
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 if (len(result) == 0):

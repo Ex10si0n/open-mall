@@ -109,6 +109,16 @@ const displayed_products = computed(() => {
   return filtered_products.value.slice(start, end);
 });
 
+
+const numEntryChgPage = () => {
+  if (currentPage.value > maxPage.value) {
+    currentPage.value = maxPage.value;
+  } else if (currentPage.value < 1) {
+    currentPage.value = 1;
+  }
+  chgPage()
+}
+
 const chgPage = () => {
   // console.log(displayed_products.value);
 
@@ -227,7 +237,7 @@ const initPage = () => {
           </div>
           <div class="p-2 bg-white rounded-lg shadow rounded-t-none">
             <div class="text-lg text-left">
-              <input @update="chgPage" class="h-6 rounded w-full text-center bg-slate-100 font-mono h-6 text-blue-500" v-model="currentPage" type="text"> <span class="p-2 "></span>
+              <input @blur="numEntryChgPage" class="h-6 rounded w-full text-center bg-slate-100 font-mono h-6 text-blue-500" v-model="currentPage" type="text"> <span class="p-2 "></span>
           </div>
           <div class="mt-2 grid grid-cols-2 gap-2">
             <button @click="prevPage" class="hover:bg-slate-100 hover:shadow-none border text-blue-500 h-14 rounded h-6 shadow">Previous</button>

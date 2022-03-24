@@ -24,24 +24,24 @@ const changeTab = (tab: string) => {
   store.commit("chgActiveTab", tab);
 };
 
-const query_token = "http://" + config.apiServer + ":" + config.port + "/api/current_user";
-axios.get(query_token,{headers:{'Authorization':"Bearer " + localStorage.getItem('Authorization')}}).then((res) => {
-  console.log(res.data);
-  store.commit('chgUser', {
-      accId: res.data.uuid,
-      userEmail: res.data.email,
-      userName: res.data.email.split('@')[0]}
-      // userName: res.data.type }
-  )
-  // alert(res.data.uuid)
-  if (res.data.type === 'vendor') {
-    userStatus: 'vendor'
-    store.commit('chgStatus', 'vendor')
-  } else {
-    userStatus: 'active'
-    store.commit('chgStatus', 'active')
-  }
-});
+// const query_token = "http://" + config.apiServer + ":" + config.port + "/api/current_user";
+// axios.get(query_token,{headers:{'Authorization':"Bearer " + localStorage.getItem('Authorization')}}).then((res) => {
+//   console.log(res.data);
+//   store.commit('chgUser', {
+//       accId: res.data.uuid,
+//       userEmail: res.data.email,
+//       userName: res.data.email.split('@')[0]}
+//       // userName: res.data.type }
+//   )
+//   // alert(res.data.uuid)
+//   if (res.data.type === 'vendor') {
+//     userStatus: 'vendor'
+//     store.commit('chgStatus', 'vendor')
+//   } else {
+//     userStatus: 'active'
+//     store.commit('chgStatus', 'active')
+//   }
+// });
 </script>
 
 <template>

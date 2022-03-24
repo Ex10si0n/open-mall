@@ -93,7 +93,7 @@ const createOrder = () => {
       addrId.value;
   axios.get(query).then((response) => {
     store.commit("chgActiveTab", "order");
-    router.push("/order");
+    router.push("/order/" + response.data.PONO);
   });
 };
 // const order = {
@@ -189,15 +189,12 @@ const createOrder = () => {
             </div>
           </div>
           <div class="mt-0">
-            <router-link to="/order">
               <button
                   class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indogo-800 rounded-t-none"
                   @click="createOrder"
               >
                 Pay
               </button>
-            </router-link
-            >
           </div>
         </div>
       </div>

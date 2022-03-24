@@ -13,7 +13,6 @@ const userEmail = computed(() => {
   return store.state.userEmail;
 });
 
-const Token = localStorage.getItem('Authorization');
 
 type ProductState = {
   pid: string;
@@ -100,7 +99,7 @@ const removeProduct = (pid: string) => {
       "/" +
       accId.value;
   axios.get(query);
-  router.push("/cart/");
+  location.reload()
 };
 </script>
 

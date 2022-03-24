@@ -1,8 +1,6 @@
 import {createStore} from 'vuex'
 import VuexPersist from 'vuex-persist';
 
-
-
 // @ts-ignore
 // @ts-ignore
 
@@ -14,7 +12,7 @@ const vuexLocalStorage = new VuexPersist({
 export default createStore({
     state: {
         hello: 'Vue-SPA-Quickstart',
-        userStatus: 'vendor', // active vendor visitor
+        userStatus: '', // active vendor visitor
         activeTab: '',
         viewingProduct: '',
         userEmail: '',
@@ -24,7 +22,6 @@ export default createStore({
         primaryAddress: {
             addrId: '',
         },
-        Authorization: getToken() 
     },
     mutations: {
         setPrimaryAddress(state, addrId) {
@@ -56,11 +53,7 @@ export default createStore({
             state.accId = '';
             state.primaryAddress.addrId = '';
             state.activeTab = '';
-            localStorage.setItem('Authorization', ' ');
         },
-        chgLogin(state, user){
-            state.Authorization = user.Authorization;
-        }
     },
     actions: {},
     plugins: [vuexLocalStorage.plugin]
