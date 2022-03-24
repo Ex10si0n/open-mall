@@ -63,7 +63,7 @@ axios.get(query).then((res) => {
           {{ userEmail }}
         </div>
       </h2>
-      <div class="max-w-sm overflow-hidden bg-white border rounded-lg shadow-sm">
+      <div class="overflow-hidden bg-white border rounded-lg shadow-sm">
         <div class="px-6 py-4">
           <div class="flex items-center justify-around">
             <div class="place-items-center text-md">
@@ -202,7 +202,7 @@ axios.get(query).then((res) => {
           </div>
         </div>
       </div>
-      <div class="max-w-sm overflow-hidden bg-white border rounded-lg shadow-sm">
+      <div class="overflow-hidden bg-white border rounded-lg shadow-sm">
         <router-link to="/address_list">
           <div v-if="hasAddress === true">
 
@@ -243,7 +243,7 @@ axios.get(query).then((res) => {
             <router-link v-else to="address_list">
               <button
                   type="submit"
-                  class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
+                  class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-t-none shadow-sm text-white bg-teal-600 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
               >
                 Select Primary Address
               </button>

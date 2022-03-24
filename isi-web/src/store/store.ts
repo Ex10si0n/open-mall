@@ -12,7 +12,7 @@ const vuexLocalStorage = new VuexPersist({
 export default createStore({
     state: {
         hello: 'Vue-SPA-Quickstart',
-        userStatus: '', // active vendor visitor
+        userStatus: 'visitor', // active vendor visitor
         activeTab: '',
         viewingProduct: '',
         userEmail: '',

@@ -19,9 +19,13 @@ const sortPrice = ref("default")
 const brandFilter = ref("all")
 
 const content = ref("")
+
+const products_brands = ref([])
+
 const chgViewingProduct = (pid: string) => {
   store.commit("chgViewingProduct", pid);
 };
+
 type ProductState = {
   pid: string;
   pname: string;
@@ -32,14 +36,30 @@ type ProductState = {
   pic: string;
 };
 
-const products_brands = computed(() => {
+/*const products_brands = computed(() => {
   return products.map((product) => product.brand).filter((brand, index, self) => self.indexOf(brand) === index).sort();
-});
+});*/
+
 const result = ref("");
 
 const products = reactive([] as Array<ProductState>);
 
+const getAllProduct = () =>{
+  axios
+    .get("http://" + config.apiServer + ":" + config.port + "/api/brands")
+    .then((res) => {
+      if (res.data.status === 'success'){
+        res.data.brand_list.forEach((brand: string) => products_brands.value.push(brand))
+      }else{
+        alert(res.data.status)
+      }
+    })
+} 
+
+getAllProduct()
+
 const initProduct = () => {
+  result.value = ""
   if(products.length > 0){
     while(products.length > 0){
       products.pop()
@@ -66,8 +86,13 @@ const search = () => {
                 config.port +
                 "/api/img/" +
                 product.thumbnail;
-            products.push(product as ProductState);
+            if(product.brand === brandFilter.value || brandFilter.value == "all"){
+              products.push(product as ProductState);
+            }
           })
+          if(products.length == 0){
+            result.value = "None"
+          }
         } else if (res.data.status === 'none'){
           searchResult1 = false
           if(store.state.userStatus != 'vendor'){
@@ -193,16 +218,16 @@ const initPage = () => {
           />
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <select class="col-span-1 bg-white rounded-lg w-full p-2  mb-3 shadow-2xl">
+          <select class="col-span-1 bg-white rounded-lg w-full p-2  mb-3 shadow-2xl" v-model="brandFilter" @change="initPage()">
             <option value="all">All Brands</option>
             <option v-for="brand in products_brands" :value="brand">{{ brand }}</option>
           </select>
-          <select class="col-span-1 bg-white rounded-lg w-full p-2  mb-3 shadow-2xl">
-            <option value="all">Sort default</option>
-            <option>Price (Low to High)</option>
-            <option>Price (High to Low)</option>
-            <option>Mostly Viewed</option>
-            <option>Featured</option>
+          <select class="col-span-1 bg-white rounded-lg w-full p-2  mb-3 shadow-2xl" v-model="sortPrice" @change="initPage()">
+            <option value="default">Sort default</option>
+            <option value="l2h">Price (Low to High)</option>
+            <option value="h2l">Price (High to Low)</option>
+            <option value="most">Mostly Viewed</option>
+            <option value="feat">Featured</option>
           </select>
         </div>
       </div>
@@ -236,7 +261,9 @@ const initPage = () => {
           </div>
         </div>
       </div>
-       <div class="w-full">
+       <div 
+          v-if="maxPage > 1"
+          class="w-full">
         <div class="bg-black p-2 bg-white rounded-lg text-white rounded-b-none shadow">
           Page {{ currentPage }} of {{ maxPage }}
           </div>

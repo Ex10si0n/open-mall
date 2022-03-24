@@ -1461,6 +1461,35 @@ def get_all_purchase():
         playload['status'] = 'error'
         return playload
 
+def get_all_brands():
+    """Get all brand
+
+    Args: 
+        None
+
+    Returns:
+        dict: status(success, error), brand_list
+    """
+    playload = {'status': '', 'brand_list': []}
+    try:
+        connection = create_connection()
+        with connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT BRAND FROM `product`"
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                if (len(result) == 0):
+                    playload['status'] = 'none'
+                    return playload
+                else:
+                    for row in result: 
+                        brand = row['BRAND']
+                        playload['brand_list'].append(brand)
+                    playload['status'] = 'success'
+                    return playload
+    except:
+        playload['status'] = 'error'
+        return playload
 
 # @TODO: purchase all products in shopping cart list and clear shopping cart
 # should create a 'purchase receipt' by the following methods
