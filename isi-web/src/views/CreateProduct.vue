@@ -47,6 +47,7 @@ const onFileChange = (event) => {
       reader.readAsDataURL(img[i])
       reader.onload = function (){
         let dataURL = reader.result as string
+        // @ts-ignore
         imgList.value.push(dataURL)
       }
     }

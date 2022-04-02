@@ -49,6 +49,7 @@ const getAllProduct = () =>{
     .get("http://" + config.apiServer + ":" + config.port + "/api/brands")
     .then((res) => {
       if (res.data.status === 'success'){
+        // @ts-ignore
         res.data.brand_list.forEach((brand: string) => products_brands.value.push(brand))
       }else{
         alert(res.data.status)
@@ -149,16 +150,21 @@ const filtered_products = computed(() => {
 });
 
 const maxPage = computed(() => {
+  // @ts-ignore
   if (Math.ceil(filtered_products.value.length / cnt.value) === 0){
     return 1
   }else{
+    // @ts-ignore
     return Math.ceil(filtered_products.value.length / cnt.value);
   }
 });
 
 const displayed_products = computed(() => {
+  // @ts-ignore
   const start = (currentPage.value - 1) * cnt.value;
+  // @ts-ignore
   const end = start + cnt.value;
+  // @ts-ignore
   return filtered_products.value.slice(start, end);
 });
 

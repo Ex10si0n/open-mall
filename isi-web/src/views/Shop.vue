@@ -199,7 +199,6 @@ const selectBrand = (selBrand) => {
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="button-addon2"
-                v-model="content"
                 @click="search"
                 autofocus
             />

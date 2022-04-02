@@ -61,7 +61,8 @@ const addPic = (event) => {
     reader.readAsDataURL(img[i])
     reader.onload = function (){
     let dataURL = reader.result as string
-    imgList.value.push(dataURL)
+      // @ts-ignore
+      imgList.value.push(dataURL)
   }
   }
 }
@@ -86,6 +87,7 @@ const getProduct = async () => {
     let pics = []
     let temp = res.data.product.pic.split(";")
     for (let i = 1; i < temp.length; i++){
+      // @ts-ignore
       pics.push("http://" + config.apiServer + ":" + config.port + "/api/img/" + temp[i])
     }
     picList.value = pics

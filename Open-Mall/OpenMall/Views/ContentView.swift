@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
+        var baseURL: String = "http://150.158.151.180:3000/#/"
         VStack {
             TabView() {
                 ShopView().tabItem {

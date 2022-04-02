@@ -80,6 +80,14 @@ const hold = () => {
   })
 }
 
+const shipOrder = () => {
+  const pono = router.currentRoute.value.params.pono
+  const query = "http://" + config.apiServer + ":" + config.port + `/api/order/deliver/${pono}`;
+  axios.get(query).then((res) => {
+    location.reload()
+  })
+}
+
 const unhold = () => {
   const pono = router.currentRoute.value.params.pono
   const query = "http://" + config.apiServer + ":" + config.port + `/api/order/unhold/${pono}`;
@@ -203,6 +211,8 @@ const buildSrc = (thumbnail) => {
               <div class="mb-2 col-span-1 text-md bold">
                 {{ info.ADDRESS }}
               </div>
+              <p v-if="info.STATUS === 'pending' && userType === 'vendor'"
+                 class="mb-3 col-span-1 text-base text-green-500 font-bold" @click="shipOrder">Mark as Delivered</p>
               <div class="grid grid-cols-2 ">
                 <p v-if="info.STATUS !== 'cancelled' && info.STATUS !== 'shipped'"
                    class="col-span-1 text-base text-red-500" @click="cancel">Cancel Order</p>
