@@ -192,7 +192,7 @@ type AddressState = {
           </div>
         </div>
         <div
-            class="bg-white max-w-sm rounded-lg rounded-t-none overflow-hidden border shadow-lg"
+            class="bg-white w-full rounded-lg rounded-t-none overflow-hidden border shadow-lg"
         >
           <div>
             <button

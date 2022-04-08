@@ -61,7 +61,8 @@ const addPic = (event) => {
     reader.readAsDataURL(img[i])
     reader.onload = function (){
     let dataURL = reader.result as string
-    imgList.value.push(dataURL)
+      // @ts-ignore
+      imgList.value.push(dataURL)
   }
   }
 }
@@ -86,6 +87,7 @@ const getProduct = async () => {
     let pics = []
     let temp = res.data.product.pic.split(";")
     for (let i = 1; i < temp.length; i++){
+      // @ts-ignore
       pics.push("http://" + config.apiServer + ":" + config.port + "/api/img/" + temp[i])
     }
     picList.value = pics
@@ -99,36 +101,61 @@ const updateProduct = () => {
     alert("Please fill in all the fields.")
    } else {
     if (store.state.userStatus === 'vendor') {
-      if(img.length > 0){
-        const queryImage = "http://" + config.apiServer + ":" + config.port + "/api/image/upload"
+      if(img.length > 0 || thumbnailImage.value.size > 0){
         const formData = new FormData();
+        if(thumbnailImage.value.name !== ""){
+          formData.append("images", thumbnailImage.value)
+        }
         for (let i = 0; i < img.length; i++){
           formData.append('images', img[i])
         }
+        const queryImage = "http://" + config.apiServer + ":" + config.port + "/api/image/upload"
         axios.post (queryImage, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
+        }).then(() => {
+          const query = "http://" + config.apiServer + ":" + config.port + "/api/product/" + pid + "/update"
+
+          axios.post(query, {
+            pid: pid,
+            pName: name.value,
+            brand: brand.value,
+            price: price.value,
+            pDesc: information.value,
+            thumbnail: thumbnailName.value,
+            pic: picString.value,
+          }).then((res) => {
+            if (res.data.status === 'success') {
+              router.push('/product/' + res.data.pid)
+            } else {
+              alert(res.data.status)
+            }
+          })
         })
       }
-      const query = "http://" + config.apiServer + ":" + config.port + "/api/product/" + pid + "/update"
-      axios.post(query, {
-        pid: pid,
-        pName: name.value,
-        brand: brand.value,
-        price: price.value,
-        pDesc: information.value,
-        thumbnail: thumbnailName.value,
-        pic: picString.value,
-      }).then((res) => {
-        if (res.data.status === 'success') {
-          router.push('/product/' + res.data.pid)
-        } else {
-          alert(res.data.status)
-        }
-      })
-   } else {
-    alert("You do not have the authority to add a new product.")
+      else {
+        const query = "http://" + config.apiServer + ":" + config.port + "/api/product/" + pid + "/update"
+
+        axios.post(query, {
+          pid: pid,
+          pName: name.value,
+          brand: brand.value,
+          price: price.value,
+          pDesc: information.value,
+          thumbnail: thumbnailName.value,
+          pic: picString.value,
+        }).then((res) => {
+          if (res.data.status === 'success') {
+            router.push('/product/' + res.data.pid)
+          } else {
+            alert(res.data.status)
+          }
+        })
+
+      }
+    } else {
+      alert("You do not have the authority to add a new product.")
   }
   } 
 }

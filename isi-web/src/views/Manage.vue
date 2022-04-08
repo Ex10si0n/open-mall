@@ -48,7 +48,7 @@ const addrId = computed(() => {
           {{ userEmail }}
         </div>
       </h2>
-      <div class="max-w-sm overflow-hidden bg-white border rounded-lg shadow-sm">
+      <div class="w-full overflow-hidden bg-white border rounded-lg shadow-sm">
         <div class="px-6 pt-4 pb-2 ">
           <h3 class="font-bold text-xl">Product Management</h3>
           <p class="text-gray-700 text-base">
@@ -68,7 +68,7 @@ const addrId = computed(() => {
           </div>
         </div>
       </div>
-      <div class="max-w-sm overflow-hidden bg-white border rounded-lg shadow-sm">
+      <div class="w-full overflow-hidden bg-white border rounded-lg shadow-sm">
         <div class="px-6 pt-4 pb-2 ">
           <h3 class="font-bold text-xl">Delivery Management</h3>
           <p class="text-gray-700 text-base">
@@ -103,7 +103,7 @@ const addrId = computed(() => {
           </div>
         </div>
       </div>
-      <div class="max-w-sm overflow-hidden bg-white border rounded-lg shadow-sm">
+      <div class="w-full overflow-hidden bg-white border rounded-lg shadow-sm">
         <div class="px-6 pt-4 pb-2 ">
           <h3 class="font-bold text-xl">User Management</h3>
           <p class="text-gray-700 text-base">

@@ -24,24 +24,24 @@ const changeTab = (tab: string) => {
   store.commit("chgActiveTab", tab);
 };
 
-const query_token = "http://" + config.apiServer + ":" + config.port + "/api/current_user";
-axios.get(query_token,{headers:{'Authorization':"Bearer " + localStorage.getItem('Authorization')}}).then((res) => {
-  console.log(res.data);
-  store.commit('chgUser', {
-      accId: res.data.uuid,
-      userEmail: res.data.email,
-      userName: res.data.email.split('@')[0]}
-      // userName: res.data.type }
-  )
-  // alert(res.data.uuid)
-  if (res.data.type === 'vendor') {
-    userStatus: 'vendor'
-    store.commit('chgStatus', 'vendor')
-  } else {
-    userStatus: 'active'
-    store.commit('chgStatus', 'active')
-  }
-});
+// const query_token = "http://" + config.apiServer + ":" + config.port + "/api/current_user";
+// axios.get(query_token,{headers:{'Authorization':"Bearer " + localStorage.getItem('Authorization')}}).then((res) => {
+//   console.log(res.data);
+//   store.commit('chgUser', {
+//       accId: res.data.uuid,
+//       userEmail: res.data.email,
+//       userName: res.data.email.split('@')[0]}
+//       // userName: res.data.type }
+//   )
+//   // alert(res.data.uuid)
+//   if (res.data.type === 'vendor') {
+//     userStatus: 'vendor'
+//     store.commit('chgStatus', 'vendor')
+//   } else {
+//     userStatus: 'active'
+//     store.commit('chgStatus', 'active')
+//   }
+// });
 </script>
 
 <template>
@@ -154,7 +154,7 @@ axios.get(query_token,{headers:{'Authorization':"Bearer " + localStorage.getItem
           <div v-else class="text-xs text-gray-800 text-center">Login</div>
         </router-link>
         <router-link
-            v-if="userStatus !== 'vendor'"
+            v-if="userStatus !== 'vendor' && userStatus !== 'visitor'"
             to="/cart"
             class="rounded-lg px-5 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
             :class="{ active: activeTab === 'cart' }"
@@ -186,7 +186,7 @@ axios.get(query_token,{headers:{'Authorization':"Bearer " + localStorage.getItem
                 fill="#1C1C1E"
             />
           </svg>
-          <div v-if="activeTab !== 'cart'" class="text-xs text-gray-500 text-center">
+          <div v-if="activeTab !== 'cart' " class="text-xs text-gray-500 text-center">
             Cart
           </div>
           <div v-else class="text-xs text-gray-800 text-center">Cart</div>

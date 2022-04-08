@@ -310,3 +310,8 @@ async def upload_image(images: List[UploadFile]):
 async def delete_image(deleteImageData: DeleteImageData):
     path = os.path.join(fpath, 'img/' + deleteImageData.picName)
     os.remove(path)
+
+@app.get('/api/brands')
+def get_all_brands():
+    from db.database import get_all_brands
+    return get_all_brands()

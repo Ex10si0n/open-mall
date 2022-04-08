@@ -66,7 +66,6 @@ const addToCart = () => {
     alert("Already in cart");
   }
   if (userStatus === "visitor"){
-
     router.push("/" + route.params.pid +"/login")
   }
   const query =
@@ -138,6 +137,13 @@ const editProduct = () => {
           <div class="inline text-md">Go Back</div>
         </div>
       </router-link>
+      <router-link v-else-if="activeTab === 'cart'" to="/cart">
+        <div class="text-orange-500">
+          <div class="inline text-xl">&lsaquo;&nbsp;</div>
+          <div class="inline text-md">Go Back</div>
+        </div>
+      </router-link
+      >
       <router-link v-else to="/">
         <div class="text-orange-500">
           <div class="inline text-xl">&lsaquo;&nbsp;</div>
@@ -145,7 +151,7 @@ const editProduct = () => {
         </div>
       </router-link
       >
-      <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+      <div class="bg-white w-full rounded-lg overflow-hidden border shadow-sm">
         <div>
           <!-- <img v-for="pic in product.pic" :src="pic" alt="Product" /> -->
           <!-- <img :src="product.pic" alt="" /> -->
@@ -164,7 +170,7 @@ const editProduct = () => {
         </div>
       </div>
       <div v-if="userStatus != 'vendor'">
-        <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+        <div class="bg-white w-full rounded-lg overflow-hidden border shadow-sm">
           <button
               type="submit"
               class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
@@ -172,8 +178,8 @@ const editProduct = () => {
           >
             {{ buttonLabel }}
           </button>
-          <router-link to="/address_list">
-            <div class="px-6 py-4">
+          <router-link to="/address_list" v-if="userStatus === 'active'">
+            <div class="px-6 py-4" v-if="addrId != ''">
               <div class="font-medium text-xl mb-2">Shipping to</div>
               <div class="grid grid-cols-3">
                 <div class="col-span-1 text-md font-bold mb-2">{{ address.NAME }}</div>
@@ -187,20 +193,21 @@ const editProduct = () => {
               </div>
               <p class="text-gray-700 text-base"></p>
             </div>
-            <div class="grid grid-cols-3 px-6 pt-4 pb-2">
-              <div class="col-span-1">
-              <span
-                  class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >#{{ address.TAG }}</span
-              >
-              </div>
+            <div class="px-6 py-4" v-else>
+                <button
+                    type="submit"
+                    class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md shadow-sm text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-800"
+                    @click="router.push('/address_list')"
+                >
+                  Select Primary Address
+                </button>
             </div>
           </router-link
           >
         </div>
       </div>
       <div v-if="userStatus === 'vendor'">
-        <div class="bg-white max-w-sm rounded-lg overflow-hidden border shadow-sm">
+        <div class="bg-white w-full rounded-lg overflow-hidden border shadow-sm">
           <button
               type="submit"
               class="group relative w-full flex justify-center py-3 px-6 border border-transparent font-medium rounded-md rounded-b-none shadow-sm text-white bg-orange-600 hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-800"
