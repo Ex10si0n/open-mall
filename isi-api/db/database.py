@@ -67,7 +67,7 @@ def login_check(email: str, password: str):
         connection = create_connection()
         with connection:
             with connection.cursor() as cursor:
-                sql = "SELECT * FROM `account` WHERE `email`=%s"
+                sql = "SELECT * FROM `account` WHERE `email`= %s"
                 cursor.execute(sql, (email,))
                 result = cursor.fetchone()
                 if (result is None):

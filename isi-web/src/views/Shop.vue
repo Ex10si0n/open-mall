@@ -304,7 +304,7 @@ const selectBrand = (selBrand) => {
         >
 <!--          <div v-if="product.brand == brandFilter || brandFilter === 'all'">-->
 
-            <img class="py-0 rounded-t-lg object-cover lg:h-80 lg:w-80" :src="product.thumbnail"/>
+          <img class="py-0 rounded-t-lg object-cover lg:h-80 lg:w-80" :src="product.thumbnail"/>
           <div class="px-5 py-2 pb-5">
               <h3 class="font-semibold tracking-tight text-gray-900 text-md">
                 {{ product.pname }}
