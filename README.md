@@ -135,8 +135,6 @@ Vendor can view all orders, and modify the status of orders. When an order is in
 
 A hybrid IOS software of the OpenMall project has been developed for Apple users.
 
-<img src="https://drive.google.com/uc?id=1ItzF-Pj0nfN7TAhf_9QrtWbqoUpRKHG7" alt="Desktop" style="zoom: 25%;" />
-
 The mobile application can communicate with the server backend through a Web API as the web applica- tion. Moreover, the UI layouts are consistent with the UI layouts in the web application. The consistency between the mobile application and the web application is in order to reduce the learning cost of users to use the mobile application.
 
 Then the following screen captures demonstrate how our mobile application works.
