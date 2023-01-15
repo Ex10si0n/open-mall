@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/** Yajing Liu: 
+ * It is the frontend about searching products. 
+ * It is to find the products according to the inputting keywords */
 import axios from "axios";
 import {computed, reactive, ref} from "vue";
 import config from "../config"

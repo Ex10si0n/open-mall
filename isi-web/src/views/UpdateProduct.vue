@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+/** Yajing Liu: 
+ * It is the frontend about editing products. 
+ * The major function of this page of code is to show a view for users to edit products and send requests to backend. 
+ * The difficulty is in the handling of the photos */
 import axios from "axios";
 import {reactive, ref} from "vue";
 import config from "../config"

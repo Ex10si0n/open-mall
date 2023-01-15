@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+/** Yajing Liu: 
+ * It is the frontend about changing passwords. 
+ * The major function of this page of code is to show a view for users to change their passwords and send requests to backend.  */
 import axios from "axios";
 import {computed, ref} from "vue";
 import config from "../config"

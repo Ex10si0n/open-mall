@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+/** Yajing Liu: 
+ * It is the frontend about creating products. 
+ * The major function of this page of code is to show a view for users to create a new product and send requests to backend. 
+ * The difficulty is in the handling of the photos */
 import axios from "axios";
 import {computed, reactive, ref} from "vue";
 import config from "../config"

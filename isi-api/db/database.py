@@ -714,6 +714,7 @@ def delete_all_product_from_cart(accId: str):
         return playload
 
 
+# Yajing Liu: interact with database to get all products in cart
 def get_all_products_in_cart(accId: str):
     """ List all product in cart
 
@@ -757,7 +758,7 @@ def get_all_products_in_cart(accId: str):
         playload['status'] = 'error'
         return playload
 
-
+# Yajing Liu: interact with database to check out all products in cart
 def check_out(accId: str, addrId: str):
     """Check out all items in the shopping cart and create a purchase order
 
@@ -853,6 +854,7 @@ def get_purchase_info_by_id(pono: str):
         playload['status'] = 'error'
         return playload
 
+# Yajing Liu: interact with database to get all purchase orders of a customer
 def get_all_purchase_of_customer(accId: str):
     """List all purchase orders that the customer has placed
 
@@ -963,7 +965,7 @@ def get_purchase_by_status(accId: str, status: str):
         playload['status'] = 'error'
         return playload
 
-
+# Yajing Liu: interact with database to filter customer purchase by status
 def customer_filter_purchase(accId: str, period: str):
     """For customer, filter purchase by status
 
@@ -1012,7 +1014,7 @@ def customer_filter_purchase(accId: str, period: str):
         playload['status'] = 'error'
         return playload
 
-
+# Yajing Liu: interact with database to filter vendor purchase by status
 def vendor_filter_purchase(order_status: str):
     """For vendor, filter purchase by status
 
@@ -1089,6 +1091,7 @@ def get_purchase_by_accid(accId: str):
     pass
 
 
+# Yajing Liu: interact with database to get purchase by id
 def get_purchase_by_id(pono: str, accId: str, addrId: str):
     """Get purchase by id
 
@@ -1215,6 +1218,7 @@ def get_more_order_by_pono(pono: str):
         playload['status'] = 'error'
         return playload
 
+# Yajing Liu: interact with database to get order by pono
 def get_order_by_pono(pono: str):
     """Get order by pono
 
@@ -1260,6 +1264,7 @@ def get_order_by_pono(pono: str):
 
 
 
+# Yajing Liu: interact with database to update stauts
 def update_status(pono: str, status: str):
     """Update status
 
@@ -1284,6 +1289,7 @@ def update_status(pono: str, status: str):
         return playload
 
 
+# Yajing Liu: interact with database to cancel purchase
 def cancel_purchase(accType: str, pono: str):
     """Cancel order
 
@@ -1321,7 +1327,7 @@ def cancel_purchase(accType: str, pono: str):
         playload['status'] = 'error'
         return playload
 
-
+# Yajing Liu: interact with database to ship purchase
 def ship_purchase(pono: str):
     """Ship order
 
@@ -1355,7 +1361,7 @@ def ship_purchase(pono: str):
         playload['status'] = 'error'
         return playload
 
-
+# Yajing Liu: interact with database to hold purchase
 def hold_purchase(pono: str):
     """Hold order
 
@@ -1385,7 +1391,7 @@ def hold_purchase(pono: str):
         playload['status'] = 'error'
         return playload
 
-
+# Yajing Liu: interact with database to unhold purchase
 def unhold_purchase(pono: str):
     """Unhold order
 
@@ -1418,7 +1424,7 @@ def unhold_purchase(pono: str):
         playload['status'] = 'error'
         return playload
 
-
+# Yajing Liu: interact with database to get all purchase
 def get_all_purchase():
     """Get all purchase
 

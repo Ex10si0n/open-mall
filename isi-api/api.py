@@ -229,6 +229,7 @@ def get_orders(accId: str):
     else:
         return get_all_purchase_of_customer(accId)
 
+# Yajing Liu: handle the request for changing password
 @app.post('/api/change_password/')
 def change_password(changePasswordData: ChangePasswordData):
     from db.database import update_password
@@ -249,26 +250,31 @@ def get_purchase_info_by_id(pono: str):
     from db.database import get_purchase_info_by_id
     return get_purchase_info_by_id(pono)
 
+# Yajing Liu: handle the request for creating a new product
 @app.post('/api/product/create')
 def create_product(createProductData: CreateProductData):
     from db.database import create_product
     return create_product(createProductData.pName, createProductData.brand, createProductData.price, createProductData.pDesc, createProductData.thumbnail, createProductData.pic)
 
+# Yajing Liu: handle the request for updating a product
 @app.post('/api/product/{pid}/update')
 def update_product(updateProductData: UpdateProductData):
     from db.database import update_product
     return update_product(updateProductData.pid, updateProductData.pName, updateProductData.brand, updateProductData.price, updateProductData.pDesc, updateProductData.thumbnail, updateProductData.pic)
 
+# Yajing Liu: handle the request for searching products by names
 @app.get('/api/search/name/{pName}')
 def get_products_by_name(pName: str):
     from db.database import get_products_by_name
     return get_products_by_name(pName)
 
+# Yajing Liu: handle the request for searching products by ids
 @app.get('/api/search/id/{pid}')
 def get_products_by_name(pid: str):
     from db.database import get_product_by_id
     return get_product_by_id(pid)
 
+# Yajing Liu: handle the request for searching products by brands
 @app.get('/api/search/brand/{brand}')
 def get_products_by_brand(brand: str):
     from db.database import get_products_by_brand
@@ -299,6 +305,7 @@ def unhold(pono: str):
     from db.database import unhold_purchase
     return unhold_purchase(pono)
 
+# Yajing Liu: handle tthe upload image request coming from the front end
 @app.post('/api/image/upload')
 async def upload_image(images: List[UploadFile]):
     for image in images:
@@ -306,6 +313,7 @@ async def upload_image(images: List[UploadFile]):
         with open(path, 'wb') as f:
             f.write(image.file.read())
 
+# Yajing Liu: handle the delete image request coming from the front end
 @app.post('/api/image/delete')
 async def delete_image(deleteImageData: DeleteImageData):
     path = os.path.join(fpath, 'img/' + deleteImageData.picName)
